@@ -1,0 +1,10 @@
+Added Component: Designator=U?(XDCR_SCD40-D-R2)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/SCD40-D-R2/Sensirion+AG/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Sensirion AG"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "SCD40-D-R2"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SCD40-D-R2/Sensirion+AG/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Add Component: Footprint Not Found M_Ra01_smd
+Added Member To Class: ClassName=Sheet1 Member=Component U? SCD40-D-R2
+Add Class Member: Failed to add class member : Component Utrx? Molue SX1278

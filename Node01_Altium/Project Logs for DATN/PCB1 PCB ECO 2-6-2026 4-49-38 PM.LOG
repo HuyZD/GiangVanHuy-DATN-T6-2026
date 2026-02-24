@@ -1,0 +1,27 @@
+Added Component: Designator=C?(JP14-D1T)
+Add component (AddParameter): Name = "ComponentLink1 Description"; Value = "Manufacturer"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.we-online.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2 Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://katalog.we-online.de/em/datasheet/6130xx143121.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Created by"; Value = "Karrer Zheng"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Created Date"; Value = "29 March 2013"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "W¨¹rth Elektronik eiSos GmbH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "NoPins"; Value = "14"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "partNo"; Value = "613014143121"; VariantName = "[No Variations]"
+Add Pin To Net: Unknown Pin: Pin U1-21
+Add Net: Net with name "NetQ?_2" already exists
+Added Member To Class: ClassName=Sheet1 Member=Component C2 Cap
+Added Member To Class: ClassName=Sheet1 Member=Component C3 Header4
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP14
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP3
+Added Member To Class: ClassName=Sheet1 Member=Component Q? S9015
+Added Member To Class: ClassName=Sheet1 Member=Component R? 10R
+Added Member To Class: ClassName=Sheet1 Member=Component R? Res5
+Added Member To Class: ClassName=Sheet1 Member=Component R? 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R? 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R? 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R? 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R? 22k
+Added Member To Class: ClassName=Sheet1 Member=Component Rp? 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Rp? 10k
+Added Member To Class: ClassName=Sheet1 Member=Component U1 SCD40-D-R2

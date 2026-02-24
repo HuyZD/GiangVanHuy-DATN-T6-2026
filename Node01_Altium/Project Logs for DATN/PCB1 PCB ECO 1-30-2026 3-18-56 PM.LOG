@@ -1,0 +1,16 @@
+Added Component: Designator=L?(LED-3528-RED)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "Dán"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH005543"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "LED3528 Màu Ð?"; VariantName = "[No Variations]"
+Add Pin To Net: Unknown Pin: Pin U?-21
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP3
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP4x2-2.0
+Added Member To Class: ClassName=Sheet1 Member=Component C? Header4
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP4
+Added Member To Class: ClassName=Sheet1 Member=Component L? LED 3528
+Added Member To Class: ClassName=Sheet1 Member=Component P? CON 3 EDG5.08
+Added Member To Class: ClassName=Sheet1 Member=Component U? SCD40-D-R2
+Added Member To Class: ClassName=Sheet1 Member=Component U? RA-02_LORA

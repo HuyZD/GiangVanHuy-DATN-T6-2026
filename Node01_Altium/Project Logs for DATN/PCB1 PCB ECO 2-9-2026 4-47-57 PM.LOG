@@ -1,0 +1,76 @@
+Change Component Designator: OldDesignator=C2 NewDesignator=Cn3
+Change Component Designator: OldDesignator=C2 NewDesignator=Cscd
+Change Component Designator: OldDesignator=C3 NewDesignator=Cn4
+Change Component Designator: OldDesignator=C? NewDesignator=Clora
+Change Component Designator: OldDesignator=C? NewDesignator=Ctr1
+Change Component Designator: OldDesignator=C? NewDesignator=JPtr
+Change Component Designator: OldDesignator=D1 NewDesignator=Dn1
+Change Component Designator: OldDesignator=L1 NewDesignator=Ln1
+Change Component Designator: OldDesignator=L? NewDesignator=Ltr1
+Change Component Designator: OldDesignator=P2 NewDesignator=Prl2
+Change Component Designator: OldDesignator=P? NewDesignator=Prl1
+Change Component Designator: OldDesignator=Q? NewDesignator=Qrl1
+Change Component Designator: OldDesignator=Q? NewDesignator=Qtr1
+Change Component Designator: OldDesignator=R1 NewDesignator=Rn1
+Change Component Designator: OldDesignator=R2 NewDesignator=Rn2
+Change Component Designator: OldDesignator=R3 NewDesignator=Rn3
+Change Component Designator: OldDesignator=R4 NewDesignator=Rn4
+Change Component Designator: OldDesignator=R? NewDesignator=Rn5
+Change Component Designator: OldDesignator=R? NewDesignator=Rrl1
+Change Component Designator: OldDesignator=R? NewDesignator=Rrl2
+Change Component Designator: OldDesignator=R? NewDesignator=Rrl3
+Change Component Designator: OldDesignator=R? NewDesignator=Rtr1
+Change Component Designator: OldDesignator=R? NewDesignator=Rtr2
+Change Component Designator: OldDesignator=R? NewDesignator=Rtr3
+Change Component Designator: OldDesignator=RL? NewDesignator=RL1
+Change Component Designator: OldDesignator=Rn1 NewDesignator=Rn6
+Change Component Designator: OldDesignator=Rn2 NewDesignator=Rn7
+Change Component Designator: OldDesignator=Rp? NewDesignator=Rlora1
+Change Component Designator: OldDesignator=Rp? NewDesignator=Rscl
+Change Component Designator: OldDesignator=Rp? NewDesignator=Rsda
+Change Component Designator: OldDesignator=U1 NewDesignator=Uarduino
+Change Component Designator: OldDesignator=U1 NewDesignator=Uscd
+Change Component Designator: OldDesignator=U? NewDesignator=Ulora
+Added Pin To Net: NetName=GND Pin=U2-1
+Added Pin To Net: NetName=GND Pin=U2-2
+Added Pin To Net: NetName=GND Pin=U2-9
+Added Pin To Net: NetName=SDI Pin=U2-13
+Added Pin To Net: NetName=SDO Pin=U2-14
+Added Pin To Net: NetName=GND Pin=U2-16
+Added Pin To Net: NetName=VCCpl Pin=Uarduino-7
+Added Pin To Net: NetName=SDO Pin=Uarduino-17
+Added Pin To Net: NetName=SDI Pin=Uarduino-18
+Added Pin To Net: NetName=SCL Pin=Ulora-4
+Added Pin To Net: NetName=SDA Pin=Ulora-6
+Change Net Name : Old Net Name=NetC2_1 New Net Name=NetCn3_1
+Change Net Name : Old Net Name=NetC3_1 New Net Name=NetCn4_1
+Change Net Name : Old Net Name=NetC?_2 New Net Name=NetCtr1_2
+Change Net Name : Old Net Name=NetL?_1 New Net Name=NetLtr1_1
+Change Net Name : Old Net Name=NetP2_1 New Net Name=NetPrl2_1
+Change Net Name : Old Net Name=NetP2_3 New Net Name=NetPrl2_3
+Change Net Name : Old Net Name=NetQ?_2 New Net Name=NetQtr1_2
+Change Net Name : Old Net Name=NetQ?_3 New Net Name=NetQtr1_3
+Change Net Name : Old Net Name=NetR1_2 New Net Name=NetRn1_2
+Change Net Name : Old Net Name=NetRn1_2 New Net Name=NetRn6_2
+Change Net Name : Old Net Name=NetRp?_2 New Net Name=NetRlora1_2
+Added Pin To Net: NetName=NetQrl1_2 Pin=Qrl1-2
+Added Pin To Net: NetName=NetQrl1_2 Pin=Rrl1-1
+Added Net: Name=NetQrl1_2
+Added Member To Class: ClassName=Sheet1 Member=Component Clora JP4
+Added Member To Class: ClassName=Sheet1 Member=Component Cn3 Cap
+Added Member To Class: ClassName=Sheet1 Member=Component Cn4 Cap
+Added Member To Class: ClassName=Sheet1 Member=Component Ctr1 1uF
+Added Member To Class: ClassName=Sheet1 Member=Component JPtr JP3
+Added Member To Class: ClassName=Sheet1 Member=Component Qrl1 ?
+Added Member To Class: ClassName=Sheet1 Member=Component Rlora1 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Rn5 Res5
+Added Member To Class: ClassName=Sheet1 Member=Component Rrl1 1k
+Added Member To Class: ClassName=Sheet1 Member=Component Rrl2 1k
+Added Member To Class: ClassName=Sheet1 Member=Component Rrl3 1k
+Added Member To Class: ClassName=Sheet1 Member=Component Rscl 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Rsda 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Rtr1 1k
+Added Member To Class: ClassName=Sheet1 Member=Component Rtr2 22k
+Added Member To Class: ClassName=Sheet1 Member=Component Rtr3 10R
+Added Member To Class: ClassName=Sheet1 Member=Component Uarduino ATmega328-PU
+Added Member To Class: ClassName=Sheet1 Member=Component Ulora TSL2561

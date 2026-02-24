@@ -1,0 +1,10 @@
+Added Component: Designator=L?(LED-3MM-WHITE)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH009001"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "LED 3MM Tr?ng SS (1000c)"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Sheet1 Member=Component L? LED 3mm
+Added Member To Class: ClassName=Sheet1 Member=Component U? Arduino Uno
+Added Member To Class: ClassName=Sheet1 Member=Component U? SCD40-D-R2

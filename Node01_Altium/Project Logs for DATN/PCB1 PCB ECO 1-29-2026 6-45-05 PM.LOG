@@ -1,0 +1,13 @@
+Added Component: Designator=P?(CON 3 3EDG5.08)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH000760"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "CON 3 2EDG5.08-3P 5.08MM ( Xanh Cong)"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP8x2
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP8x2
+Added Member To Class: ClassName=Sheet1 Member=Component P? CON 3 EDG5.08
+Added Member To Class: ClassName=Sheet1 Member=Component U? ATmega328-PU
+Added Member To Class: ClassName=Sheet1 Member=Component U? RA-02_LORA
+Added Room: Name=Sheet1

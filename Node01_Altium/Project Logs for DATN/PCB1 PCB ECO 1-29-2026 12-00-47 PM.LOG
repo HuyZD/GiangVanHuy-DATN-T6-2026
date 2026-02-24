@@ -1,0 +1,9 @@
+Added Component: Designator=RELAY?(8-PIN)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/EC2-5NU/nexem/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Nexem"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "EC2-5NU"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/EC2-5NU/nexem/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Sheet1 Member=Component RELAY? EC2-5NU
+Added Member To Class: ClassName=Sheet1 Member=Component U? Arduino Uno

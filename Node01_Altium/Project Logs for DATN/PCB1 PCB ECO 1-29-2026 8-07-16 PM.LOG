@@ -1,0 +1,69 @@
+Remove Pin from Net: Failed to remove Pin
+Add Component: Footprint Not Found 0805
+Add Component: Footprint Not Found 0805c
+Add Component: Footprint Not Found 0805
+Add Component: Footprint Not Found 0805
+Add Component: Footprint Not Found Sma
+Add Component: Footprint Not Found IND_SPR06xe
+Add Component: Footprint Not Found 0805c
+Add Component: Footprint Not Found 0805c
+Add Component: Footprint Not Found 0805c
+Add Component: Footprint Not Found 0805c
+Add Component: Footprint Not Found 0805c
+Add Component: Footprint Not Found 0805c
+Add Component: Footprint Not Found 0805c
+Added Component: Designator=Tn?(sot23-3)
+Added Component: Designator=Un?(Sot23-6)
+Added Pin To Net: NetName=VCC Pin=C?-1
+Add Pin To Net: Unknown Pin: Pin Cn?-1
+Add Pin To Net: Unknown Pin: Pin Cn?-1
+Add Pin To Net: Unknown Pin: Pin Cn?-2
+Add Pin To Net: Unknown Pin: Pin Cn?-2
+Add Pin To Net: Unknown Pin: Pin Dnb?-1
+Added Pin To Net: NetName=VCC Pin=L?-2
+Add Pin To Net: Unknown Pin: Pin R?-1
+Add Pin To Net: Unknown Pin: Pin R?-1
+Add Pin To Net: Unknown Pin: Pin R?-1
+Add Pin To Net: Unknown Pin: Pin R?-1
+Add Pin To Net: Unknown Pin: Pin Rn?-2
+Added Pin To Net: NetName=VCC Pin=Tn?-2
+Add Pin To Net: Unknown Pin: Pin U?-21
+Added Pin To Net: NetName=GND Pin=Un?-2
+Added Pin To Net: NetName=+24 Pin=Un?-5
+Added Net: Name=+24
+Added Pin To Net: NetName=NetC?_2 Pin=C?-2
+Added Pin To Net: NetName=NetC?_2 Pin=Un?-3
+Added Net: Name=NetC?_2
+Added Pin To Net: NetName=NetCbst?_1 Pin=Un?-1
+Added Net: Name=NetCbst?_1
+Added Pin To Net: NetName=NetR?_2 Pin=Un?-4
+Added Net: Name=NetR?_2
+Added Pin To Net: NetName=NetRn?_1 Pin=Tn?-1
+Added Net: Name=NetRn?_1
+Added Net: Name=PowEn1
+Added Pin To Net: NetName=swpo1 Pin=L?-1
+Added Pin To Net: NetName=swpo1 Pin=Un?-6
+Added Net: Name=swpo1
+Added Pin To Net: NetName=VCCpl Pin=Tn?-3
+Added Net: Name=VCCpl
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP3
+Added Member To Class: ClassName=Sheet1 Member=Component C? Header4
+Added Member To Class: ClassName=Sheet1 Member=Component C? Cap
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP4
+Added Member To Class: ClassName=Sheet1 Member=Component C? JP4x2-2.0
+Add Class Member: Failed to add class member : Component Cbst? Cap
+Add Class Member: Failed to add class member : Component Cn? CAP
+Add Class Member: Failed to add class member : Component Cn? CAP
+Add Class Member: Failed to add class member : Component Dnb? Diode
+Added Member To Class: ClassName=Sheet1 Member=Component L? Inductor
+Add Class Member: Failed to add class member : Component R? Res1
+Add Class Member: Failed to add class member : Component R? Res1
+Add Class Member: Failed to add class member : Component R? Res1
+Add Class Member: Failed to add class member : Component R? Res1
+Add Class Member: Failed to add class member : Component R? Res1
+Add Class Member: Failed to add class member : Component Rn? 1k
+Add Class Member: Failed to add class member : Component Rn? 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Tn? ao3401
+Added Member To Class: ClassName=Sheet1 Member=Component U? RA-02_LORA
+Added Member To Class: ClassName=Sheet1 Member=Component U? SCD40-D-R2
+Added Member To Class: ClassName=Sheet1 Member=Component Un? AOZ1282CI
