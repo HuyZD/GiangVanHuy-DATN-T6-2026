@@ -18,7 +18,7 @@ void loop() {
    if (scd4x.readMeasurement(co2, temp, humidity) == 0) {
      Serial.print("CO2 [ppm]: "); Serial.println(co2);
      Serial.print("Temp [°C]: "); Serial.println(temp);
-     Serial.print("Humidity [%]: "); Serial.println(humidity);
+     Serial.print("Humidity   [%]: "); Serial.println(humidity);
    }
  }
  delay(5000); // 0.2Hz sampling
