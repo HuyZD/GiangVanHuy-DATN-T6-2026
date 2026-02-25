@@ -5,10 +5,11 @@ void setup() {
  Serial.begin(115200);
  Wire.begin();
  scd4x.begin(Wire, 0x62);
- scd4x.wakeUp();
+ //scd4x.wakeUp();
  scd4x.stopPeriodicMeasurement();
  scd4x.reinit();
  scd4x.startPeriodicMeasurement();
+ delay(5000);
 }
 void loop() {
  bool dataReady = false;
