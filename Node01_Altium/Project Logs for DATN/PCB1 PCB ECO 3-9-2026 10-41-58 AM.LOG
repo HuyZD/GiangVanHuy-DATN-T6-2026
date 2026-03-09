@@ -1,0 +1,175 @@
+Removed Pin From Net: NetName=GND Pin=C4-1
+Removed Pin From Net: NetName=SCK Pin=C4-3
+Removed Pin From Net: NetName=NSS Pin=C4-7
+Removed Pin From Net: NetName=VCCpl Pin=C4-8
+Removed Pin From Net: NetName=VCCpl Pin=Clora-1
+Removed Pin From Net: NetName=GND Pin=Clora-2
+Removed Pin From Net: NetName=SCL Pin=Clora-3
+Removed Pin From Net: NetName=SDA Pin=Clora-4
+Removed Pin From Net: NetName=VCC Pin=Cscd-2
+Removed Pin From Net: NetName=swpo1 Pin=Ln1-1
+Removed Pin From Net: NetName=+24 Pin=P1-2
+Removed Pin From Net: NetName=GND Pin=Rn4-1
+Removed Pin From Net: NetName=NetCn4_1 Pin=Rn4-2
+Removed Pin From Net: NetName=PowEn1 Pin=Rn6-1
+Removed Pin From Net: NetName=VCCpl Pin=Tn1-3
+Removed Pin From Net: NetName=VCCpl Pin=Uarduino-7
+Removed Member From Class: ClassName=Sheet1 Member=A1
+Removed Member From Class: ClassName=Sheet1 Member=C4
+Removed Member From Class: ClassName=Sheet1 Member=Clora
+Removed Member From Class: ClassName=Sheet1 Member=Rlora1
+Removed Member From Class: ClassName=Sheet1 Member=Rn4
+Change Component Designator: OldDesignator=C3 NewDesignator=Cre1
+Change Component Designator: OldDesignator=J1 NewDesignator=Jre1
+Change Component Designator: OldDesignator=R? NewDesignator=Rre1
+Change Component Designator: OldDesignator=Ulora NewDesignator=Uas
+Change component parameters: Designator = "Rn3" ("Rn3"); Footprint = "AXIAL-0.3"; UniqueID = "\FLHWQMMQ" ("\FLHWQMMQ")
+Change component parameters (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "PackageDescription"; Value = "Axial Device, Thru-Hole; 2 Leads; 0.3 in Pin Spacing"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "PackageReference"; Value = "AXIAL-0.3"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = "9K"; VariantName = "[No Variations]"
+Change component parameters: Designator = "Rn5" ("Rn5"); Footprint = "AXIAL-0.3"; UniqueID = "\VXJWNZZN" ("\VXJWNZZN")
+Change component parameters (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "PackageDescription"; Value = "Axial Device, Thru-Hole; 2 Leads; 0.3 in Pin Spacing"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "PackageReference"; Value = "AXIAL-0.3"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Value"; Value = "47K"; VariantName = "[No Variations]"
+Added Component: Designator=Dbv2(smb)
+Added Component: Designator=Pex?(HDR2X4)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Pu?(HDR1X8)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Pu?(HDR1X8)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Pu?(HDR1X8)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Pu?(HDR1X8)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=Pulora(HDR1X8)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=VCCpl Pin=Cscd-2
+Added Pin To Net: NetName=GND Pin=Dbv2-1
+Added Pin To Net: NetName=GND Pin=Pex?-1
+Added Pin To Net: NetName=VCCpl Pin=Pex?-2
+Added Pin To Net: NetName=NSS Pin=Pex?-4
+Added Pin To Net: NetName=SCK Pin=Pex?-5
+Added Pin To Net: NetName=PowEn1 Pin=Pu?-2
+Added Pin To Net: NetName=VCC Pin=Pu?-7
+Added Pin To Net: NetName=GND Pin=Pu?-8
+Added Pin To Net: NetName=VCCpl Pin=Pulora-6
+Added Pin To Net: NetName=GND Pin=Pulora-7
+Added Pin To Net: NetName=GND Pin=Pulora-8
+Added Pin To Net: NetName=VCCpl Pin=Rscl-2
+Added Pin To Net: NetName=VCCpl Pin=Rsda-2
+Added Pin To Net: NetName=+5V Pin=Tn1-3
+Added Pin To Net: NetName=+5V Pin=Uarduino-7
+Added Pin To Net: NetName=+5V Pin=Uarduino-20
+Added Pin To Net: NetName=+5V Pin=Uarduino-21
+Added Pin To Net: NetName=VCCpl Pin=Uas-1
+Change Net Name : Old Net Name=+5V New Net Name=VCC5
+Added Pin To Net: NetName=DIO0 Pin=Pex?-8
+Added Pin To Net: NetName=DIO0 Pin=Pulora-4
+Added Pin To Net: NetName=DIO0 Pin=Uarduino-26
+Added Net: Name=DIO0
+Added Pin To Net: NetName=DIO1 Pin=Pulora-3
+Added Pin To Net: NetName=DIO1 Pin=U2-6
+Added Net: Name=DIO1
+Added Pin To Net: NetName=DIO2 Pin=Pulora-2
+Added Pin To Net: NetName=DIO2 Pin=U2-7
+Added Net: Name=DIO2
+Added Pin To Net: NetName=DIO3 Pin=Pulora-1
+Added Pin To Net: NetName=DIO3 Pin=U2-8
+Added Net: Name=DIO3
+Added Pin To Net: NetName=DIO5 Pin=U2-11
+Added Net: Name=DIO5
+Added Net: Name=EARTH
+Added Pin To Net: NetName=INT Pin=Uas-5
+Added Net: Name=INT
+Added Pin To Net: NetName=MISO Pin=Pex?-7
+Added Pin To Net: NetName=MISO Pin=U2-13
+Added Pin To Net: NetName=MISO Pin=Uarduino-18
+Added Net: Name=MISO
+Added Pin To Net: NetName=MOSI Pin=Pex?-6
+Added Pin To Net: NetName=MOSI Pin=U2-14
+Added Pin To Net: NetName=MOSI Pin=Uarduino-17
+Added Net: Name=MOSI
+Added Pin To Net: NetName=NetBT?_1 Pin=Uarduino-1
+Added Net: Name=NetBT?_1
+Added Pin To Net: NetName=NetCn25_1 Pin=Dbv2-2
+Added Net: Name=NetCn25_1
+Added Net: Name=NetDn?_2
+Added Net: Name=NetDNbv_2
+Added Net: Name=NetJlt?_1
+Added Pin To Net: NetName=NetL?_1 Pin=Uarduino-6
+Added Net: Name=NetL?_1
+Added Net: Name=NetL?_2
+Added Net: Name=NetPptr?_1
+Added Net: Name=NetPptr?_3
+Added Pin To Net: NetName=NetPu?_3 Pin=Pu?-3
+Added Net: Name=NetPu?_3
+Added Pin To Net: NetName=NetPu?_4 Pin=Pu?-4
+Added Net: Name=NetPu?_4
+Added Pin To Net: NetName=NetPu?_6 Pin=Pu?-6
+Added Net: Name=NetPu?_6
+Added Pin To Net: NetName=NetPu?_7 Pin=Pu?-7
+Added Net: Name=NetPu?_7
+Added Pin To Net: NetName=NetPu?_8 Pin=Pu?-8
+Added Net: Name=NetPu?_8
+Added Net: Name=NetRn8_1
+Added Net: Name=NetRn?_1
+Added Net: Name=NetRn?_2
+Added Pin To Net: NetName=PowEn2 Pin=Pu?-1
+Added Pin To Net: NetName=PowEn2 Pin=Rn6-1
+Added Pin To Net: NetName=PowEn2 Pin=Uarduino-13
+Added Net: Name=PowEn2
+Added Net: Name=RS485A1
+Added Net: Name=RS485A2
+Added Net: Name=RS485B1
+Added Net: Name=RS485B2
+Added Pin To Net: NetName=RST Pin=Pex?-3
+Added Pin To Net: NetName=RST Pin=Pulora-5
+Added Pin To Net: NetName=RST Pin=U2-4
+Added Pin To Net: NetName=RST Pin=Uarduino-24
+Added Net: Name=RST
+Added Net: Name=U1EN
+Added Net: Name=U1RX
+Added Net: Name=U1TX
+Added Pin To Net: NetName=U2ENo Pin=Pu?-5
+Added Net: Name=U2ENo
+Added Pin To Net: NetName=U2RXo Pin=Pu?-3
+Added Net: Name=U2RXo
+Added Pin To Net: NetName=U2TXo Pin=Pu?-4
+Added Net: Name=U2TXo
+Added Pin To Net: NetName=V+ Pin=P1-2
+Added Net: Name=V+
+Added Net: Name=VCCpll
+Added Net: Name=Vsen1
+Added Member To Class: ClassName=Sheet1 Member=Component Cre1 Header4
+Added Member To Class: ClassName=Sheet1 Member=Component Dbv2 DIODE
+Added Member To Class: ClassName=Sheet1 Member=Component Pex? nRF24L01
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pulora Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Qtr1 S9015
+Added Member To Class: ClassName=Sheet1 Member=Component Rn1 Res1
+Added Member To Class: ClassName=Sheet1 Member=Component Rre1 1k
+Added Member To Class: ClassName=Sheet1 Member=Component Uscd SCD40-D-R2

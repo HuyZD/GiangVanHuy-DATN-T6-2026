@@ -1,0 +1,10 @@
+Added Component: Designator=J?(CONN_4828-300x-CP_3MM)
+Add component (AddParameter): Name = "Copyright"; Value = "Copyright (C) 2025 Ultra Librarian. All rights reserved."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Name"; Value = "3M"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer_Part_Number"; Value = "4828-3004-CP"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RefDes"; Value = "RefDes"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Type"; Value = "IC Sockets"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Sheet1 Member=Component J? 4828-3004-CP
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8

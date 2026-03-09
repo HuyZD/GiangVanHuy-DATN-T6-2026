@@ -1,0 +1,9 @@
+Change Component Designator: OldDesignator=Pex? NewDesignator=Pexlr
+Change Component Designator: OldDesignator=Pu? NewDesignator=Pulr2
+Change Component Designator: OldDesignator=Pulora NewDesignator=Pulr1
+Added Pin To Net: NetName=DIO0 Pin=U2-5
+Added Pin To Net: NetName=DIO4 Pin=U2-10
+Added Net: Name=DIO4
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pu? Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pulr2 Header 8
