@@ -1,0 +1,100 @@
+Removed Pin From Net: NetName=U2RXo Pin=U-11
+Removed Pin From Net: NetName=RST2 Pin=U-12
+Removed Pin From Net: NetName=DIO0 Pin=U-A0
+Removed Pin From Net: NetName=U2ENo Pin=U-A1
+Removed Pin From Net: NetName=PowEn2 Pin=U-A2
+Removed Pin From Net: NetName=PowEn1 Pin=U-A3
+Removed Pin From Net: NetName=GND Pin=U-GND
+Removed Pin From Net: NetName=GND Pin=U-GND
+Removed Pin From Net: NetName=GND Pin=U-GND
+Removed Pin From Net: NetName=GND Pin=U-GND
+Removed Pin From Net: NetName=RST Pin=U-RAW
+Removed Pin From Net: NetName=U2RXo Pin=U-RX
+Removed Pin From Net: NetName=U2RXo Pin=U-RX
+Removed Pin From Net: NetName=U2TXo Pin=U-TX
+Removed Pin From Net: NetName=U2TXo Pin=U-TX
+Removed Pin From Net: NetName=U1EN Pin=U-VCC
+Removed Pin From Net: NetName=U1EN Pin=U-VCC
+Removed Pin From Net: NetName=U1EN Pin=U-VCC
+Removed Member From Class: ClassName=Sheet1 Member=U
+Added Component: Designator=ARDUINO_MINI_PRO(ARDUINO_MINI_PRO)
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-11
+Added Pin To Net: NetName=RST2 Pin=ARDUINO_MINI_PRO-12
+Added Pin To Net: NetName=DIO0 Pin=ARDUINO_MINI_PRO-A0
+Added Pin To Net: NetName=U2ENo Pin=ARDUINO_MINI_PRO-A1
+Added Pin To Net: NetName=PowEn2 Pin=ARDUINO_MINI_PRO-A2
+Added Pin To Net: NetName=PowEn1 Pin=ARDUINO_MINI_PRO-A3
+Added Pin To Net: NetName=A4 Pin=ARDUINO_MINI_PRO-A4
+Added Pin To Net: NetName=A5 Pin=ARDUINO_MINI_PRO-A5
+Added Pin To Net: NetName=DTR Pin=ARDUINO_MINI_PRO-DTR
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=RST Pin=ARDUINO_MINI_PRO-RAW
+Added Pin To Net: NetName=D7 Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=D7 Pin=ARDUINO_MINI_PRO-RST
+Add Pin To Net: Unknown Pin: Pin ARDUINO_MINI_PRO-RX
+Add Pin To Net: Unknown Pin: Pin ARDUINO_MINI_PRO-RX
+Add Pin To Net: Unknown Pin: Pin ARDUINO_MINI_PRO-TX
+Add Pin To Net: Unknown Pin: Pin ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_2 Pin=ARDUINO_MINI_PRO-2
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_2 Pin=P2-8
+Added Net: Name=NetARDUINO_MINI_PRO_2
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_3 Pin=ARDUINO_MINI_PRO-3
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_3 Pin=P2-7
+Added Net: Name=NetARDUINO_MINI_PRO_3
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_4 Pin=ARDUINO_MINI_PRO-4
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_4 Pin=P2-6
+Added Net: Name=NetARDUINO_MINI_PRO_4
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_5 Pin=ARDUINO_MINI_PRO-5
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_5 Pin=P2-5
+Added Net: Name=NetARDUINO_MINI_PRO_5
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_6 Pin=ARDUINO_MINI_PRO-6
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_6 Pin=P2-4
+Added Net: Name=NetARDUINO_MINI_PRO_6
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_7 Pin=ARDUINO_MINI_PRO-7
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_7 Pin=P2-3
+Added Net: Name=NetARDUINO_MINI_PRO_7
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_8 Pin=ARDUINO_MINI_PRO-8
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_8 Pin=P2-2
+Added Net: Name=NetARDUINO_MINI_PRO_8
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_9 Pin=ARDUINO_MINI_PRO-9
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_9 Pin=P2-1
+Added Net: Name=NetARDUINO_MINI_PRO_9
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_13 Pin=ARDUINO_MINI_PRO-13
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_13 Pin=P1-9
+Added Net: Name=NetARDUINO_MINI_PRO_13
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_A6 Pin=ARDUINO_MINI_PRO-A6
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_A6 Pin=P4-2
+Added Net: Name=NetARDUINO_MINI_PRO_A6
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_A7 Pin=ARDUINO_MINI_PRO-A7
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_A7 Pin=P4-1
+Added Net: Name=NetARDUINO_MINI_PRO_A7
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=P2-9
+Added Net: Name=NetARDUINO_MINI_PRO_GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=P2-10
+Added Net: Name=NetARDUINO_MINI_PRO_RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=P3-4
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=Rmclr-1
+Added Net: Name=NetARDUINO_MINI_PRO_VCC
+Added Member To Class: ClassName=Sheet1 Member=Component ARDUINO_MINI_PRO

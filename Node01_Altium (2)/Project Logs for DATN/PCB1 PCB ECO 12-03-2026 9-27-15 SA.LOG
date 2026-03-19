@@ -1,0 +1,84 @@
+Change Component Designator: OldDesignator=C? NewDesignator=C1
+Change Component Designator: OldDesignator=C? NewDesignator=C2
+Change Component Designator: OldDesignator=C? NewDesignator=C3
+Change Component Designator: OldDesignator=Ca? NewDesignator=Ca1
+Change Component Designator: OldDesignator=Cbst? NewDesignator=Cbst1
+Change Component Designator: OldDesignator=Cn? NewDesignator=Cn1
+Change Component Designator: OldDesignator=Cn? NewDesignator=Cn2
+Change Component Designator: OldDesignator=Cn? NewDesignator=Cn3
+Change Component Designator: OldDesignator=Dn? NewDesignator=Dn1
+Change Component Designator: OldDesignator=Dn? NewDesignator=Dn2
+Change Component Designator: OldDesignator=Dnb? NewDesignator=Dnb1
+Change Component Designator: OldDesignator=L? NewDesignator=L1
+Change Component Designator: OldDesignator=P? NewDesignator=P1
+Change Component Designator: OldDesignator=P? NewDesignator=P2
+Change Component Designator: OldDesignator=P? NewDesignator=P3
+Change Component Designator: OldDesignator=Pu? NewDesignator=Pu1
+Change Component Designator: OldDesignator=Pu? NewDesignator=Pu2
+Change Component Designator: OldDesignator=Pu? NewDesignator=Pu3
+Change Component Designator: OldDesignator=R? NewDesignator=R1
+Change Component Designator: OldDesignator=R? NewDesignator=R2
+Change Component Designator: OldDesignator=R? NewDesignator=R3
+Change Component Designator: OldDesignator=R? NewDesignator=R4
+Change Component Designator: OldDesignator=R? NewDesignator=R5
+Change Component Designator: OldDesignator=R? NewDesignator=R6
+Change Component Designator: OldDesignator=R? NewDesignator=R7
+Change Component Designator: OldDesignator=R? NewDesignator=R8
+Change Component Designator: OldDesignator=R? NewDesignator=R9
+Change Component Designator: OldDesignator=Rmclr? NewDesignator=Rmclr1
+Change Component Designator: OldDesignator=Rn? NewDesignator=Rn1
+Change Component Designator: OldDesignator=Rn? NewDesignator=Rn2
+Change Component Designator: OldDesignator=Rn? NewDesignator=Rn3
+Change Component Designator: OldDesignator=Rn? NewDesignator=Rn4
+Change Component Designator: OldDesignator=Rn? NewDesignator=Rn5
+Change Component Designator: OldDesignator=U? NewDesignator=U1
+Change Component Designator: OldDesignator=Un? NewDesignator=Un1
+Change Net Name : Old Net Name=NetC?_2 New Net Name=NetC3_2
+Change Net Name : Old Net Name=NetCbst?_1 New Net Name=NetCbst1_1
+Change Net Name : Old Net Name=NetCbst?_2 New Net Name=NetCbst1_2
+Change Net Name : Old Net Name=NetDn?_2 New Net Name=NetDn1_2
+Change Net Name : Old Net Name=NetRn?_1 New Net Name=NetRn3_1
+Change Net Name : Old Net Name=NetRn?_2 New Net Name=NetRn3_2
+Added Pin To Net: NetName=NetDn2_2 Pin=Dn2-2
+Added Pin To Net: NetName=NetDn2_2 Pin=P3-2
+Added Pin To Net: NetName=NetDn2_2 Pin=P3-2
+Added Net: Name=NetDn2_2
+Added Pin To Net: NetName=NetJlt1_1 Pin=Rmclr1-2
+Added Net: Name=NetJlt1_1
+Added Pin To Net: NetName=NetR1_1 Pin=R1-1
+Added Net: Name=NetR1_1
+Added Pin To Net: NetName=NetR2_1 Pin=R2-1
+Added Net: Name=NetR2_1
+Added Pin To Net: NetName=NetR3_1 Pin=R3-1
+Added Net: Name=NetR3_1
+Added Pin To Net: NetName=NetR4_1 Pin=R4-1
+Added Net: Name=NetR4_1
+Added Pin To Net: NetName=NetR5_1 Pin=R5-1
+Added Pin To Net: NetName=NetR5_1 Pin=R7-2
+Added Pin To Net: NetName=NetR5_1 Pin=Un1-4
+Added Net: Name=NetR5_1
+Added Pin To Net: NetName=NetRn1_1 Pin=Rn1-1
+Added Pin To Net: NetName=NetRn1_1 Pin=Rn2-2
+Added Pin To Net: NetName=NetRn1_1 Pin=Tn1-1
+Added Net: Name=NetRn1_1
+Added Member To Class: ClassName=Sheet1 Member=Component C2 100pF
+Added Member To Class: ClassName=Sheet1 Member=Component C3 100pF
+Added Member To Class: ClassName=Sheet1 Member=Component Cn1 104
+Added Member To Class: ClassName=Sheet1 Member=Component Cn2 CAP
+Added Member To Class: ClassName=Sheet1 Member=Component Dn2 Diode
+Added Member To Class: ClassName=Sheet1 Member=Component P1 CON 3
+Added Member To Class: ClassName=Sheet1 Member=Component P2 CON 4 EDG5.08
+Added Member To Class: ClassName=Sheet1 Member=Component Pu1 Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component Pu3 Header 8
+Added Member To Class: ClassName=Sheet1 Member=Component R1 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R2 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R3 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R5 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R6 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R7 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R8 1k
+Added Member To Class: ClassName=Sheet1 Member=Component R9 1k
+Added Member To Class: ClassName=Sheet1 Member=Component Rn2 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Rn3 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Rn4 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Rn5 z10V

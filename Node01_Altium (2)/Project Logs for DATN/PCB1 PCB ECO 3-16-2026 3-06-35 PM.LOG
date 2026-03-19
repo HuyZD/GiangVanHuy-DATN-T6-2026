@@ -1,0 +1,16 @@
+Added Pin To Net: NetName=OUT Pin=ARDUINO_MINI_PRO-7
+Added Pin To Net: NetName=TX Pin=ARDUINO_MINI_PRO-8
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=TX Pin=P2-2
+Added Pin To Net: NetName=OUT Pin=P2-3
+Added Room: Name=Sheet1

@@ -1,0 +1,14 @@
+Added Component: Designator=VR?(VREG_LM3940IMP-3.3/NOPB)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/LM3940IMP-3.3/Texas+Instruments/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "LM3940IMP-3.3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "SOT-223-4 Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/LM3940IMP-3.3/Texas+Instruments/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=Cha1-2
+Added Pin To Net: NetName=GND Pin=Cha2-2
+Added Pin To Net: NetName=VCC5 Pin=VR?-1
+Added Pin To Net: NetName=GND Pin=VR?-2
+Added Pin To Net: NetName=VCCpll Pin=VR?-3
+Added Pin To Net: NetName=GND Pin=VR?-4
+Added Member To Class: ClassName=Sheet1 Member=Component VR? LM3940IMP-3.3/NOPB

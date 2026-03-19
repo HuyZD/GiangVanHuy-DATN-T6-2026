@@ -1,0 +1,21 @@
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U1RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U1TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=GND Pin=Pulr2-1
+Added Pin To Net: NetName=NSS Pin=Pulr2-2
+Added Pin To Net: NetName=GND Pin=Pulr2-8
+Change Net Name : Old Net Name=NetPulr2_7 New Net Name=DIO4
+Add Net: Net with name "NetARDUINO_MINI_PRO_GND" already exists
+Added Room: Name=Sheet1

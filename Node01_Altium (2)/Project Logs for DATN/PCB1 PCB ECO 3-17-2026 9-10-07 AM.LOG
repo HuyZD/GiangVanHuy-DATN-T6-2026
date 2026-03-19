@@ -1,0 +1,17 @@
+Removed Pin From Net: NetName=TX Pin=ARDUINO_MINI_PRO-8
+Removed Pin From Net: NetName=RL Pin=ARDUINO_MINI_PRO-9
+Removed Pin From Net: NetName=RL Pin=P2-1
+Removed Pin From Net: NetName=TX Pin=P2-2
+Added Pin To Net: NetName=RL Pin=ARDUINO_MINI_PRO-8
+Added Pin To Net: NetName=TX Pin=ARDUINO_MINI_PRO-9
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=TX Pin=P2-1
+Added Pin To Net: NetName=RL Pin=P2-2

@@ -1,0 +1,55 @@
+Removed Pin From Net: NetName=VCCpl Pin=H3-1
+Removed Pin From Net: NetName=GND Pin=H3-2
+Removed Pin From Net: NetName=SDA Pin=H3-4
+Removed Pin From Net: NetName=INT Pin=H3-5
+Removed Pin From Net: NetName=GND Pin=H4-1
+Removed Pin From Net: NetName=VCCpl Pin=H4-2
+Removed Pin From Net: NetName=SDA Pin=H4-4
+Removed Member From Class: ClassName=Sheet1 Member=H3
+Removed Member From Class: ClassName=Sheet1 Member=H4
+Added Component: Designator=JP?(JP 1x4 CT)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH004006"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Jump Ðon Cái 2.54MM 1x20P Th?ng"; VariantName = "[No Variations]"
+Added Component: Designator=JP?(JP 1x5 CT)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH004006"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Jump Ðon Cái 2.54MM 1x20P Th?ng"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=Po Pin=ARDUINO_MINI_PRO-5
+Added Pin To Net: NetName=A Pin=ARDUINO_MINI_PRO-6
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=GND Pin=JP?-1
+Added Pin To Net: NetName=VCCpl Pin=JP?-1
+Added Pin To Net: NetName=GND Pin=JP?-2
+Added Pin To Net: NetName=VCCpl Pin=JP?-2
+Added Pin To Net: NetName=A5 Pin=JP?-3
+Added Pin To Net: NetName=A5 Pin=JP?-3
+Added Pin To Net: NetName=SDA Pin=JP?-4
+Added Pin To Net: NetName=SDA Pin=JP?-4
+Added Pin To Net: NetName=INT Pin=JP?-5
+Added Pin To Net: NetName=A Pin=P2-4
+Added Pin To Net: NetName=Po Pin=P2-5
+Add Net: Net with name "NetARDUINO_MINI_PRO_GND" already exists
+Added Member To Class: ClassName=Sheet1 Member=Component JP? JP 1x4 2.54
+Added Member To Class: ClassName=Sheet1 Member=Component JP? JP 1x5 2.54
+Added Room: Name=Sheet1

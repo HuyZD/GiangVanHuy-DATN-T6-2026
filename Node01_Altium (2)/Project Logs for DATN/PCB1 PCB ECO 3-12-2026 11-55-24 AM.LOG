@@ -1,0 +1,64 @@
+Removed Pin From Net: NetName=VCC5 Pin=JP?-1
+Removed Pin From Net: NetName=VCC5 Pin=JP?-1
+Removed Pin From Net: NetName=GND Pin=JP?-2
+Removed Pin From Net: NetName=GND Pin=JP?-2
+Removed Pin From Net: NetName=A Pin=JP?-3
+Removed Pin From Net: NetName=GND Pin=JP?-3
+Removed Pin From Net: NetName=Po Pin=JP?-4
+Removed Pin From Net: NetName=Do Pin=JP?-5
+Removed Pin From Net: NetName=To Pin=JP?-6
+Removed Member From Class: ClassName=Sheet1 Member=JP?
+Added Component: Designator=Jas(JST_B5B-XH-A)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/B5B-XH-A/JST+Sales+America+Inc./view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "JST Sales"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "B5B-XH-A"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/B5B-XH-A/JST+Sales+America+Inc./view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=Jph(CON6_100_B6B-XH-A_TH_ST)
+Add component (AddParameter): Name = "Alternate Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case/Package"; Value = "TH-CON"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Crimp Part Number"; Value = "ASXHSXH22K51"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "JST"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "B6B-XH-A(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mating Part Number"; Value = "XHP-6"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number-1"; Value = "B6B-XH-A(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier-1"; Value = "ARROW"; VariantName = "[No Variations]"
+Added Component: Designator=Jsc(CON4_78_B4B-PH-K-S(LF)(SN))
+Add component (AddParameter): Name = "Alternate Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case/Package"; Value = "TH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Crimp Part Number"; Value = "ASPHSPH24K51"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "JST"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "B4B-PH-K-S(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mating Part Number"; Value = "PHR-4"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier-1"; Value = "SP Road"; VariantName = "[No Variations]"
+Added Component: Designator=Jtds(CON3_78_B3B-PH-K-S_TH_ST)
+Add component (AddParameter): Name = "Alternate Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case/Package"; Value = "TH-CON"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "JST"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "0894000320"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number-1"; Value = "894000320"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier-1"; Value = "MOUSER"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=VCCpl Pin=Jas-1
+Added Pin To Net: NetName=GND Pin=Jas-2
+Added Pin To Net: NetName=SCL Pin=Jas-3
+Added Pin To Net: NetName=SDA Pin=Jas-4
+Added Pin To Net: NetName=INT Pin=Jas-5
+Added Pin To Net: NetName=VCC5 Pin=Jph-1
+Added Pin To Net: NetName=GND Pin=Jph-2
+Added Pin To Net: NetName=GND Pin=Jph-3
+Added Pin To Net: NetName=Po Pin=Jph-4
+Added Pin To Net: NetName=Do Pin=Jph-5
+Added Pin To Net: NetName=To Pin=Jph-6
+Added Pin To Net: NetName=GND Pin=Jsc-1
+Added Pin To Net: NetName=VCCpl Pin=Jsc-2
+Added Pin To Net: NetName=SCL Pin=Jsc-3
+Added Pin To Net: NetName=SDA Pin=Jsc-4
+Added Pin To Net: NetName=VCC5 Pin=Jtds-1
+Added Pin To Net: NetName=GND Pin=Jtds-2
+Added Pin To Net: NetName=A Pin=Jtds-3
+Added Member To Class: ClassName=Sheet1 Member=Component Jas B5B-XH-A
+Added Member To Class: ClassName=Sheet1 Member=Component Jph B6B-XH-A(LF)(SN)
+Added Member To Class: ClassName=Sheet1 Member=Component Jsc B4B-PH-K-S(LF)(SN)
+Added Member To Class: ClassName=Sheet1 Member=Component Jtds 0894000320

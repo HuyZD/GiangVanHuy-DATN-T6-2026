@@ -1,0 +1,24 @@
+Removed Pin From Net: NetName=VCCpl Pin=Ca5-1
+Removed Pin From Net: NetName=VCCpl Pin=Ca7-1
+Removed Pin From Net: NetName=VCCpl Pin=JPas-1
+Removed Pin From Net: NetName=VCCpl Pin=JPsc-2
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC5 Pin=Ca5-1
+Added Pin To Net: NetName=VCC5 Pin=Ca7-1
+Added Pin To Net: NetName=VCC5 Pin=JPas-1
+Added Pin To Net: NetName=VCC5 Pin=JPsc-2
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=P1-12
+Added Net: Name=NetARDUINO_MINI_PRO_VCC
+Added Member To Class: ClassName=Sheet1 Member=Component Ptr1 Header 4
+Added Member To Class: ClassName=Sheet1 Member=Component Utr2 MAX485
+Added Room: Name=Sheet1

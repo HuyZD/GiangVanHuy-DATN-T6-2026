@@ -1,0 +1,32 @@
+Added Component: Designator=J5(SAMTEC_SO-3015-03-03-02-N)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/SO-3015-03-03-02-N/Samtec/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Samtec"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "SO-3015-03-03-02-N"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SO-3015-03-03-02-N/Samtec/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=J6(SAMTEC_SO-3015-03-03-02-N)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/SO-3015-03-03-02-N/Samtec/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Samtec"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "SO-3015-03-03-02-N"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SO-3015-03-03-02-N/Samtec/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=J7(SAMTEC_SO-3015-03-03-02-N)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/SO-3015-03-03-02-N/Samtec/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Samtec"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "SO-3015-03-03-02-N"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SO-3015-03-03-02-N/Samtec/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=J8(SAMTEC_SO-3015-03-03-02-N)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/SO-3015-03-03-02-N/Samtec/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Samtec"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "SO-3015-03-03-02-N"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/SO-3015-03-03-02-N/Samtec/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Sheet1 Member=Component J5 SO-3015-03-03-02-N
+Added Member To Class: ClassName=Sheet1 Member=Component J6 SO-3015-03-03-02-N
+Added Member To Class: ClassName=Sheet1 Member=Component J7 SO-3015-03-03-02-N
+Added Member To Class: ClassName=Sheet1 Member=Component J8 SO-3015-03-03-02-N

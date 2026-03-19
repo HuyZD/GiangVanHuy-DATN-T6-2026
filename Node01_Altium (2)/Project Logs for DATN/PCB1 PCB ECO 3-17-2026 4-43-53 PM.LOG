@@ -1,0 +1,12 @@
+Removed Pin From Net: NetName=GND Pin=P1-2
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC Pin=ARDUINO_MINI_PRO-VCC
+Add Net: Net with name "NetARDUINO_MINI_PRO_GND" already exists
+Add Net: Net with name "NetARDUINO_MINI_PRO_RST" already exists
+Added Member To Class: ClassName=Sheet1 Member=Component Utr4 MAX485_MODULE_5V_LOGIC_TLL_TO_RS-485_CONVERTER
+Added Room: Name=Sheet1

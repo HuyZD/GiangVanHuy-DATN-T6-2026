@@ -1,0 +1,17 @@
+Added Component: Designator=JPtr(JP 1x3 CT)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH004006"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Jump Ðon Cái 2.54MM 1x20P Th?ng"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetJPtr_1 Pin=JPtr-1
+Added Pin To Net: NetName=NetJPtr_1 Pin=Rtr1-2
+Added Net: Name=NetJPtr_1
+Added Pin To Net: NetName=NetJPtr_2 Pin=JPtr-2
+Added Pin To Net: NetName=NetJPtr_2 Pin=Rres?-2
+Added Net: Name=NetJPtr_2
+Added Pin To Net: NetName=NetJPtr_3 Pin=JPtr-3
+Added Pin To Net: NetName=NetJPtr_3 Pin=Tn6-3
+Added Net: Name=NetJPtr_3
+Added Member To Class: ClassName=Sheet1 Member=Component JPtr JP 1x3 2.54

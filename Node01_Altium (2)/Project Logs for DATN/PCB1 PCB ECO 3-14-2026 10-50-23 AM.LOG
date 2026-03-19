@@ -1,0 +1,23 @@
+Change Component Designator: OldDesignator=Prl? NewDesignator=Prl1
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D8 Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=D7 Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=D7 Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U1RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U1TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-VCC
+Change Net Name : Old Net Name=NetPrl?_1 New Net Name=NetPrl1_1
+Change Net Name : Old Net Name=NetPrl?_3 New Net Name=NetPrl1_3

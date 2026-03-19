@@ -1,0 +1,29 @@
+Removed Pin From Net: NetName=U2TXo Pin=P3-2
+Removed Pin From Net: NetName=U2RXo Pin=P3-3
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-2
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-3
+Added Pin To Net: NetName=U2ENo Pin=ARDUINO_MINI_PRO-4
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=U2ENo Pin=P2-6
+Added Pin To Net: NetName=U2RXo Pin=P2-7
+Added Pin To Net: NetName=U2TXo Pin=P2-8
+Add Net: Net with name "NetARDUINO_MINI_PRO_GND" already exists
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RX Pin=P3-3
+Added Net: Name=NetARDUINO_MINI_PRO_RX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_TX Pin=P3-2
+Added Net: Name=NetARDUINO_MINI_PRO_TX
+Added Room: Name=Sheet1
