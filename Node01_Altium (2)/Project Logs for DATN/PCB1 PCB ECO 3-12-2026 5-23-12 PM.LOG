@@ -1,0 +1,11 @@
+Removed Pin From Net: NetName=NetLtr1_1 Pin=Ltr1-1
+Removed Pin From Net: NetName=NetLtr1_2 Pin=Ltr1-2
+Added Component: Designator=Ltr1(LED-3MM-RED)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH003892"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Led 3MM Ph? Ð? (10c)"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetLtr1_1 Pin=Ltr1-1
+Added Pin To Net: NetName=NetLtr1_2 Pin=Ltr1-2

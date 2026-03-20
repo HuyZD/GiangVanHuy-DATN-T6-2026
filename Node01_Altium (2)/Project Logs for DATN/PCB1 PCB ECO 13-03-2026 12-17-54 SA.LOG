@@ -1,0 +1,37 @@
+Removed Pin From Net: NetName=+24 Pin=Cn16-1
+Removed Pin From Net: NetName=GND Pin=Cn16-2
+Removed Pin From Net: NetName=VCC Pin=P3-4
+Removed Pin From Net: NetName=VCC Pin=U-VCC
+Removed Pin From Net: NetName=VCC Pin=U-VCC
+Removed Pin From Net: NetName=VCC Pin=U-VCC
+Removed Member From Class: ClassName=Sheet1 Member=Cn16
+Added Component: Designator=Rmclr(0805c)
+Added Pin To Net: NetName=VCC Pin=Rmclr-2
+Added Pin To Net: NetName=D8 Pin=U-GND
+Added Pin To Net: NetName=D8 Pin=U-GND
+Added Pin To Net: NetName=D8 Pin=U-GND
+Added Pin To Net: NetName=D8 Pin=U-GND
+Added Pin To Net: NetName=GND Pin=U-GND
+Added Pin To Net: NetName=GND Pin=U-GND
+Added Pin To Net: NetName=GND Pin=U-GND
+Added Pin To Net: NetName=GND Pin=U-GND
+Added Pin To Net: NetName=NetP2_10 Pin=U-RST
+Added Pin To Net: NetName=NetP2_10 Pin=U-RST
+Added Pin To Net: NetName=NetP2_10 Pin=U-RST
+Added Pin To Net: NetName=U2RXo Pin=U-RX
+Added Pin To Net: NetName=U2RXo Pin=U-RX
+Added Pin To Net: NetName=U2TXo Pin=U-TX
+Added Pin To Net: NetName=U2TXo Pin=U-TX
+Added Pin To Net: NetName=U1EN Pin=U-VCC
+Added Pin To Net: NetName=U1EN Pin=U-VCC
+Added Pin To Net: NetName=U1EN Pin=U-VCC
+Added Pin To Net: NetName=U2TXo Pin=U-VCC
+Added Pin To Net: NetName=U2TXo Pin=U-VCC
+Added Pin To Net: NetName=U2TXo Pin=U-VCC
+Added Pin To Net: NetName=NetP3_4 Pin=P3-4
+Added Pin To Net: NetName=NetP3_4 Pin=Rmclr-1
+Added Pin To Net: NetName=NetP3_4 Pin=U-VCC
+Added Pin To Net: NetName=NetP3_4 Pin=U-VCC
+Added Pin To Net: NetName=NetP3_4 Pin=U-VCC
+Added Net: Name=NetP3_4
+Added Member To Class: ClassName=Sheet1 Member=Component Rmclr 10k

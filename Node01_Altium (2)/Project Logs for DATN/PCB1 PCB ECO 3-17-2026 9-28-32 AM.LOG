@@ -1,0 +1,19 @@
+Removed Pin From Net: NetName=PowEn2 Pin=ARDUINO_MINI_PRO-A2
+Removed Pin From Net: NetName=PowEn1 Pin=ARDUINO_MINI_PRO-A3
+Removed Pin From Net: NetName=PowEn1 Pin=P1-5
+Removed Pin From Net: NetName=PowEn2 Pin=P1-6
+Added Pin To Net: NetName=PowEn1 Pin=ARDUINO_MINI_PRO-A2
+Added Pin To Net: NetName=PowEn2 Pin=ARDUINO_MINI_PRO-A3
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=PowEn2 Pin=P1-5
+Added Pin To Net: NetName=PowEn1 Pin=P1-6
+Added Member To Class: ClassName=Sheet1 Member=Component ARDUINO_MINI_PRO
+Added Member To Class: ClassName=Sheet1 Member=Component P1 Header 12

@@ -1,0 +1,23 @@
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U1RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U1TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC5 Pin=JPtr-2
+Added Pin To Net: NetName=GND Pin=JPtr-3
+Added Pin To Net: NetName=VCC5 Pin=Rre-2
+Added Pin To Net: NetName=GND Pin=Tn6-3
+Change Net Name : Old Net Name=NetJPtr_1 New Net Name=TX
+Add Net: Net with name "NetARDUINO_MINI_PRO_GND" already exists
+Added Member To Class: ClassName=Sheet1 Member=Component Tn6 ao3401
+Added Room: Name=Sheet1

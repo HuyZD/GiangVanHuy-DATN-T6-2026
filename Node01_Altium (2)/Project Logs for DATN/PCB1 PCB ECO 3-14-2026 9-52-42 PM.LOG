@@ -1,0 +1,17 @@
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RX Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_TX Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=U2RXo Pin=P2-10
+Add Net: Net with name "NetARDUINO_MINI_PRO_GND" already exists

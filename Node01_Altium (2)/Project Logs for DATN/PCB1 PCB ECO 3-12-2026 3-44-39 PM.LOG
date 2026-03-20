@@ -1,0 +1,43 @@
+Added Component: Designator=Cn7(1206e)
+Added Component: Designator=Cn8(1206e)
+Added Component: Designator=Jre?(TSOP1838)
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/TSOP1838/Vishay/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Vishay"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "TSOP1838"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/TSOP1838/Vishay/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=Ulr(MODULE_RA-02_LORA)
+Add component (AddParameter): Name = "Availability"; Value = "Unavailable"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "RA-02_LORA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=VCC Pin=Cn7-1
+Added Pin To Net: NetName=GND Pin=Cn7-2
+Added Pin To Net: NetName=VCC Pin=Cn8-1
+Added Pin To Net: NetName=GND Pin=Cn8-2
+Added Pin To Net: NetName=OUT Pin=Jre?-1
+Added Pin To Net: NetName=GND Pin=Jre?-2
+Added Pin To Net: NetName=VCCpl Pin=Jre?-3
+Added Pin To Net: NetName=GND Pin=Ulr-1
+Added Pin To Net: NetName=GND Pin=Ulr-2
+Added Pin To Net: NetName=VCCpl Pin=Ulr-3
+Added Pin To Net: NetName=RST Pin=Ulr-4
+Added Pin To Net: NetName=DIO0 Pin=Ulr-5
+Added Pin To Net: NetName=DIO1 Pin=Ulr-6
+Added Pin To Net: NetName=DIO2 Pin=Ulr-7
+Added Pin To Net: NetName=DIO3 Pin=Ulr-8
+Added Pin To Net: NetName=GND Pin=Ulr-9
+Added Pin To Net: NetName=NetPulr2_7 Pin=Ulr-10
+Added Pin To Net: NetName=DIO5 Pin=Ulr-11
+Added Pin To Net: NetName=SCK Pin=Ulr-12
+Added Pin To Net: NetName=MISO Pin=Ulr-13
+Added Pin To Net: NetName=MOSI Pin=Ulr-14
+Added Pin To Net: NetName=NSS Pin=Ulr-15
+Added Pin To Net: NetName=GND Pin=Ulr-16
+Added Member To Class: ClassName=Sheet1 Member=Component Cn7 CAP
+Added Member To Class: ClassName=Sheet1 Member=Component Cn8 CAP
+Added Member To Class: ClassName=Sheet1 Member=Component Jre? TSOP1838
+Added Member To Class: ClassName=Sheet1 Member=Component Ulr RA-02_LORA

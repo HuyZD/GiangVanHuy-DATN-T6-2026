@@ -1,0 +1,27 @@
+Change Component Designator: OldDesignator=U? NewDesignator=Utr3
+Change Component Designator: OldDesignator=U? NewDesignator=Utr4
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=GND Pin=Utr3-1
+Added Pin To Net: NetName=RS485A2 Pin=Utr3-2
+Added Pin To Net: NetName=RS485B2 Pin=Utr3-3
+Added Pin To Net: NetName=VCC5 Pin=Utr3-4
+Added Pin To Net: NetName=U2RXo Pin=Utr3-5
+Added Pin To Net: NetName=U2ENo Pin=Utr3-6
+Added Pin To Net: NetName=U2ENo Pin=Utr3-7
+Added Pin To Net: NetName=U2TXo Pin=Utr3-8
+Added Pin To Net: NetName=GND Pin=Utr4-1
+Added Pin To Net: NetName=RS485A1 Pin=Utr4-2
+Added Pin To Net: NetName=RS485B1 Pin=Utr4-3
+Added Pin To Net: NetName=VCC5 Pin=Utr4-4
+Added Pin To Net: NetName=U1RX Pin=Utr4-5
+Added Pin To Net: NetName=U1EN Pin=Utr4-6
+Added Pin To Net: NetName=U1EN Pin=Utr4-7
+Added Pin To Net: NetName=U1TX Pin=Utr4-8
+Add Net: Net with name "NetARDUINO_MINI_PRO_RST" already exists
+Added Member To Class: ClassName=Sheet1 Member=Component Utr3 MAX485_MODULE_5V_LOGIC_TLL_TO_RS-485_CONVERTER

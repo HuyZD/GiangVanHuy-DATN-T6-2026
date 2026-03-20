@@ -1,0 +1,23 @@
+Removed Pin From Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Removed Pin From Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Removed Pin From Net: NetName=U2ENo Pin=ARDUINO_MINI_PRO-RX
+Removed Pin From Net: NetName=U2ENo Pin=ARDUINO_MINI_PRO-RX
+Removed Pin From Net: NetName=NetARDUINO_MINI_PRO_RST Pin=P1-3
+Removed Pin From Net: NetName=U2RXo Pin=P2-10
+Removed Pin From Net: NetName=U2ENo Pin=P2-11
+Added Pin To Net: NetName=U2ENo Pin=ARDUINO_MINI_PRO-A6
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=P2-10
+Added Pin To Net: NetName=U2RXo Pin=P2-11
+Added Pin To Net: NetName=U2ENo Pin=P4-2
+Added Room: Name=Sheet1

@@ -1,0 +1,43 @@
+Removed Pin From Net: NetName=PowEn3 Pin=P1-4
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-2
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-4
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-5
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-6
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-7
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-8
+Added Pin To Net: NetName=U1EN Pin=ARDUINO_MINI_PRO-9
+Added Pin To Net: NetName=PowEn3 Pin=ARDUINO_MINI_PRO-A7
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_RST Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U1EN Pin=H1-3
+Added Pin To Net: NetName=U1EN Pin=H2-4
+Added Pin To Net: NetName=U1EN Pin=JPrev-1
+Added Pin To Net: NetName=U1EN Pin=JPtr-1
+Added Pin To Net: NetName=U1EN Pin=Jre-1
+Added Pin To Net: NetName=U1EN Pin=P2-1
+Added Pin To Net: NetName=U1EN Pin=P2-2
+Added Pin To Net: NetName=U1EN Pin=P2-3
+Added Pin To Net: NetName=U1EN Pin=P2-4
+Added Pin To Net: NetName=U1EN Pin=P2-5
+Added Pin To Net: NetName=U1EN Pin=P2-6
+Added Pin To Net: NetName=U1EN Pin=P2-8
+Added Pin To Net: NetName=PowEn3 Pin=P4-1
+Added Pin To Net: NetName=U1EN Pin=Rptr9-2
+Added Pin To Net: NetName=U1EN Pin=Rptr10-2
+Added Pin To Net: NetName=U1EN Pin=Rrev-1
+Added Pin To Net: NetName=U1EN Pin=Rrl1-1
+Added Pin To Net: NetName=U1EN Pin=Rtr1-2
+Added Pin To Net: NetName=U1EN Pin=Utr2-1
+Added Pin To Net: NetName=U1EN Pin=Utr2-4
+Change Net Name : Old Net Name=U1EN New Net Name=A
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_VCC Pin=P1-4
+Added Net: Name=NetARDUINO_MINI_PRO_VCC
+Added Member To Class: ClassName=Sheet1 Member=Component ARDUINO_MINI_PRO
+Added Room: Name=Sheet1

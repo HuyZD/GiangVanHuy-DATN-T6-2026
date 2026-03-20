@@ -1,0 +1,15 @@
+Removed Pin From Net: NetName=SCL Pin=P4-4
+Removed Pin From Net: NetName=SDA Pin=P4-5
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=SDA Pin=P4-4
+Added Pin To Net: NetName=SCL Pin=P4-5

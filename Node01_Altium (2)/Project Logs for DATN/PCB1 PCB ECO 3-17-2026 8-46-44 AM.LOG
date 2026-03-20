@@ -1,0 +1,25 @@
+Added Component: Designator=JPsc?(JP 1x4 CT)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH004006"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Jump Ðon Cái 2.54MM 1x20P Th?ng"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=RL Pin=ARDUINO_MINI_PRO-9
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=NetARDUINO_MINI_PRO_GND Pin=ARDUINO_MINI_PRO-GND
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RST
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=NSS Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC Pin=ARDUINO_MINI_PRO-VCC
+Added Pin To Net: NetName=VCC5 Pin=JPsc?-1
+Added Pin To Net: NetName=U2TXo Pin=JPsc?-2
+Added Pin To Net: NetName=U2RXo Pin=JPsc?-3
+Added Pin To Net: NetName=GND Pin=JPsc?-4
+Added Pin To Net: NetName=RL Pin=P2-1
+Added Member To Class: ClassName=Sheet1 Member=Component JPsc? JP 1x4 2.54

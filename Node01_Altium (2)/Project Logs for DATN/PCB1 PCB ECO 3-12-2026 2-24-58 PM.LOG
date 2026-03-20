@@ -1,0 +1,28 @@
+Removed Pin From Net: NetName=GND Pin=Qrl?-1
+Removed Pin From Net: NetName=NetDrl1_1 Pin=Qrl?-3
+Removed Pin From Net: NetName=NetJPtr?_3 Pin=Qtr?-1
+Removed Pin From Net: NetName=TX Pin=Qtr?-2
+Removed Pin From Net: NetName=NetLtr1_2 Pin=Qtr?-3
+Removed Member From Class: ClassName=Sheet1 Member=Qrl?
+Removed Member From Class: ClassName=Sheet1 Member=Qtr?
+Added Component: Designator=Rtr1(0805c)
+Added Component: Designator=Tn5(sot23-3)
+Added Component: Designator=Tn6(sot23-3)
+Added Pin To Net: NetName=DIO5 Pin=Pulr2-6
+Added Pin To Net: NetName=NetDrl1_1 Pin=Tn5-2
+Added Pin To Net: NetName=GND Pin=Tn5-3
+Added Pin To Net: NetName=NetLtr1_2 Pin=Tn6-2
+Added Pin To Net: NetName=NetJPtr?_3 Pin=Tn6-3
+Added Pin To Net: NetName=NetJPtr?_1 Pin=Rtr1-2
+Added Net: Name=NetJPtr?_1
+Added Pin To Net: NetName=NetPulr2_7 Pin=Pulr2-7
+Added Net: Name=NetPulr2_7
+Added Pin To Net: NetName=NetRrl1_2 Pin=Rrl1-2
+Added Pin To Net: NetName=NetRrl1_2 Pin=Tn5-1
+Added Net: Name=NetRrl1_2
+Added Pin To Net: NetName=NetRtr1_1 Pin=Rtr1-1
+Added Pin To Net: NetName=NetRtr1_1 Pin=Tn6-1
+Added Net: Name=NetRtr1_1
+Added Member To Class: ClassName=Sheet1 Member=Component Rtr1 10k
+Added Member To Class: ClassName=Sheet1 Member=Component Tn5 ao3401
+Added Member To Class: ClassName=Sheet1 Member=Component Tn6 ao3401
