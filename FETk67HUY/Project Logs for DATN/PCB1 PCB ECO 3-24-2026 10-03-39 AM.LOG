@@ -1,0 +1,14 @@
+Removed Pin From Net: NetName=GND Pin=Pexlr-1
+Removed Pin From Net: NetName=VCCLr Pin=Pexlr-2
+Removed Pin From Net: NetName=RS Pin=Pexlr-3
+Removed Pin From Net: NetName=NSS Pin=Pexlr-4
+Removed Pin From Net: NetName=SCK Pin=Pexlr-5
+Removed Pin From Net: NetName=MOSI Pin=Pexlr-6
+Removed Pin From Net: NetName=MISO Pin=Pexlr-7
+Removed Pin From Net: NetName=DIO0 Pin=Pexlr-8
+Removed Member From Class: ClassName=Sheet1 Member=Pexlr
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U1TXo Pin=ARDUINO_MINI_PRO-TX
+Added Room: Name=Sheet1

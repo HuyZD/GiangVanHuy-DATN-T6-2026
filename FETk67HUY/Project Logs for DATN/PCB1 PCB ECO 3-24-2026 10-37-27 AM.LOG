@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=VCC_5V Pin=CnMb2-1
+Removed Pin From Net: NetName=GND Pin=CnMb2-2
+Removed Member From Class: ClassName=Sheet1 Member=CnMb2
+Added Pin To Net: NetName=U1RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Room: Name=Sheet1

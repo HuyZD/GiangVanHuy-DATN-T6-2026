@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=U2TXo Pin=JPTxRx-2
+Removed Pin From Net: NetName=U2RXo Pin=JPTxRx-3
+Added Pin To Net: NetName=U1RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U1TXo Pin=JPTxRx-2
+Added Pin To Net: NetName=U1RXo Pin=JPTxRx-3

@@ -1,0 +1,138 @@
+Removed Pin From Net: NetName=GND Pin=Jn1-1
+Removed Pin From Net: NetName=V+ Pin=Jn1-2
+Removed Pin From Net: NetName=VCC_5V Pin=JPas-1
+Removed Pin From Net: NetName=GND Pin=JPas-2
+Removed Pin From Net: NetName=SCL Pin=JPas-3
+Removed Pin From Net: NetName=SDA Pin=JPas-4
+Removed Pin From Net: NetName=OUT Pin=JPrev-1
+Removed Pin From Net: NetName=VCC_5V Pin=JPrev-2
+Removed Pin From Net: NetName=GND Pin=JPrev-3
+Removed Pin From Net: NetName=GND Pin=JPscd-1
+Removed Pin From Net: NetName=VCC_5V Pin=JPscd-2
+Removed Pin From Net: NetName=SCL Pin=JPscd-3
+Removed Pin From Net: NetName=SDA Pin=JPscd-4
+Removed Pin From Net: NetName=TX Pin=Jtr-1
+Removed Pin From Net: NetName=VCC_5V Pin=Jtr-2
+Removed Pin From Net: NetName=GND Pin=Jtr-3
+Removed Pin From Net: NetName=GND Pin=Q1-1
+Removed Pin From Net: NetName=NetLtr3_2 Pin=Q1-3
+Removed Pin From Net: NetName=GND Pin=Q2-1
+Removed Pin From Net: NetName=NetD3rl1_1 Pin=Q2-3
+Removed Pin From Net: NetName=GND Pin=Q3-1
+Removed Pin From Net: NetName=NetD3rl3_1 Pin=Q3-3
+Removed Pin From Net: NetName=GND Pin=Q4-1
+Removed Pin From Net: NetName=NetD3rl2_1 Pin=Q4-3
+Removed Pin From Net: NetName=VCC Pin=VR1-1
+Removed Pin From Net: NetName=GND Pin=VR1-2
+Removed Pin From Net: NetName=VCC_3.3V Pin=VR1-3
+Removed Pin From Net: NetName=GND Pin=VR1-4
+Removed Member From Class: ClassName=Sheet1 Member=Jn1
+Removed Member From Class: ClassName=Sheet1 Member=JPas
+Removed Member From Class: ClassName=Sheet1 Member=JPrev
+Removed Member From Class: ClassName=Sheet1 Member=JPscd
+Removed Member From Class: ClassName=Sheet1 Member=VR1
+Added Component: Designator=AMS1(SOT223)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "Dán"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH000596"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "AMS1117-3.3V SOT223"; VariantName = "[No Variations]"
+Added Component: Designator=Jas(CON4_78_B4B-PH-K-S(LF)(SN))
+Add component (AddParameter): Name = "Alternate Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case/Package"; Value = "TH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Crimp Part Number"; Value = "ASPHSPH24K51"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "JST"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "B4B-PH-K-S(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mating Part Number"; Value = "PHR-4"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier-1"; Value = "SP Road"; VariantName = "[No Variations]"
+Added Component: Designator=Jrev(CON3_100_B3B-XH-A_TH_ST)
+Add component (AddParameter): Name = "Alternate Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case/Package"; Value = "TH-CON"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Crimp Part Number"; Value = "ASXHSXH22K51"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "CUI"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "B3B-XH-A(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mating Part Number"; Value = "XHP-3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number-1"; Value = "B3B-XH-A(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier-1"; Value = "ARROW"; VariantName = "[No Variations]"
+Added Component: Designator=Jscd(CON4_78_B4B-PH-K-S(LF)(SN))
+Add component (AddParameter): Name = "Alternate Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case/Package"; Value = "TH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Crimp Part Number"; Value = "ASPHSPH24K51"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "JST"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "B4B-PH-K-S(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mating Part Number"; Value = "PHR-4"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier-1"; Value = "SP Road"; VariantName = "[No Variations]"
+Added Component: Designator=Jtr(CON3_100_B3B-XH-A_TH_ST)
+Add component (AddParameter): Name = "Alternate Part Number-1"; Value = "NA"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case/Package"; Value = "TH-CON"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Crimp Part Number"; Value = "ASXHSXH22K51"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "CUI"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "B3B-XH-A(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mating Part Number"; Value = "XHP-3"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number-1"; Value = "B3B-XH-A(LF)(SN)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier-1"; Value = "ARROW"; VariantName = "[No Variations]"
+Added Component: Designator=KF1(Con 2 KF301 5.08)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH000987"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "CON 2 KF301-2P 5.08MM Xanh Duong"; VariantName = "[No Variations]"
+Added Component: Designator=Q1(SOT-23)
+Add component (AddParameter): Name = "Value"; Value = "C9014"; VariantName = "[No Variations]"
+Added Component: Designator=Q2(SOT-23)
+Add component (AddParameter): Name = "Value"; Value = "C9014"; VariantName = "[No Variations]"
+Added Component: Designator=Q3(SOT-23)
+Add component (AddParameter): Name = "Value"; Value = "C9014"; VariantName = "[No Variations]"
+Added Component: Designator=Q4(SOT-23)
+Add component (AddParameter): Name = "Value"; Value = "C9014"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=AMS1-1
+Added Pin To Net: NetName=VCC_3.3V Pin=AMS1-2
+Added Pin To Net: NetName=VCC Pin=AMS1-3
+Added Pin To Net: NetName=VCC_3.3V Pin=AMS1-4
+Added Pin To Net: NetName=VCC_5V Pin=Jas-1
+Added Pin To Net: NetName=GND Pin=Jas-2
+Added Pin To Net: NetName=SCL Pin=Jas-3
+Added Pin To Net: NetName=SDA Pin=Jas-4
+Added Pin To Net: NetName=OUT Pin=Jrev-1
+Added Pin To Net: NetName=VCC_5V Pin=Jrev-2
+Added Pin To Net: NetName=GND Pin=Jrev-3
+Added Pin To Net: NetName=GND Pin=Jscd-1
+Added Pin To Net: NetName=VCC_5V Pin=Jscd-2
+Added Pin To Net: NetName=SCL Pin=Jscd-3
+Added Pin To Net: NetName=SDA Pin=Jscd-4
+Added Pin To Net: NetName=TX Pin=Jtr-1
+Added Pin To Net: NetName=VCC_5V Pin=Jtr-2
+Added Pin To Net: NetName=GND Pin=Jtr-3
+Added Pin To Net: NetName=V+ Pin=KF1-1
+Added Pin To Net: NetName=GND Pin=KF1-2
+Added Pin To Net: NetName=GND Pin=Q1-2
+Added Pin To Net: NetName=NetLtr3_2 Pin=Q1-3
+Added Pin To Net: NetName=GND Pin=Q2-2
+Added Pin To Net: NetName=NetD3rl2_1 Pin=Q2-3
+Added Pin To Net: NetName=GND Pin=Q3-2
+Added Pin To Net: NetName=NetD3rl1_1 Pin=Q3-3
+Added Pin To Net: NetName=GND Pin=Q4-2
+Added Pin To Net: NetName=NetD3rl3_1 Pin=Q4-3
+Added Pin To Net: NetName=NetQ1_1 Pin=Q1-1
+Added Pin To Net: NetName=NetQ1_1 Pin=Rre1-2
+Added Net: Name=NetQ1_1
+Added Pin To Net: NetName=NetQ2_1 Pin=Q2-1
+Added Pin To Net: NetName=NetQ2_1 Pin=R1rl2-2
+Added Net: Name=NetQ2_1
+Added Pin To Net: NetName=NetQ3_1 Pin=Q3-1
+Added Pin To Net: NetName=NetQ3_1 Pin=R1rl1-2
+Added Net: Name=NetQ3_1
+Added Pin To Net: NetName=NetQ4_1 Pin=Q4-1
+Added Pin To Net: NetName=NetQ4_1 Pin=R1rl3-2
+Added Net: Name=NetQ4_1
+Change Class Name : Old Net Name=Sheet1 New Net Name=DATN_IoT_Node_Schenatic
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component AMS1 AMS1117-3.3V
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Jas B4B-PH-K-S(LF)(SN)
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Jrev B3B-XH-A(LF)(SN)
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Jscd B4B-PH-K-S(LF)(SN)
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component KF1 CON 2 KF301
+Added Room: Name=DATN_IoT_Node_Schenatic

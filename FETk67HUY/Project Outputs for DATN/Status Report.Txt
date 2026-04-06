@@ -1,0 +1,13 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [DATN.PrjPcb]
+   Generated File[DATN_IoT_Node_PCB-RoundHoles.TXT]
+   Generated File[DATN_IoT_Node_PCB-SlotHoles.TXT]
+   Generated File[DATN_IoT_Node_PCB.LDP]
+   Generated File[DATN_IoT_Node_PCB.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 11:24:13 AM On 3/31/2026

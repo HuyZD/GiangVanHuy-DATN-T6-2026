@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=NetDbv2_2 Pin=Fbv-1
+Removed Pin From Net: NetName=NetCbv1_1 Pin=Fbv-2
+Added Component: Designator=Fbv(Cau chi tu phuc hoi 2A 24V SMD1812)
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH010033"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten"; Value = "C?u Chì T? Ph?c H?i 2A 24V SMD1812"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetCbv1_1 Pin=Fbv-1
+Added Pin To Net: NetName=NetDbv2_2 Pin=Fbv-2
+Added Room: Name=DATN_IoT_Node_Schenatic

@@ -1,0 +1,43 @@
+Added Component: Designator=U2Mb1(MODULE_MAX485_MODULE_5V_LOGIC_TLL_TO_RS-485_CONVERTER)
+Add component (AddParameter): Name = "Availability"; Value = "Not in stock"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/MAX485%20Module%205V%20logic%20TLL%20to%20RS-485%20converter/e-Gizmo+Mechatronix+Central/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "e-Gizmo Mechatronix Central"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "MAX485 Module 5V logic TLL to RS-485 converter"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Package"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/MAX485%20Module%205V%20logic%20TLL%20to%20RS-485%20converter/e-Gizmo+Mechatronix+Central/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=U2Mb2(MODULE_MAX485_MODULE_5V_LOGIC_TLL_TO_RS-485_CONVERTER)
+Add component (AddParameter): Name = "Availability"; Value = "Not in stock"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/MAX485%20Module%205V%20logic%20TLL%20to%20RS-485%20converter/e-Gizmo+Mechatronix+Central/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "e-Gizmo Mechatronix Central"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "MAX485 Module 5V logic TLL to RS-485 converter"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Package"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/MAX485%20Module%205V%20logic%20TLL%20to%20RS-485%20converter/e-Gizmo+Mechatronix+Central/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=U2Mb1-1
+Added Pin To Net: NetName=RS485A1 Pin=U2Mb1-2
+Added Pin To Net: NetName=RS485B1 Pin=U2Mb1-3
+Added Pin To Net: NetName=VCC_5V Pin=U2Mb1-4
+Added Pin To Net: NetName=U1RX Pin=U2Mb1-5
+Added Pin To Net: NetName=U1EN Pin=U2Mb1-6
+Added Pin To Net: NetName=U1EN Pin=U2Mb1-7
+Added Pin To Net: NetName=U1TX Pin=U2Mb1-8
+Added Pin To Net: NetName=GND Pin=U2Mb2-1
+Added Pin To Net: NetName=RS485A2 Pin=U2Mb2-2
+Added Pin To Net: NetName=RS485B2 Pin=U2Mb2-3
+Added Pin To Net: NetName=VCC_5V Pin=U2Mb2-4
+Added Pin To Net: NetName=U2RXo Pin=U2Mb2-5
+Added Pin To Net: NetName=U2ENo Pin=U2Mb2-6
+Added Pin To Net: NetName=U2ENo Pin=U2Mb2-7
+Added Pin To Net: NetName=U2TXo Pin=U2Mb2-8
+Added Member To Class: ClassName=Sheet1 Member=Component Cn1 Cap
+Added Member To Class: ClassName=Sheet1 Member=Component Cn2 100pF
+Added Member To Class: ClassName=Sheet1 Member=Component Cn3 CAP
+Added Member To Class: ClassName=Sheet1 Member=Component Rn1 Res1
+Added Member To Class: ClassName=Sheet1 Member=Component Rn2 Res1
+Added Member To Class: ClassName=Sheet1 Member=Component Rn4 Res1
+Added Member To Class: ClassName=Sheet1 Member=Component Tn2 c1815
+Added Member To Class: ClassName=Sheet1 Member=Component U2Mb1 MAX485_MODULE_5V_LOGIC_TLL_TO_RS-485_CONVERTER
+Added Member To Class: ClassName=Sheet1 Member=Component U2Mb2 MAX485_MODULE_5V_LOGIC_TLL_TO_RS-485_CONVERTER

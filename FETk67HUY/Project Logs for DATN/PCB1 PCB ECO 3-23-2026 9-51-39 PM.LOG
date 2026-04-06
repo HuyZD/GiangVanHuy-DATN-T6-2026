@@ -1,0 +1,35 @@
+Removed Pin From Net: NetName=RL1 Pin=ARDUINO_MINI_PRO-2
+Removed Pin From Net: NetName=Po Pin=ARDUINO_MINI_PRO-5
+Removed Pin From Net: NetName=U2ENo Pin=ARDUINO_MINI_PRO-9
+Removed Pin From Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Removed Pin From Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Removed Pin From Net: NetName=U2TXo Pin=JPTxRx-2
+Removed Pin From Net: NetName=U2RXo Pin=JPTxRx-3
+Removed Pin From Net: NetName=U2ENo Pin=P2-1
+Removed Pin From Net: NetName=Po Pin=P2-5
+Removed Pin From Net: NetName=RL1 Pin=P2-8
+Added Pin To Net: NetName=U2ENo Pin=ARDUINO_MINI_PRO-2
+Added Pin To Net: NetName=RL1 Pin=ARDUINO_MINI_PRO-3
+Added Pin To Net: NetName=Po Pin=ARDUINO_MINI_PRO-9
+Added Pin To Net: NetName=Po Pin=P2-1
+Added Pin To Net: NetName=RL1 Pin=P2-7
+Added Pin To Net: NetName=U2ENo Pin=P2-8
+Change Net Name : Old Net Name=RL3 New Net Name=RL2
+Change Net Name : Old Net Name=U2ENo New Net Name=U1ENo
+Change Net Name : Old Net Name=U2RXo New Net Name=U1RXo
+Change Net Name : Old Net Name=U2TXo New Net Name=U1TXo
+Added Pin To Net: NetName=RL3 Pin=ARDUINO_MINI_PRO-5
+Added Pin To Net: NetName=RL3 Pin=P2-5
+Added Net: Name=RL3
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2RXo Pin=JPTxRx-3
+Added Net: Name=U2RXo
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U2TXo Pin=JPTxRx-2
+Added Net: Name=U2TXo
+Added Pin To Net: NetName=U21TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U21TXo Pin=ARDUINO_MINI_PRO-TX
+Added Net: Name=U21TXo
+Added Room: Name=Sheet1

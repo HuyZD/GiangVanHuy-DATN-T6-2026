@@ -1,0 +1,33 @@
+Removed Pin From Net: NetName=GND Pin=U2Mb2-1
+Removed Pin From Net: NetName=RS485A2 Pin=U2Mb2-2
+Removed Pin From Net: NetName=RS485B2 Pin=U2Mb2-3
+Removed Pin From Net: NetName=VCC_5V Pin=U2Mb2-4
+Removed Pin From Net: NetName=U1RXo Pin=U2Mb2-5
+Removed Pin From Net: NetName=U1ENo Pin=U2Mb2-6
+Removed Pin From Net: NetName=U1ENo Pin=U2Mb2-7
+Removed Pin From Net: NetName=U1TXo Pin=U2Mb2-8
+Removed Member From Class: ClassName=Sheet1 Member=U2Mb2
+Change Component Designator: OldDesignator=U1Mb2 NewDesignator=U1Mb
+Added Component: Designator=U?(MODULE_MAX485_MODULE_5V_LOGIC_TLL_TO_RS-485_CONVERTER)
+Add component (AddParameter): Name = "Availability"; Value = "Not in stock"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/MAX485%20Module%205V%20logic%20TLL%20to%20RS-485%20converter/e-Gizmo+Mechatronix+Central/view-part/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "e-Gizmo Mechatronix Central"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "MAX485 Module 5V logic TLL to RS-485 converter"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Package"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/MAX485%20Module%205V%20logic%20TLL%20to%20RS-485%20converter/e-Gizmo+Mechatronix+Central/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U1TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=GND Pin=U?-1
+Added Pin To Net: NetName=RS485A2 Pin=U?-2
+Added Pin To Net: NetName=RS485B2 Pin=U?-3
+Added Pin To Net: NetName=VCC_5V Pin=U?-4
+Added Pin To Net: NetName=U1RXo Pin=U?-5
+Added Pin To Net: NetName=U1ENo Pin=U?-6
+Added Pin To Net: NetName=U1ENo Pin=U?-7
+Added Pin To Net: NetName=U1TXo Pin=U?-8
+Added Member To Class: ClassName=Sheet1 Member=Component U? MAX485_MODULE_5V_LOGIC_TLL_TO_RS-485_CONVERTER
+Added Room: Name=Sheet1

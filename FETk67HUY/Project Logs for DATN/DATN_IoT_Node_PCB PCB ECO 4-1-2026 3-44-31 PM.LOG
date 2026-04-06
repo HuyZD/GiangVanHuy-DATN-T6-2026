@@ -1,0 +1,5 @@
+Change Net Name : Old Net Name=NetPrl3_2 New Net Name=COM3
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Ltr1 LED 3mm
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Ltr2 LED 3mm
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Ltr3 LED 3mm
+Added Room: Name=DATN_IoT_Node_Schenatic
