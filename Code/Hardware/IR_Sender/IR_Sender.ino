@@ -73,7 +73,7 @@ void loop() {
     //char command = Serial.read();
    // if (command == 'a') {
       mySender.send(rawDataOn,RAW_DATA_LEN,40);//Pass the buffer,length, optionally frequency
-    //  Serial.println(F("AC Switched On"));
+     Serial.println(F("AC Switched On"));
   //  }
   //  else if (command == 'b') {
 		 delay(500);
