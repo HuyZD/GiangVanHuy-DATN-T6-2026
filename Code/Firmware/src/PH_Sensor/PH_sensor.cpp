@@ -1,11 +1,9 @@
-#include <Arduino.h>
-#define PH_PIN 3
+#include "PH_sensor.h"
 
-void setup() {
-  Serial.begin(9600);
+void PH_Sensor_setup() {
 }
 
-void loop() {
+void PH_Sensor() {
   int adcValue = analogRead(PH_PIN);     // đọc ADC (0-1023)
   float voltage = adcValue * 5.0 / 1023; // đổi sang điện áp
 

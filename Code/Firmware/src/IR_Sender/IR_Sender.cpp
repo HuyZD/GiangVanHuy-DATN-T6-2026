@@ -4,17 +4,10 @@
  * website: https://josephdream.tech/
  *   
  */
-#include <IRLibSendBase.h>    //We need the base code
-#include <IRLib_HashRaw.h>    //Only use raw sender
+#include "IR_Sender.h"
 
 IRsendRaw mySender;
-
-void setup() {
-  Serial.begin(9600);
-  delay(2000); 
-}
-
-#define RAW_DATA_LEN 200
+// on air conditioner 
 uint16_t rawDataOn[RAW_DATA_LEN]={
 	4394, 4358, 550, 1618, 522, 546, 530, 1614, 
 	526, 1618, 526, 542, 530, 542, 526, 1618, 
@@ -41,7 +34,8 @@ uint16_t rawDataOn[RAW_DATA_LEN]={
 	490, 578, 494, 578, 490, 582, 490, 1654, 
 	486, 586, 486, 1654, 490, 1654, 486, 582, 
 	490, 1654, 490, 1654, 486, 1654, 486, 1000};
-#define RAW_DATA_LEN 200
+
+// off air conditioner
 uint16_t rawDataOff[RAW_DATA_LEN]={
 	4358, 4394, 518, 1650, 490, 578, 494, 1650, 
 	494, 1650, 490, 582, 490, 578, 494, 1650, 
@@ -68,7 +62,10 @@ uint16_t rawDataOff[RAW_DATA_LEN]={
 	494, 578, 490, 578, 494, 578, 494, 578, 
 	490, 582, 494, 578, 494, 1646, 494, 1650, 
 	490, 1650, 490, 1654, 490, 1654, 490, 1000};
-void loop() {
+void IR_sender_setup() {
+}
+
+void IR_sender() {
   //if (Serial.available()){
     //char command = Serial.read();
    // if (command == 'a') {

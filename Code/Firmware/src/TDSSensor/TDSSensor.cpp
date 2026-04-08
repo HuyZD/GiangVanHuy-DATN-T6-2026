@@ -1,20 +1,15 @@
 // Original source code: https://wiki.keyestudio.com/KS0429_keyestudio_TDS_Meter_V1.0#Test_Code
 // Project details: https://RandomNerdTutorials.com/arduino-tds-water-quality-sensor/
-#include <Arduino.h>
-#define TdsSensorPin 5
-#define VREF 5.0              // analog reference voltage(Volt) of the ADC
-#define SCOUNT  30            // sum of sample point
+#include "TDSSensor.h"
 
-int analogBuffer[SCOUNT];     // store the analog value in the array, read from ADC
-int analogBufferTemp[SCOUNT];
 int analogBufferIndex = 0;
 int copyIndex = 0;
+
 
 float averageVoltage = 0;
 float tdsValue = 0;
 float temperature = 16;       // current temperature for compensation
 
-// median filtering algorithm
 int getMedianNum(int bArray[], int iFilterLen){
   int bTab[iFilterLen];
   for (byte i = 0; i<iFilterLen; i++)
@@ -38,12 +33,12 @@ int getMedianNum(int bArray[], int iFilterLen){
   return bTemp;
 }
 
-void setup(){
+void TDS_Sensor_setup(){
   Serial.begin(115200);
   pinMode(TdsSensorPin,INPUT);
 }
 
-void loop(){
+void TDS_Sensor_read(){
   static unsigned long analogSampleTimepoint = millis();
   if(millis()-analogSampleTimepoint > 40U){     //every 40 milliseconds,read the analog value from the ADC
     analogSampleTimepoint = millis();

@@ -1,15 +1,7 @@
-#include <SPI.h>
-#include <LoRa.h>
-
-// LoRa pins
-#define SS 10
-#define RST A1
-#define DIO0 A0
+#include "LoRaSender.h"
 
 int counter = 0;
-
-void setup() {
-  Serial.begin(9600);
+void LoRa_Sender_setup() {
   while (!Serial);
 
   Serial.println("LoRa Sender");
@@ -30,7 +22,7 @@ void setup() {
   LoRa.setTxPower(20);
 }
 
-void loop() {
+void LoRa_Sender() {
   Serial.print("Sending packet: ");
   Serial.println(counter);
 

@@ -1,13 +1,6 @@
-#include <SPI.h>
-#include <LoRa.h>
+#include "LoRaReceiver.h"
 
-// LoRa pins
-#define SS 10
-#define RST A1
-#define DIO0 A0
-
-void setup() {
-  Serial.begin(9600);
+void LoRa_Receiver_setup() {
   while (!Serial);
 
   Serial.println("LoRa Receiver");
@@ -25,7 +18,7 @@ void setup() {
   LoRa.setSpreadingFactor(12);
 }
 
-void loop() {
+void LoRa_Receiver() {
   // Try to parse packet
   int packetSize = LoRa.parsePacket();
   

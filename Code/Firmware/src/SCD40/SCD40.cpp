@@ -1,8 +1,6 @@
-#include <Wire.h>
-#include <SensirionI2cScd4x.h>
+#include "SCD40.h"
 SensirionI2cScd4x scd4x;
-void setup() {
- Serial.begin(115200);
+void SCD40_setup() {
  Wire.begin();
  scd4x.begin(Wire, 0x62);
  //scd4x.wakeUp();
@@ -11,7 +9,7 @@ void setup() {
  scd4x.startPeriodicMeasurement();
  delay(5000);
 }
-void loop() {
+void SCD40_read() {
  bool dataReady = false;
  if (scd4x.getDataReadyStatus(dataReady) == 0 && dataReady) {
    uint16_t co2;

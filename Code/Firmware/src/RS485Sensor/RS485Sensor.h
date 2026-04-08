@@ -7,6 +7,6 @@
 void preTransmission(); 
 void postTransmission();
 void RS485_Sensor_setup();
-void RS485_Sensor_loop();
+void RS485_Sensor_read();
 
 #endif	//RS485_SENSOR_H    

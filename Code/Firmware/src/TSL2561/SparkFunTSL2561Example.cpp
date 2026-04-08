@@ -46,8 +46,7 @@ Updated to Arduino 1.6.4 5/2015
 // Your sketch must #include this library, and the Wire library
 // (Wire is a standard library included with Arduino):
 
-#include <SparkFunTSL2561.h>
-#include <Wire.h>
+#include "SparkFunTSL2561Example.h"
 
 // Create an SFE_TSL2561 object, here called "light":
 
@@ -58,7 +57,7 @@ SFE_TSL2561 light;
 boolean gain;     // Gain setting, 0 = X1, 1 = X16;
 unsigned int ms;  // Integration ("shutter") time in milliseconds
 
-void setup()
+void TSL2561_setup()
 {
   // Initialize the Serial port:
   
@@ -133,7 +132,7 @@ void setup()
   // Once a measurement occurs, another integration period will start.
 }
 
-void loop()
+void TSL2561_read()
 {
   // Wait between measurements before retrieving the result
   // (You can also configure the sensor to issue an interrupt

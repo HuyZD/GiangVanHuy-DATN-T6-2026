@@ -25,7 +25,7 @@ void RS485_Sensor_setup() {
   node.postTransmission(postTransmission);
 }
 
-void RS485_Sensor_loop() {
+void RS485_Sensor_read() {
   uint8_t result;
 
   // đọc 2 thanh ghi từ địa chỉ 0

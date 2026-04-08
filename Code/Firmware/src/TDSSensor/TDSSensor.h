@@ -11,10 +11,10 @@ extern int analogBufferTemp[SCOUNT];
 extern int analogBufferIndex ;
 extern int copyIndex ;
 
-float averageVoltage ;
-float tdsValue ;
-float temperature ;       // current temperature for compensation
+extern float averageVoltage ;
+extern float tdsValue ;
+extern float temperature ;       // current temperature for compensation
 void TDS_Sensor_setup();
-void TDS_Sensor_loop();
+void TDS_Sensor_read();
 
 #endif	//TDS_SENSOR_H
