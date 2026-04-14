@@ -2,8 +2,8 @@
 #include <LoRa.h>
 
 // LoRa pins
-#define SS 10
-#define RST 9
+#define SS 5
+#define RST 21
 #define DIO0 2
 
 void setup() {
@@ -16,7 +16,7 @@ void setup() {
   LoRa.setPins(SS, RST, DIO0);
   
   // Replace the frequency with your regional frequency (e.g., 915E6 for US, 868E6 for EU)
-  if (!LoRa.begin(915E6)) {
+  if (!LoRa.begin(433E6)) {
     Serial.println("Starting LoRa failed!");
     while (1);
   }

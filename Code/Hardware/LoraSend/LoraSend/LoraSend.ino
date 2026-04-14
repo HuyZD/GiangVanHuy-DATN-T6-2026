@@ -18,7 +18,7 @@ void setup() {
   LoRa.setPins(SS, RST, DIO0);
   
   // Replace the frequency with your regional frequency (e.g., 915E6 for US, 868E6 for EU)
-  if (!LoRa.begin(915E6)) {
+  if (!LoRa.begin(433E6)) {
     Serial.println("Starting LoRa failed!");
     while (1);
   }
