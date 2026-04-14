@@ -1,0 +1,8 @@
+Change Component Comment : Designator=Cha2 Old Comment=0.33uF New Comment=33uF
+Change Component Comment : Designator=Cha1 Old Comment=0.47uF New Comment=47uF
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Jtr B3B-XH-A(LF)(SN)
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Q1 HF
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Q2 HF
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Q3 HF
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Q4 HF
+Added Room: Name=DATN_IoT_Node_Schenatic

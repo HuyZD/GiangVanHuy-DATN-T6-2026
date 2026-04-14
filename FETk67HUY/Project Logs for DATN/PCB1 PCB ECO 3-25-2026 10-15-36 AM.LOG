@@ -1,0 +1,9 @@
+Removed Pin From Net: NetName=A Pin=ARDUINO_MINI_PRO-4
+Removed Pin From Net: NetName=OUT Pin=ARDUINO_MINI_PRO-5
+Removed Pin From Net: NetName=OUT Pin=P2-5
+Removed Pin From Net: NetName=A Pin=P2-6
+Added Pin To Net: NetName=OUT Pin=ARDUINO_MINI_PRO-4
+Added Pin To Net: NetName=A Pin=ARDUINO_MINI_PRO-5
+Added Pin To Net: NetName=A Pin=P2-5
+Added Pin To Net: NetName=OUT Pin=P2-6
+Added Room: Name=Sheet1

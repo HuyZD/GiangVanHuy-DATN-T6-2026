@@ -1,0 +1,14 @@
+Added Pin To Net: NetName=U1RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U1RXo Pin=ARDUINO_MINI_PRO-RX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=U2TXo Pin=ARDUINO_MINI_PRO-TX
+Added Pin To Net: NetName=COM1 Pin=Prl1-2
+Added Pin To Net: NetName=COM1 Pin=RL1-1
+Added Net: Name=COM1
+Added Pin To Net: NetName=COM2 Pin=Prl2-2
+Added Pin To Net: NetName=COM2 Pin=RL2-1
+Added Net: Name=COM2
+Added Pin To Net: NetName=NetPrl3_2 Pin=Prl3-2
+Added Pin To Net: NetName=NetPrl3_2 Pin=RL3-1
+Added Net: Name=NetPrl3_2
+Added Room: Name=Sheet1

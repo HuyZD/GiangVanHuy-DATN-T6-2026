@@ -1,0 +1,78 @@
+Removed Pin From Net: NetName=NetLtr1_1 Pin=Ltr1-1
+Removed Pin From Net: NetName=NetLtr1_2 Pin=Ltr1-2
+Removed Pin From Net: NetName=NetLtr1_2 Pin=Ltr2-1
+Removed Pin From Net: NetName=NetLtr2_2 Pin=Ltr2-2
+Removed Pin From Net: NetName=NetLtr2_2 Pin=Ltr3-1
+Removed Pin From Net: NetName=NetLtr3_2 Pin=Ltr3-2
+Removed Pin From Net: NetName=NetLtr3_2 Pin=Q1-3
+Removed Pin From Net: NetName=TX Pin=Rre1-1
+Removed Pin From Net: NetName=NetQ1_1 Pin=Rre1-2
+Removed Pin From Net: NetName=NetLtr1_1 Pin=Rre2-1
+Removed Pin From Net: NetName=VCC_5V Pin=Rre2-2
+Removed Member From Class: ClassName=DATN_IoT_Node_Schenatic Member=Rre1
+Removed Member From Class: ClassName=DATN_IoT_Node_Schenatic Member=Rre2
+Change Component Designator: OldDesignator=Ltr3 NewDesignator=Ltr4
+Added Component: Designator=Ltr1(LED-3MM-RED)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH003892"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Led 3MM Ph? Ð? (10c)"; VariantName = "[No Variations]"
+Added Component: Designator=Ltr2(LED-3MM-RED)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH003892"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Led 3MM Ph? Ð? (10c)"; VariantName = "[No Variations]"
+Added Component: Designator=Ltr3(LED-3MM-RED)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "C?m"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ghi_Chu"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH003892"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Led 3MM Ph? Ð? (10c)"; VariantName = "[No Variations]"
+Added Component: Designator=Rtr1(tro smd 0805)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "Dán"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH005315"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "So_Chan"; Value = "2"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Tr? 0805 5% 30R"; VariantName = "[No Variations]"
+Added Component: Designator=Rtr2(tro smd 0805)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "Dán"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH005315"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "So_Chan"; Value = "2"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Tr? 0805 5% 30R"; VariantName = "[No Variations]"
+Added Component: Designator=Rtr3(tro smd 0805)
+Add component (AddParameter): Name = "Chung_Loai"; Value = "Dán"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Don_Vi"; Value = "Con"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Kieu_Chan"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ma_Hang"; Value = "MH005259"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "So_Chan"; Value = "2"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Ten_Linh_Kien"; Value = "Tr? 0805 5% 220R"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=NetLtr1_1 Pin=Ltr1-1
+Added Pin To Net: NetName=NetLtr1_2 Pin=Ltr1-2
+Added Pin To Net: NetName=NetLtr1_2 Pin=Ltr2-1
+Added Pin To Net: NetName=NetLtr2_2 Pin=Ltr2-2
+Added Pin To Net: NetName=NetLtr3_2 Pin=Ltr3-2
+Added Pin To Net: NetName=NetLtr3_2 Pin=Ltr4-1
+Added Pin To Net: NetName=NetLtr2_2 Pin=Ltr4-2
+Added Pin To Net: NetName=NetLtr2_2 Pin=Q1-3
+Added Pin To Net: NetName=VCC_5V Pin=Rtr1-1
+Added Pin To Net: NetName=NetLtr1_1 Pin=Rtr1-2
+Added Pin To Net: NetName=VCC_5V Pin=Rtr2-1
+Added Pin To Net: NetName=TX Pin=Rtr3-1
+Added Pin To Net: NetName=NetQ1_1 Pin=Rtr3-2
+Added Pin To Net: NetName=NetLtr3_1 Pin=Ltr3-1
+Added Pin To Net: NetName=NetLtr3_1 Pin=Rtr2-2
+Added Net: Name=NetLtr3_1
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Hph Header 4P 2.54 Duc Thang
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Ltr4 LED 3mm
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Rtr1 30R
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Rtr2 30R
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Rtr3 220R
+Added Room: Name=DATN_IoT_Node_Schenatic

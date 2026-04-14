@@ -1,0 +1,28 @@
+Removed Pin From Net: NetName=VCC_5V Pin=2-2
+Removed Pin From Net: NetName=VCC_5V Pin=D3rl1-2
+Removed Pin From Net: NetName=VCC_5V Pin=D3rl3-2
+Removed Member From Class: ClassName=DATN_IoT_Node_Schenatic Member=2
+Removed Member From Class: ClassName=DATN_IoT_Node_Schenatic Member=D3rl1
+Removed Member From Class: ClassName=DATN_IoT_Node_Schenatic Member=D3rl3
+Added Component: Designator=Drl1(sma)
+Added Component: Designator=Drl2(sma)
+Added Component: Designator=Drl3(sma)
+Added Pin To Net: NetName=VCC_5V Pin=Drl1-2
+Added Pin To Net: NetName=VCC_5V Pin=Drl2-2
+Added Pin To Net: NetName=VCC_5V Pin=Drl3-2
+Added Pin To Net: NetName=NetDrl1_1 Pin=Drl1-1
+Added Pin To Net: NetName=NetDrl1_1 Pin=Q3-3
+Added Pin To Net: NetName=NetDrl1_1 Pin=RL1-4
+Added Net: Name=NetDrl1_1
+Added Pin To Net: NetName=NetDrl2_1 Pin=Drl2-1
+Added Pin To Net: NetName=NetDrl2_1 Pin=Q2-3
+Added Pin To Net: NetName=NetDrl2_1 Pin=RL2-4
+Added Net: Name=NetDrl2_1
+Added Pin To Net: NetName=NetDrl3_1 Pin=Drl3-1
+Added Pin To Net: NetName=NetDrl3_1 Pin=Q4-3
+Added Pin To Net: NetName=NetDrl3_1 Pin=RL3-4
+Added Net: Name=NetDrl3_1
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Drl1 DIODE
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Drl2 DIODE
+Added Member To Class: ClassName=DATN_IoT_Node_Schenatic Member=Component Drl3 DIODE
+Added Room: Name=DATN_IoT_Node_Schenatic
