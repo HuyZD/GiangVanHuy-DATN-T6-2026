@@ -2,8 +2,8 @@
 #include <LoRa.h>
 
 // LoRa pins
-#define SS 10
-#define RST 9
+#define SS 5
+#define RST 21
 #define DIO0 2
 
 void setup() {

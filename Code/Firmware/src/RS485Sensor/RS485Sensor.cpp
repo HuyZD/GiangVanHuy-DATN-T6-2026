@@ -5,15 +5,18 @@ ModbusMaster node;
 
 // chuyển sang chế độ gửi
 void preTransmission() {
+  Serial.println("preTransmission: Switching to transmit mode");
   digitalWrite(MAX485_CONTROL, HIGH);
 }
 
 // chuyển sang chế độ nhận
 void postTransmission() {
+  Serial.println("postTransmission: Switching to receive mode");
   digitalWrite(MAX485_CONTROL, LOW);
 }
 
 void RS485_Sensor_setup() {
+  Serial.println("RS485 Sensor Setup");
   rs485.begin(9600);      
 
   pinMode(MAX485_CONTROL, OUTPUT);
@@ -25,7 +28,8 @@ void RS485_Sensor_setup() {
   node.postTransmission(postTransmission);
 }
 
-void RS485_Sensor_read() {
+void RS485_Sensor_read(float &temperature, float &humidity) {
+  Serial.println("RS485 Sensor Read");
   uint8_t result;
 
   // đọc 2 thanh ghi từ địa chỉ 0
@@ -35,8 +39,8 @@ void RS485_Sensor_read() {
     uint16_t temp_raw = node.getResponseBuffer(0);
     uint16_t hum_raw  = node.getResponseBuffer(1);
 
-    float temperature = temp_raw / 10.0;
-    float humidity    = hum_raw / 10.0;
+     temperature = temp_raw / 10.0;
+     humidity    = hum_raw / 10.0;
 
     Serial.print("Temperature: ");
     Serial.print(temperature);

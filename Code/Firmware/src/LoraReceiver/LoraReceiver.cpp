@@ -1,33 +1,39 @@
 #include "LoRaReceiver.h"
 
-void LoRa_Receiver_setup() {
-  while (!Serial);
+void LoRa_Receiver_setup()
+{
 
-  Serial.println("LoRa Receiver");
+  Serial.println("LoRa Receiver Setup");
 
   // Setup LoRa module
   LoRa.setPins(SS, RST, DIO0);
-  
+
   // Replace the frequency with your regional frequency (e.g., 915E6 for US, 868E6 for EU)
-  if (!LoRa.begin(915E6)) {
+  if (!LoRa.begin(915E6))
+  {
     Serial.println("Starting LoRa failed!");
-    while (1);
+    while (1)
+      ;
   }
-  
+
   // Use the same spreading factor as the sender
   LoRa.setSpreadingFactor(12);
 }
 
-void LoRa_Receiver() {
+void LoRa_Receiver()
+{
   // Try to parse packet
+  Serial.println("LoRa Receiver");
   int packetSize = LoRa.parsePacket();
-  
-  if (packetSize) {
+
+  if (packetSize)
+  {
     // Received a packet
     Serial.print("Received packet '");
 
     // Read packet
-    while (LoRa.available()) {
+    while (LoRa.available())
+    {
       Serial.print((char)LoRa.read());
     }
 

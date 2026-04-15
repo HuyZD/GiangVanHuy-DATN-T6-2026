@@ -3,6 +3,6 @@
 #include <Arduino.h>
 #define PH_PIN 3
 void PH_Sensor_setup();
-void PH_Sensor();
+float PH_Sensor_read();
 
 #endif	//PH_SENSOR_H

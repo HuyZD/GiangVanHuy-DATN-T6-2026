@@ -1,9 +1,12 @@
 #include "PH_sensor.h"
 
-void PH_Sensor_setup() {
+void PH_Sensor_setup()
+{
 }
 
-void PH_Sensor() {
+float PH_Sensor_read()
+{
+  Serial.println("PH Sensor");
   int adcValue = analogRead(PH_PIN);     // đọc ADC (0-1023)
   float voltage = adcValue * 5.0 / 1023; // đổi sang điện áp
 
@@ -20,4 +23,5 @@ void PH_Sensor() {
   Serial.println(phValue, 2);
 
   delay(1000);
+  return phValue;
 }

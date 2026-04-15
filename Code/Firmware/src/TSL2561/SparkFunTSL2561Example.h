@@ -5,6 +5,6 @@
 #include <Wire.h>
 #include <SparkFunTSL2561.h>
 void TSL2561_setup();
-void TSL2561_read();
+double TSL2561_read();
 void printError(byte error);
 #endif	//SPARKFUN_TSL2561_EXAMPLE_H

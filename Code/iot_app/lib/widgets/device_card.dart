@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/device.dart';
+import '../models/node.dart';
 
 class DeviceCard extends StatelessWidget {
+final bool autoMode;
   final Device device;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
@@ -10,6 +12,7 @@ class DeviceCard extends StatelessWidget {
   const DeviceCard({
     Key? key,
     required this.device,
+required this.autoMode,
     this.onTap,
     this.onDelete,
     this.onEdit,
@@ -35,7 +38,9 @@ class DeviceCard extends StatelessWidget {
                   Icon(
                     device.type == "sensor"
                         ? Icons.sensors
-                        : Icons.power,
+                        : device.actuatorType == "relay"
+                        ? Icons.power
+                        : Icons.ac_unit,
                     size: 40,
                     color: Colors.green,
                   ),
@@ -46,7 +51,7 @@ class DeviceCard extends StatelessWidget {
                     device.value,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  if (device.threshold != null)
+                  if (device.type == "sensor" && device.threshold != null && autoMode ==true)
                     Text(
                       "Ngưỡng: ${device.threshold?.toStringAsFixed(2)}",
                       style: TextStyle(fontSize: 12),
@@ -69,11 +74,22 @@ class DeviceCard extends StatelessWidget {
                     onThreshold?.call();
                   }
                 },
-                itemBuilder: (context) => [
-                  PopupMenuItem(value: "edit", child: Text("Sửa")),
-                  PopupMenuItem(value: "delete", child: Text("Xóa")),
-                  PopupMenuItem(value: "threshold", child: Text("Thiết lập ngưỡng")),
-                ],
+                itemBuilder: (context) {
+                  List<PopupMenuEntry<String>> items = [
+                    PopupMenuItem(value: "edit", child: Text("Sửa")),
+                    PopupMenuItem(value: "delete", child: Text("Xóa")),
+                  ];
+                  if (device.type == "sensor"  && autoMode == true) {
+                    items.add(
+                      PopupMenuItem(
+                        value: "threshold",
+                        child: Text("Thiết lập ngưỡng"),
+                      ),
+                    );
+                  }
+
+                  return items;
+                },
               ),
             ),
           ],

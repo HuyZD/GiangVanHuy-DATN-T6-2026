@@ -15,6 +15,6 @@ extern float averageVoltage ;
 extern float tdsValue ;
 extern float temperature ;       // current temperature for compensation
 void TDS_Sensor_setup();
-void TDS_Sensor_read();
+float TDS_Sensor_read();
 
 #endif	//TDS_SENSOR_H
