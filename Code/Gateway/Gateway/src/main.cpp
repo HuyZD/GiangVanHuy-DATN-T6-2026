@@ -202,6 +202,9 @@ constexpr uint8_t LED_PIN = 2;
 
 // Global variables
 bool ledState = false;  // LED state
+bool relay1State = false; // Relay 1 state
+bool relay2State = false; // Relay 2 state
+bool relay3State = false; // Relay 3 state
 bool subscribed = false; // Indicates if RPC subscription is done
 
 // Initialize WiFi and MQTT clients
@@ -213,11 +216,17 @@ ThingsBoard tb(mqttClient, MAX_MESSAGE_SIZE);
 void initWiFi();
 bool reconnect();
 RPC_Response processSetLedStatus(const RPC_Data &data);
+RPC_Response processRelay1(const RPC_Data &data);
+RPC_Response processRelay2(const RPC_Data &data); 
+RPC_Response processRelay3(const RPC_Data &data);
 void processTime(const JsonVariantConst& data);
 
 // Define the array of RPC callbacks
-const std::array<RPC_Callback, 1U> callbacks = {
-  RPC_Callback{ "setLedStatus", processSetLedStatus }
+const std::array<RPC_Callback, 4U> callbacks = {
+  RPC_Callback{ "setLedStatus", processSetLedStatus },
+  RPC_Callback{ "setRelay1Status", processRelay1 },
+  RPC_Callback{ "setRelay2Status", processRelay2 },
+  RPC_Callback{ "setRelay3Status", processRelay3 }
 };
 
 void setup() {
@@ -308,7 +317,27 @@ RPC_Response processSetLedStatus(const RPC_Data &data) {
   Serial.println(ledState ? "LED ON" : "LED OFF");
   return RPC_Response("newStatus", dataInt);  // Respond with the new status
 }
-
+RPC_Response processRelay1(const RPC_Data &data) {
+  // Process the RPC request to change the LED state
+  int dataInt = data;
+  relay1State = dataInt == 1;  // Update the LED state based on the received data
+  Serial.println(relay1State ? "RELAY1 ON" : "RELAY1 OFF");
+  return RPC_Response("newStatus", dataInt);  // Respond with the new status
+}
+RPC_Response processRelay2(const RPC_Data &data) {
+  // Process the RPC request to change the LED state
+  int dataInt = data;
+  relay2State = dataInt == 1;  // Update the LED state based on the received data
+  Serial.println(relay2State ? "RELAY2 ON" : "RELAY2 OFF");
+  return RPC_Response("newStatus", dataInt);  // Respond with the new status
+}
+RPC_Response processRelay3(const RPC_Data &data) {
+  // Process the RPC request to change the LED state
+  int dataInt = data;
+  relay3State = dataInt == 1;  // Update the LED state based on the received data
+  Serial.println(relay3State ? "RELAY3 ON" : "RELAY3 OFF");
+  return RPC_Response("newStatus", dataInt);  // Respond with the new status
+}
 void processTime(const JsonVariantConst& data) {
   // Process the RPC response containing the current time
   Serial.print("Received time from ThingsBoard: ");
