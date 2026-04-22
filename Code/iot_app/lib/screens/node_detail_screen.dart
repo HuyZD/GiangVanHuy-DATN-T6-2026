@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../models/node.dart';
 import '../models/device.dart';
 import '../widgets/device_card.dart';
 import '../services/thingsboard_service.dart';
+//import '../services/thingsboard_ws.dart';
+
+String? jwt;
 class NodeDetailScreen extends StatefulWidget {
   final Node node;
 
@@ -16,10 +21,23 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  Timer? timer;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    loginFromThingsboard();
+
+    timer = Timer.periodic(Duration(seconds: 5), (t) {
+      fetchDataFromThingsboard();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel(); // 🔥 cực quan trọng
+    super.dispose();
   }
 
   @override
@@ -99,9 +117,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
           device: devices[index],
           autoMode: widget.node.autoMode,
           onTap: () async {
-
             if (!widget.node.autoMode && devices[index].type == "actuator") {
-
               if (devices[index].actuatorType == "relay") {
                 // 🔥 ON/OFF
                 setState(() {
@@ -126,8 +142,9 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
           },
 
           onThreshold: () {
-            if(devices[index].type == "sensor" && widget.node.autoMode == true){
-            showThresholdDialog(devices[index]);
+            if (devices[index].type == "sensor" &&
+                widget.node.autoMode == true) {
+              showThresholdDialog(devices[index]);
             }
           },
         );
@@ -135,6 +152,45 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     );
   }
 
+  // Future<void> initThingsBoard() async {
+  //   bool ok = await ThingsBoardService.instance.login(
+  //     "giangvanhuy84@gmail.com",
+  //     "Giangvanhuy12@7",
+  //   );
+  //
+  //   if (!ok) {
+  //     print("login fail ! ");
+  //   }
+  //   else {
+  //     print("login success ");
+  //   }
+  //
+  //
+  // }
+  Future<void> loginFromThingsboard() async {
+    jwt = await ThingsboardService.login();
+}
+  Future<void> fetchDataFromThingsboard() async {
+
+
+    var data = await ThingsboardService.getTelemetry(
+      jwt!,
+      "0e99eb10-37e6-11f1-8ebb-d54a2d348b45",
+    );
+
+    setState(() {
+      for (var device in widget.node.sensors) {
+        String key = device.name.toLowerCase();
+
+        device.value = data[key]?[0]?["value"] ?? "--";
+      }
+      for (var device in widget.node.actuators) {
+        String key = device.name.toUpperCase();
+
+        device.value = data[key]?[0]?["value"] ?? "--";
+      }
+    });
+  }
   void showThresholdDialog(Device device) {
     final controller =
     TextEditingController(text: device.threshold?.toString() ?? "");

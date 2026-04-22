@@ -18,26 +18,31 @@ class ThingsboardService {
   }
   // Login
 
-
-  // 🔥 LOGIN
   static Future<String?> login() async {
-  final res = await http.post(
-  Uri.parse("$baseUrl/api/auth/login"),
-  headers: {"Content-Type": "application/json"},
-  body: jsonEncode({
-  "username": "giangvanhuy84@gmail.com",
-  "password": "Giangvanhuy12@7"
-  }),
-  );
+    final res = await http.post(
+      Uri.parse("$baseUrl/api/auth/login"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "username": "giangvanhuy84@gmail.com",
+        "password": "Giangvanhuy12@7"
+      }),
+    );
 
-  final data = jsonDecode(res.body);
-  return data["token"];
+    print("LOGIN STATUS: ${res.statusCode}");
+    print("LOGIN BODY: ${res.body}");
+
+    if (res.statusCode == 200) {
+      final data = jsonDecode(res.body);
+      return data["token"];
+    } else {
+      return null;
+    }
   }
   static Future<Map<String, dynamic>> getTelemetry(
       String jwt, String deviceId) async {
 
     final url = Uri.parse(
-        "$baseUrl/api/plugins/telemetry/DEVICE/$deviceId/values/timeseries?keys=temperature"
+        "$baseUrl/api/plugins/telemetry/DEVICE/$deviceId/values/timeseries"
     );
 
     final res = await http.get(

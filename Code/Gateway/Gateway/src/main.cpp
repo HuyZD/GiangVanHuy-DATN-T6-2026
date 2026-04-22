@@ -186,6 +186,7 @@
 #include <WiFi.h>
 #include <Arduino_MQTT_Client.h>
 #include <ThingsBoard.h>
+
 // #include <ArduinoOTA.h> (Uncomment if you are using PlatformIO)
 
 // Wi-Fi and ThingsBoard configuration
@@ -200,11 +201,19 @@ constexpr uint32_t SERIAL_DEBUG_BAUD = 9600U;
 // Pin definition for the LED
 constexpr uint8_t LED_PIN = 2;
 
+unsigned long lastSendTime = 0;
+volatile double temperature = 0.0;
+volatile double humidity = 0.0; 
+volatile double PH = 0.0;
+volatile double TDS = 0.0;
+volatile double CO2 = 0.0;
+volatile double light = 0.0;
+volatile bool RL1 = false;
+volatile bool RL2 = false;
+volatile bool RL3 = false;
+
 // Global variables
 bool ledState = false;  // LED state
-bool relay1State = false; // Relay 1 state
-bool relay2State = false; // Relay 2 state
-bool relay3State = false; // Relay 3 state
 bool subscribed = false; // Indicates if RPC subscription is done
 
 // Initialize WiFi and MQTT clients
@@ -220,6 +229,8 @@ RPC_Response processRelay1(const RPC_Data &data);
 RPC_Response processRelay2(const RPC_Data &data); 
 RPC_Response processRelay3(const RPC_Data &data);
 void processTime(const JsonVariantConst& data);
+void sendDataToThingsBoard(double temperature, double humidity, double PH, double TDS, double CO2, double light, bool RL1, bool RL2, bool RL3) ;
+
 
 // Define the array of RPC callbacks
 const std::array<RPC_Callback, 4U> callbacks = {
@@ -288,6 +299,22 @@ void loop() {
   // }
 
   // Maintain the connection and process incoming messages
+
+    if(millis() - lastSendTime > 5000) {
+    // Cập nhật dữ liệu cảm biến (giả lập)
+    temperature += 0.1;
+    humidity += 0.11;
+    PH += 0.15;
+    TDS += 0.17;
+    CO2 += 0.19;
+    light += 0.2;
+    RL1 = !RL1;
+    RL2 = !RL2;
+    RL3 = !RL3;
+
+    sendDataToThingsBoard(temperature, humidity, PH, TDS, CO2, light, RL1, RL2, RL3);
+    lastSendTime = millis();
+  }
   tb.loop();
 }
 
@@ -320,26 +347,43 @@ RPC_Response processSetLedStatus(const RPC_Data &data) {
 RPC_Response processRelay1(const RPC_Data &data) {
   // Process the RPC request to change the LED state
   int dataInt = data;
-  relay1State = dataInt == 1;  // Update the LED state based on the received data
-  Serial.println(relay1State ? "RELAY1 ON" : "RELAY1 OFF");
+  RL1 = dataInt == 1;  // Update the LED state based on the received data
+  Serial.println(RL1 ? "RELAY1 ON" : "RELAY1 OFF");
   return RPC_Response("newStatus", dataInt);  // Respond with the new status
 }
 RPC_Response processRelay2(const RPC_Data &data) {
   // Process the RPC request to change the LED state
   int dataInt = data;
-  relay2State = dataInt == 1;  // Update the LED state based on the received data
-  Serial.println(relay2State ? "RELAY2 ON" : "RELAY2 OFF");
+  RL2 = dataInt == 1;  // Update the LED state based on the received data
+  Serial.println(RL2   ? "RELAY2 ON" : "RELAY2 OFF");
   return RPC_Response("newStatus", dataInt);  // Respond with the new status
 }
 RPC_Response processRelay3(const RPC_Data &data) {
   // Process the RPC request to change the LED state
   int dataInt = data;
-  relay3State = dataInt == 1;  // Update the LED state based on the received data
-  Serial.println(relay3State ? "RELAY3 ON" : "RELAY3 OFF");
+  RL3 = dataInt == 1;  // Update the LED state based on the received data
+  Serial.println(RL3 ? "RELAY3 ON" : "RELAY3 OFF");
   return RPC_Response("newStatus", dataInt);  // Respond with the new status
 }
 void processTime(const JsonVariantConst& data) {
   // Process the RPC response containing the current time
   Serial.print("Received time from ThingsBoard: ");
   Serial.println(data["time"].as<String>());
+}
+void sendDataToThingsBoard(double temperature, double humidity, double PH, double TDS, double CO2, double light, bool RL1, bool RL2, bool RL3) {
+ 
+  String jsonData = "{";
+  jsonData += "\"temperature\":" + String(temperature) + ","; 
+  jsonData += "\"humidity\":" + String(humidity) + ",";
+  jsonData += "\"PH\":" + String(PH) + ",";
+  jsonData += "\"TDS\":" + String(TDS) + ",";
+
+  jsonData += "\"CO2\":" + String(CO2) + ",";
+  jsonData += "\"light\":" + String(light) + ",";
+  jsonData += "\"RL1\":" + String(RL1) + ",";
+  jsonData += "\"RL2\":" + String(RL2) + ",";
+  jsonData += "\"RL3\":" + String(RL3);
+  jsonData += "}";
+  tb.sendTelemetryJson(jsonData.c_str());
+
 }

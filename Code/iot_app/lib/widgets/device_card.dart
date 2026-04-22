@@ -48,7 +48,9 @@ required this.autoMode,
                   Text(device.name),
                   SizedBox(height: 5),
                   Text(
-                    device.value,
+                    device.type == "sensor"
+                        ? device.value
+                        : (device.value == "1" ? "ON" : "OFF"),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   if (device.type == "sensor" && device.threshold != null && autoMode ==true)
