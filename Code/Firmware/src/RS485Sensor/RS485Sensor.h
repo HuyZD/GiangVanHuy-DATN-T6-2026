@@ -7,6 +7,6 @@
 void preTransmission(); 
 void postTransmission();
 void RS485_Sensor_setup();
-void RS485_Sensor_read();
+void RS485_Sensor_read(float temperature, float humidity);
 
 #endif	//RS485_SENSOR_H    

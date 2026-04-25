@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../models/node.dart';
 import '../models/device.dart';
 import '../widgets/device_card.dart';
+import '../services/thingsboard_service.dart';
+//import '../services/thingsboard_ws.dart';
 
+String? jwt;
 class NodeDetailScreen extends StatefulWidget {
   final Node node;
 
@@ -16,17 +21,62 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  Timer? timer;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    loginFromThingsboard();
+
+    timer = Timer.periodic(Duration(seconds: 5), (t) {
+      fetchDataFromThingsboard();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel(); // 🔥 cực quan trọng
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.node.name),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            // 🔥 TÊN NODE
+            Text(widget.node.name),
+
+            // 🔥 MODE + SWITCH
+            Row(
+              children: [
+                Text(
+                  widget.node.autoMode ? "Auto" : "Manual",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: widget.node.autoMode ? Colors.green : Colors.black,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Switch(
+                  value: widget.node.autoMode,
+                  onChanged: (value) async {
+                    setState(() {
+                      widget.node.autoMode = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // 🔥 TABBAR VẪN GIỮ
         bottom: TabBar(
           controller: _tabController,
           tabs: [
@@ -65,13 +115,21 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
       itemBuilder: (context, index) {
         return DeviceCard(
           device: devices[index],
+          autoMode: widget.node.autoMode,
+          onTap: () async {
+            if (!widget.node.autoMode && devices[index].type == "actuator") {
+              if (devices[index].actuatorType == "relay") {
+                // 🔥 ON/OFF
+                setState(() {
+                  devices[index].value =
+                  devices[index].value == "ON" ? "OFF" : "ON";
+                });
+              }
 
-          onTap: () {
-            if (devices[index].type == "actuator") {
-              setState(() {
-                devices[index].value =
-                devices[index].value == "ON" ? "OFF" : "ON";
-              });
+              else if (devices[index].actuatorType == "ac") {
+                // 🔥 mở dialog chỉnh nhiệt độ
+                showACControlDialog(devices[index]);
+              }
             }
           },
 
@@ -84,13 +142,55 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
           },
 
           onThreshold: () {
-            showThresholdDialog(devices[index]);
+            if (devices[index].type == "sensor" &&
+                widget.node.autoMode == true) {
+              showThresholdDialog(devices[index]);
+            }
           },
         );
       },
     );
   }
 
+  // Future<void> initThingsBoard() async {
+  //   bool ok = await ThingsBoardService.instance.login(
+  //     "giangvanhuy84@gmail.com",
+  //     "Giangvanhuy12@7",
+  //   );
+  //
+  //   if (!ok) {
+  //     print("login fail ! ");
+  //   }
+  //   else {
+  //     print("login success ");
+  //   }
+  //
+  //
+  // }
+  Future<void> loginFromThingsboard() async {
+    jwt = await ThingsboardService.login();
+}
+  Future<void> fetchDataFromThingsboard() async {
+
+
+    var data = await ThingsboardService.getTelemetry(
+      jwt!,
+      "0e99eb10-37e6-11f1-8ebb-d54a2d348b45",
+    );
+
+    setState(() {
+      for (var device in widget.node.sensors) {
+        String key = device.name.toLowerCase();
+
+        device.value = data[key]?[0]?["value"] ?? "--";
+      }
+      for (var device in widget.node.actuators) {
+        String key = device.name.toUpperCase();
+
+        device.value = data[key]?[0]?["value"] ?? "--";
+      }
+    });
+  }
   void showThresholdDialog(Device device) {
     final controller =
     TextEditingController(text: device.threshold?.toString() ?? "");
@@ -150,65 +250,96 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
   }
   // ➕ ADD DEVICE
   void showAddDeviceDialog(BuildContext context) {
+
     final nameController = TextEditingController();
     String selectedType = "sensor";
+    String selectedActuatorType = "relay";
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Thêm thiết bị"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(labelText: "Tên"),
-            ),
-            DropdownButtonFormField<String>(
-              value: selectedType,
-              items: [
-                DropdownMenuItem(value: "sensor", child: Text("Sensor")),
-                DropdownMenuItem(value: "actuator", child: Text("Actuator")),
+      builder: (_) => StatefulBuilder(
+        builder: (context, setStateDialog) {
+          return AlertDialog(
+            title: Text("Thêm thiết bị"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: "Tên"),
+                ),
+
+                // 🔥 CHỌN SENSOR / ACTUATOR
+                DropdownButtonFormField<String>(
+                  value: selectedType,
+                  items: [
+                    DropdownMenuItem(value: "sensor", child: Text("Sensor")),
+                    DropdownMenuItem(value: "actuator", child: Text("Actuator")),
+                  ],
+                  onChanged: (value) {
+                    setStateDialog(() {
+                      selectedType = value!;
+                    });
+                  },
+                ),
+
+                // 🔥 CHỈ HIỆN KHI LÀ ACTUATOR
+                if (selectedType == "actuator")
+                  DropdownButtonFormField<String>(
+                    value: selectedActuatorType,
+                    items: [
+                      DropdownMenuItem(
+                          value: "relay", child: Text("Relay (ON/OFF)")),
+                      DropdownMenuItem(
+                          value: "ac", child: Text("Điều hòa (nhiệt độ)")),
+                    ],
+                    onChanged: (value) {
+                      setStateDialog(() {
+                        selectedActuatorType = value!;
+                      });
+                    },
+                    decoration:
+                    InputDecoration(labelText: "Loại actuator"),
+                  ),
               ],
-              onChanged: (value) {
-                selectedType = value!;
-              },
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                if (selectedType == "sensor") {
-                  widget.node.sensors.add(
-                    Device(
-                      id: DateTime.now().toString(),
-                      name: nameController.text,
-                      type: "sensor",
-                      value: "--",
-                    ),
-                  );
-                } else {
-                  widget.node.actuators.add(
-                    Device(
-                      id: DateTime.now().toString(),
-                      name: nameController.text,
-                      type: "actuator",
-                      value: "OFF",
-                    ),
-                  );
-                }
-              });
-              Navigator.pop(context);
-            },
-            child: Text("Thêm"),
-          ),
-        ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Hủy"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    if (selectedType == "sensor") {
+                      widget.node.sensors.add(
+                        Device(
+                          id: DateTime.now().toString(),
+                          name: nameController.text,
+                          type: "sensor",
+                          value: "--",
+                        ),
+                      );
+                    } else {
+                      widget.node.actuators.add(
+                        Device(
+                          id: DateTime.now().toString(),
+                          name: nameController.text,
+                          type: "actuator",
+                          value: selectedActuatorType == "relay" ? "OFF":"",
+                          actuatorType: selectedActuatorType,
+                        ),
+                      );
+                    }
+                  });
+
+                  Navigator.pop(context);
+                },
+                child: Text("Thêm"),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -266,6 +397,137 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
             child: Text("Lưu"),
           ),
         ],
+      ),
+    );
+  }
+  void showACControlDialog(Device device) {
+    int temp = int.tryParse(device.value) ?? 25;
+    String mode = "cool"; // cool / dry / fan
+    String fan = "auto"; // auto / low / high
+    bool isOn = true;
+
+    showDialog(
+      context: context,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setStateDialog) {
+          return AlertDialog(
+            title: Text("Điều khiển điều hòa"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                // 🔥 ON/OFF
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Trạng thái"),
+                    Switch(
+                      value: isOn,
+                      onChanged: (value) {
+                        setStateDialog(() {
+                          isOn = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 10),
+
+                // 🌡️ NHIỆT ĐỘ
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: () {
+                        setStateDialog(() {
+                          if (temp > 16) temp--;
+                        });
+                      },
+                    ),
+
+                    Text(
+                      "$temp°C",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        setStateDialog(() {
+                          if (temp < 30) temp++;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 10),
+
+                // ❄️ MODE
+                DropdownButtonFormField<String>(
+                  value: mode,
+                  items: [
+                    DropdownMenuItem(value: "cool", child: Text("Cool")),
+                    DropdownMenuItem(value: "dry", child: Text("Dry")),
+                    DropdownMenuItem(value: "fan", child: Text("Fan")),
+                  ],
+                  onChanged: (value) {
+                    setStateDialog(() {
+                      mode = value!;
+                    });
+                  },
+                  decoration: InputDecoration(labelText: "Chế độ"),
+                ),
+
+                SizedBox(height: 10),
+
+                // 💨 FAN SPEED
+                DropdownButtonFormField<String>(
+                  value: fan,
+                  items: [
+                    DropdownMenuItem(value: "auto", child: Text("Auto")),
+                    DropdownMenuItem(value: "low", child: Text("Low")),
+                    DropdownMenuItem(value: "high", child: Text("High")),
+                  ],
+                  onChanged: (value) {
+                    setStateDialog(() {
+                      fan = value!;
+                    });
+                  },
+                  decoration: InputDecoration(labelText: "Quạt"),
+                ),
+              ],
+            ),
+
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Hủy"),
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    device.value = "$temp"; // lưu nhiệt độ
+
+                    // 🔥 bạn có thể lưu thêm nếu muốn:
+                    // device.mode = mode;
+                    // device.fan = fan;
+                    // device.isOn = isOn;
+                  });
+
+                  Navigator.pop(context);
+                },
+                child: Text("Lưu"),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

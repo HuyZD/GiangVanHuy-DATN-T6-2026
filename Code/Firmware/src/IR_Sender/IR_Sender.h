@@ -5,6 +5,11 @@
 #define RAW_DATA_LEN 200
 extern uint16_t rawDataOn[RAW_DATA_LEN];
 extern uint16_t rawDataOff[RAW_DATA_LEN];
+extern uint16_t rawDataUp[RAW_DATA_LEN];
+extern uint16_t rawDataDown[RAW_DATA_LEN];
 void IR_sender_setup();
-void IR_sender();  
+void IR_sender_up();  
+void IR_sender_down();  
+void IR_sender_on();
+void IR_sender_off();
 #endif	//IR_SENDER_H   

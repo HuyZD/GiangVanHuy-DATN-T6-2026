@@ -6,7 +6,7 @@ class Device {
 
   double? threshold;
   String? linkedActuatorId;
-
+  String? actuatorType;
   Device({
     required this.id,
     required this.name,
@@ -14,5 +14,6 @@ class Device {
     required this.value,
     this.threshold,
     this.linkedActuatorId,
+    this.actuatorType,
   });
 }
