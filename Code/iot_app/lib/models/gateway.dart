@@ -4,7 +4,7 @@ class Gateway {
    String id;
    String name;
    String status;
-   List<Node> nodes; // 🔥 thêm
+   List<Node> nodes;
 
   Gateway({
     required this.id,

@@ -4,7 +4,7 @@ class Farm {
    String id;
    String name;
    String location;
-   List<Gateway> gateways; // 🔥 thêm dòng này
+   List<Gateway> gateways;
 
   Farm({
     required this.id,

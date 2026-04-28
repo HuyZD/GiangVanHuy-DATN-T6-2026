@@ -54,4 +54,29 @@ class ThingsboardService {
 
     return jsonDecode(res.body);
   }
+  static Future<void> sendRPC({
+    required String jwt,
+    required String deviceId,
+    required String method,
+    dynamic params,
+  }) async {
+    final url = Uri.parse(
+        "https://thingsboard.cloud/api/plugins/rpc/twoway/$deviceId");
+
+    final body = {
+      "method": method,
+      "params": params,
+    };
+
+    final response = await http.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": "Bearer $jwt",
+      },
+      body: jsonEncode(body),
+    );
+
+    print("RPC response: ${response.body}");
+  }
   }

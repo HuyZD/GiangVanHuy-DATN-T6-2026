@@ -215,7 +215,7 @@ volatile bool RL3 = false;
 // Global variables
 bool ledState = false;  // LED state
 bool subscribed = false; // Indicates if RPC subscription is done
-
+int setLedStatus = 0; // Variable to hold incoming RPC data
 // Initialize WiFi and MQTT clients
 WiFiClient wifiClient;
 Arduino_MQTT_Client mqttClient(wifiClient);
@@ -339,31 +339,31 @@ bool reconnect() {
 
 RPC_Response processSetLedStatus(const RPC_Data &data) {
   // Process the RPC request to change the LED state
-  int dataInt = data;
-  ledState = dataInt == 1;  // Update the LED state based on the received data
+   setLedStatus = data;
+  ledState = setLedStatus == 1;  // Update the LED state based on the received data
   Serial.println(ledState ? "LED ON" : "LED OFF");
-  return RPC_Response("newStatus", dataInt);  // Respond with the new status
+  return RPC_Response("newStatus", setLedStatus);  // Respond with the new status
 }
 RPC_Response processRelay1(const RPC_Data &data) {
   // Process the RPC request to change the LED state
-  int dataInt = data;
-  RL1 = dataInt == 1;  // Update the LED state based on the received data
+  int dataRL1 = data;
+  RL1 = dataRL1 == 1;  // Update the LED state based on the received data
   Serial.println(RL1 ? "RELAY1 ON" : "RELAY1 OFF");
-  return RPC_Response("newStatus", dataInt);  // Respond with the new status
+  return RPC_Response("newStatus", dataRL1);  // Respond with the new status
 }
 RPC_Response processRelay2(const RPC_Data &data) {
   // Process the RPC request to change the LED state
-  int dataInt = data;
-  RL2 = dataInt == 1;  // Update the LED state based on the received data
+  int dataRL2 = data;
+  RL2 = dataRL2 == 1;  // Update the LED state based on the received data
   Serial.println(RL2   ? "RELAY2 ON" : "RELAY2 OFF");
-  return RPC_Response("newStatus", dataInt);  // Respond with the new status
+  return RPC_Response("newStatus", dataRL2);  // Respond with the new status
 }
 RPC_Response processRelay3(const RPC_Data &data) {
   // Process the RPC request to change the LED state
-  int dataInt = data;
-  RL3 = dataInt == 1;  // Update the LED state based on the received data
+  int dataRL3 = data;
+  RL3 = dataRL3 == 1;  // Update the LED state based on the received data
   Serial.println(RL3 ? "RELAY3 ON" : "RELAY3 OFF");
-  return RPC_Response("newStatus", dataInt);  // Respond with the new status
+  return RPC_Response("newStatus", dataRL3);  // Respond with the new status
 }
 void processTime(const JsonVariantConst& data) {
   // Process the RPC response containing the current time
@@ -382,7 +382,8 @@ void sendDataToThingsBoard(double temperature, double humidity, double PH, doubl
   jsonData += "\"light\":" + String(light) + ",";
   jsonData += "\"RL1\":" + String(RL1) + ",";
   jsonData += "\"RL2\":" + String(RL2) + ",";
-  jsonData += "\"RL3\":" + String(RL3);
+  jsonData += "\"RL3\":" + String(RL3) + ",";
+  jsonData += "\"setLedStatus\":" + String(setLedStatus);
   jsonData += "}";
   tb.sendTelemetryJson(jsonData.c_str());
 

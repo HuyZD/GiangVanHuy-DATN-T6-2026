@@ -32,7 +32,7 @@ class _FarmListScreenState extends State<FarmListScreen> {
                 Device(id: "2", name: "Humidity", type: "sensor", value: "70%"),
               ],
               actuators: [
-                Device(id: "3", name: "Light", type: "actuator", value: "OFF"),
+                Device(id: "3", name: "Light", type: "actuator", value: "1"),
               ],
             ),
           ],

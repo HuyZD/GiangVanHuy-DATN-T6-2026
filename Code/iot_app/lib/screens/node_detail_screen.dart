@@ -122,9 +122,10 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                 // 🔥 ON/OFF
                 setState(() {
                   devices[index].value =
-                  devices[index].value == "ON" ? "OFF" : "ON";
+                  devices[index].value == "1" ? "0" : "1";
                 });
-              }
+                await ThingsboardService.sendRPC(jwt: jwt!, deviceId: "0e99eb10-37e6-11f1-8ebb-d54a2d348b45", method: "setLedStatus", params: devices[index].value == "1" ? 1 : 0,);
+                }
 
               else if (devices[index].actuatorType == "ac") {
                 // 🔥 mở dialog chỉnh nhiệt độ
@@ -172,24 +173,27 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
 }
   Future<void> fetchDataFromThingsboard() async {
 
+      var data = await ThingsboardService.getTelemetry(
+        jwt!,
+        "0e99eb10-37e6-11f1-8ebb-d54a2d348b45",
+      );
 
-    var data = await ThingsboardService.getTelemetry(
-      jwt!,
-      "0e99eb10-37e6-11f1-8ebb-d54a2d348b45",
-    );
+      setState(() {
 
-    setState(() {
-      for (var device in widget.node.sensors) {
-        String key = device.name.toLowerCase();
+          for (var device in widget.node.sensors) {
+            String key = device.name.toLowerCase();
 
-        device.value = data[key]?[0]?["value"] ?? "--";
-      }
-      for (var device in widget.node.actuators) {
-        String key = device.name.toUpperCase();
+            device.value = data[key]?[0]?["value"] ?? "--";
+          }
+          if (widget.node.autoMode) {
+            for (var device in widget.node.actuators) {
+              String key = device.name;
 
-        device.value = data[key]?[0]?["value"] ?? "--";
-      }
-    });
+              device.value = data[key]?[0]?["value"] ?? "--";
+            }
+          }
+      });
+
   }
   void showThresholdDialog(Device device) {
     final controller =
@@ -326,7 +330,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                           id: DateTime.now().toString(),
                           name: nameController.text,
                           type: "actuator",
-                          value: selectedActuatorType == "relay" ? "OFF":"",
+                          value: selectedActuatorType == "relay" ? "1":"",
                           actuatorType: selectedActuatorType,
                         ),
                       );
