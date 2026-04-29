@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'farm_list_screen.dart';
+import '../models/device.dart';
+import '../models/node.dart';
+import 'node_detail_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -18,11 +22,88 @@ class _LoginScreenState extends State<LoginScreen> {
 
     await Future.delayed(Duration(seconds: 2)); // giả lập API
 
+    if (!mounted) return;
+
     setState(() => isLoading = false);
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => FarmListScreen()),
+      MaterialPageRoute(
+        builder: (_) => NodeDetailScreen(
+          node: Node(
+            id: "node-01",
+            name: "Node",
+            sensors: [
+              Device(
+                id: "tds",
+                name: "TDS",
+                type: "sensor",
+                value: "--",
+                unit: "ppm",
+              ),
+              Device(id: "ph", name: "PH", type: "sensor", value: "--"),
+              Device(
+                id: "light",
+                name: "AS",
+                type: "sensor",
+                value: "--",
+                unit: "lux",
+              ),
+              Device(
+                id: "co2",
+                name: "CO2",
+                type: "sensor",
+                value: "--",
+                unit: "ppm",
+              ),
+              Device(
+                id: "temperature",
+                name: "Nhiệt độ",
+                type: "sensor",
+                value: "--",
+                unit: "°C",
+              ),
+              Device(
+                id: "humidity",
+                name: "Độ ẩm",
+                type: "sensor",
+                value: "--",
+                unit: "%",
+              ),
+            ],
+            actuators: [
+              Device(
+                id: "RL1",
+                name: "RL1",
+                type: "actuator",
+                value: "0",
+                actuatorType: "relay",
+              ),
+              Device(
+                id: "RL2",
+                name: "RL2",
+                type: "actuator",
+                value: "0",
+                actuatorType: "relay",
+              ),
+              Device(
+                id: "RL3",
+                name: "RL3",
+                type: "actuator",
+                value: "0",
+                actuatorType: "relay",
+              ),
+              Device(
+                id: "AC",
+                name: "Điều hòa",
+                type: "actuator",
+                value: "0",
+                actuatorType: "ac",
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -88,9 +169,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             labelText: "Password",
                             prefixIcon: Icon(Icons.lock),
                             suffixIcon: IconButton(
-                              icon: Icon(obscure
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
+                              icon: Icon(
+                                obscure
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
                               onPressed: () {
                                 setState(() => obscure = !obscure);
                               },
@@ -115,13 +198,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             child: isLoading
-                                ? CircularProgressIndicator(
-                              color: Colors.white,
-                            )
+                                ? CircularProgressIndicator(color: Colors.white)
                                 : Text(
-                              "Đăng nhập",
-                              style: TextStyle(fontSize: 16),
-                            ),
+                                    "Đăng nhập",
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                           ),
                         ),
 
@@ -130,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextButton(
                           onPressed: () {},
                           child: Text("Quên mật khẩu?"),
-                        )
+                        ),
                       ],
                     ),
                   ),

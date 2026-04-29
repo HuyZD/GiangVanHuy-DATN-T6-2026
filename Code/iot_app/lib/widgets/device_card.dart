@@ -1,26 +1,61 @@
 import 'package:flutter/material.dart';
 import '../models/device.dart';
-import '../models/node.dart';
 
 class DeviceCard extends StatelessWidget {
-final bool autoMode;
+  final bool autoMode;
   final Device device;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
   final VoidCallback? onThreshold;
+
   const DeviceCard({
-    Key? key,
+    super.key,
     required this.device,
-required this.autoMode,
+    required this.autoMode,
     this.onTap,
     this.onDelete,
     this.onEdit,
     this.onThreshold, // 🔥 thêm
-  }) : super(key: key);
+  });
+
+  IconData get deviceIcon {
+    if (device.type != "sensor") {
+      return device.actuatorType == "relay"
+          ? Icons.power
+          : Icons.settings_remote;
+    }
+
+    switch (device.id.toLowerCase()) {
+      case "tds":
+        return Icons.water_drop;
+      case "ph":
+        return Icons.science;
+      case "as":
+      case "light":
+        return Icons.wb_sunny;
+      case "co2":
+        return Icons.cloud;
+      case "temperature":
+        return Icons.thermostat;
+      case "humidity":
+        return Icons.water;
+      default:
+        return Icons.sensors;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final showMenu = onEdit != null || onDelete != null || onThreshold != null;
+    final unit = device.unit ?? "";
+    final sensorValue = unit.isEmpty || device.value == "--"
+        ? device.value
+        : "${device.value} $unit";
+    final thresholdText = unit.isEmpty
+        ? "${device.minThreshold?.toStringAsFixed(1)} - ${device.maxThreshold?.toStringAsFixed(1)}"
+        : "${device.minThreshold?.toStringAsFixed(1)} - ${device.maxThreshold?.toStringAsFixed(1)} $unit";
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -35,65 +70,73 @@ required this.autoMode,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    device.type == "sensor"
-                        ? Icons.sensors
-                        : device.actuatorType == "relay"
-                        ? Icons.power
-                        : Icons.ac_unit,
-                    size: 40,
-                    color: Colors.green,
-                  ),
+                  Icon(deviceIcon, size: 40, color: Colors.green),
                   SizedBox(height: 10),
                   Text(device.name),
                   SizedBox(height: 5),
                   Text(
                     device.type == "sensor"
-                        ? device.value
+                        ? sensorValue
+                        : device.actuatorType == "ac"
+                        ? (device.value == "0"
+                              ? "OFF"
+                              : (device.value.isEmpty ? "--" : "ON"))
                         : (device.value == "1" ? "ON" : "OFF"),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  if (device.type == "sensor" && device.threshold != null && autoMode ==true)
-                    Text(
-                      "Ngưỡng: ${device.threshold?.toStringAsFixed(2)}",
-                      style: TextStyle(fontSize: 12),
-                    ),
+                  if (device.type == "sensor" &&
+                      device.minThreshold != null &&
+                      device.maxThreshold != null &&
+                      autoMode == true)
+                    Text(thresholdText, style: TextStyle(fontSize: 12)),
                 ],
               ),
             ),
 
-            // 🔥 MENU 3 CHẤM
-            Positioned(
-              top: 0,
-              right: 0,
-              child: PopupMenuButton<String>(
-                onSelected: (value) {
-                  if (value == "edit") {
-                    onEdit?.call();
-                  } else if (value == "delete") {
-                    onDelete?.call();
-                  } else if (value == "threshold") {
-                    onThreshold?.call();
-                  }
-                },
-                itemBuilder: (context) {
-                  List<PopupMenuEntry<String>> items = [
-                    PopupMenuItem(value: "edit", child: Text("Sửa")),
-                    PopupMenuItem(value: "delete", child: Text("Xóa")),
-                  ];
-                  if (device.type == "sensor"  && autoMode == true) {
-                    items.add(
-                      PopupMenuItem(
-                        value: "threshold",
-                        child: Text("Thiết lập ngưỡng"),
-                      ),
-                    );
-                  }
+            if (showMenu)
+              Positioned(
+                top: 0,
+                right: 0,
+                child: PopupMenuButton<String>(
+                  onSelected: (value) {
+                    if (value == "edit") {
+                      onEdit?.call();
+                    } else if (value == "delete") {
+                      onDelete?.call();
+                    } else if (value == "threshold") {
+                      onThreshold?.call();
+                    }
+                  },
+                  itemBuilder: (context) {
+                    List<PopupMenuEntry<String>> items = [];
 
-                  return items;
-                },
+                    if (onEdit != null) {
+                      items.add(
+                        PopupMenuItem(value: "edit", child: Text("Sửa")),
+                      );
+                    }
+
+                    if (onDelete != null) {
+                      items.add(
+                        PopupMenuItem(value: "delete", child: Text("Xóa")),
+                      );
+                    }
+
+                    if (onThreshold != null &&
+                        device.type == "sensor" &&
+                        autoMode == true) {
+                      items.add(
+                        PopupMenuItem(
+                          value: "threshold",
+                          child: Text("Thiết lập ngưỡng"),
+                        ),
+                      );
+                    }
+
+                    return items;
+                  },
+                ),
               ),
-            ),
           ],
         ),
       ),

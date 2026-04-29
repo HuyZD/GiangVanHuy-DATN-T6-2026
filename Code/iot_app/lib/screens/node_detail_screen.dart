@@ -5,16 +5,21 @@ import '../models/node.dart';
 import '../models/device.dart';
 import '../widgets/device_card.dart';
 import '../services/thingsboard_service.dart';
-//import '../services/thingsboard_ws.dart';
 
 String? jwt;
+
 class NodeDetailScreen extends StatefulWidget {
   final Node node;
+  final Future<void> Function() onDataChanged;
 
-  NodeDetailScreen({required this.node});
+  NodeDetailScreen({
+    super.key,
+    required this.node,
+    Future<void> Function()? onDataChanged,
+  }) : onDataChanged = onDataChanged ?? (() async {});
 
   @override
-  _NodeDetailScreenState createState() => _NodeDetailScreenState();
+  State<NodeDetailScreen> createState() => _NodeDetailScreenState();
 }
 
 class _NodeDetailScreenState extends State<NodeDetailScreen>
@@ -27,7 +32,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    loginFromThingsboard();
+    initThingsboardData();
 
     timer = Timer.periodic(Duration(seconds: 5), (t) {
       fetchDataFromThingsboard();
@@ -47,11 +52,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
-            // 🔥 TÊN NODE
             Text(widget.node.name),
-
-            // 🔥 MODE + SWITCH
             Row(
               children: [
                 Text(
@@ -69,6 +70,15 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                     setState(() {
                       widget.node.autoMode = value;
                     });
+                    widget.onDataChanged();
+                    final currentJwt = await ensureJwt();
+                    if (currentJwt != null) {
+                      await ThingsboardService.sendSharedAttributes(
+                        jwt: currentJwt,
+                        deviceId: ThingsboardService.deviceId,
+                        data: {"autoMode": value},
+                      );
+                    }
                   },
                 ),
               ],
@@ -92,13 +102,6 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
           buildGrid(widget.node.actuators),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showAddDeviceDialog(context);
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
-      ),
     );
   }
 
@@ -117,40 +120,50 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
           device: devices[index],
           autoMode: widget.node.autoMode,
           onTap: () async {
+            if (widget.node.autoMode && devices[index].type == "sensor") {
+              showThresholdDialog(devices[index]);
+              return;
+            }
+
             if (!widget.node.autoMode && devices[index].type == "actuator") {
               if (devices[index].actuatorType == "relay") {
                 // 🔥 ON/OFF
                 setState(() {
-                  devices[index].value =
-                  devices[index].value == "1" ? "0" : "1";
+                  devices[index].value = devices[index].value == "1"
+                      ? "0"
+                      : "1";
                 });
-                await ThingsboardService.sendRPC(jwt: jwt!, deviceId: "0e99eb10-37e6-11f1-8ebb-d54a2d348b45", method: "setLedStatus", params: devices[index].value == "1" ? 1 : 0,);
+                widget.onDataChanged();
+                if (jwt != null) {
+                  await ThingsboardService.sendRPC(
+                    jwt: jwt!,
+                    deviceId: ThingsboardService.deviceId,
+                    method: getRelayMethod(devices[index]),
+                    params: devices[index].value == "1" ? 1 : 0,
+                  );
                 }
-
-              else if (devices[index].actuatorType == "ac") {
+              } else if (devices[index].actuatorType == "ac") {
                 // 🔥 mở dialog chỉnh nhiệt độ
                 showACControlDialog(devices[index]);
               }
             }
           },
-
-          onDelete: () {
-            showDeleteDeviceDialog(devices, index);
-          },
-
-          onEdit: () {
-            showEditDeviceDialog(devices[index]);
-          },
-
-          onThreshold: () {
-            if (devices[index].type == "sensor" &&
-                widget.node.autoMode == true) {
-              showThresholdDialog(devices[index]);
-            }
-          },
         );
       },
     );
+  }
+
+  String getRelayMethod(Device device) {
+    switch (device.id) {
+      case "RL1":
+        return "setRelay1Status";
+      case "RL2":
+        return "setRelay2Status";
+      case "RL3":
+        return "setRelay3Status";
+      default:
+        return "setRelay1Status";
+    }
   }
 
   // Future<void> initThingsBoard() async {
@@ -168,67 +181,108 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
   //
   //
   // }
-  Future<void> loginFromThingsboard() async {
+  Future<void> initThingsboardData() async {
     jwt = await ThingsboardService.login();
-}
-  Future<void> fetchDataFromThingsboard() async {
-
-      var data = await ThingsboardService.getTelemetry(
-        jwt!,
-        "0e99eb10-37e6-11f1-8ebb-d54a2d348b45",
-      );
-
-      setState(() {
-
-          for (var device in widget.node.sensors) {
-            String key = device.name.toLowerCase();
-
-            device.value = data[key]?[0]?["value"] ?? "--";
-          }
-          if (widget.node.autoMode) {
-            for (var device in widget.node.actuators) {
-              String key = device.name;
-
-              device.value = data[key]?[0]?["value"] ?? "--";
-            }
-          }
-      });
-
+    await loadSharedAttributes();
   }
-  void showThresholdDialog(Device device) {
-    final controller =
-    TextEditingController(text: device.threshold?.toString() ?? "");
 
-    Device? selectedActuator =
-    widget.node.actuators.isNotEmpty ? widget.node.actuators.first : null;
+  Future<String?> ensureJwt() async {
+    jwt ??= await ThingsboardService.login();
+    return jwt;
+  }
+
+  List<String> get sharedAttributeKeys {
+    final thresholdKeys = widget.node.sensors.expand(
+      (device) => ["threshold_${device.id}_min", "threshold_${device.id}_max"],
+    );
+
+    return ["autoMode", ...thresholdKeys];
+  }
+
+  double? parseAttributeDouble(dynamic value) {
+    if (value == null) return null;
+    return double.tryParse(value.toString());
+  }
+
+  Future<void> loadSharedAttributes() async {
+    final currentJwt = jwt;
+    if (currentJwt == null) return;
+
+    final attributes = await ThingsboardService.getSharedAttributes(
+      jwt: currentJwt,
+      deviceId: ThingsboardService.deviceId,
+      keys: sharedAttributeKeys,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      final autoMode = attributes["autoMode"];
+      if (autoMode != null) {
+        widget.node.autoMode = autoMode == true || autoMode == "true";
+      }
+
+      for (final device in widget.node.sensors) {
+        device.minThreshold = parseAttributeDouble(
+          attributes["threshold_${device.id}_min"],
+        );
+        device.maxThreshold = parseAttributeDouble(
+          attributes["threshold_${device.id}_max"],
+        );
+      }
+    });
+  }
+
+  Future<void> fetchDataFromThingsboard() async {
+    if (jwt == null) return;
+
+    var data = await ThingsboardService.getTelemetry(
+      jwt!,
+      ThingsboardService.deviceId,
+    );
+
+    setState(() {
+      for (var device in widget.node.sensors) {
+        String key = device.id.toUpperCase();
+
+        device.value = data[key]?[0]?["value"] ?? "--";
+      }
+      if (widget.node.autoMode) {
+        for (var device in widget.node.actuators) {
+          String key = device.id;
+
+          device.value = data[key]?[0]?["value"] ?? "--";
+        }
+      }
+    });
+  }
+
+  void showThresholdDialog(Device device) {
+    final unit = device.unit == null ? "" : " (${device.unit})";
+    final minController = TextEditingController(
+      text: device.minThreshold?.toString() ?? "",
+    );
+    final maxController = TextEditingController(
+      text: device.maxThreshold?.toString() ?? "",
+    );
 
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Thiết lập ngưỡng"),
+        title: Text("Set ngưỡng ${device.name}"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              controller: controller,
+              controller: minController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: "Ngưỡng"),
+              decoration: InputDecoration(labelText: "Min$unit"),
             ),
-
             SizedBox(height: 10),
-
-            DropdownButtonFormField<Device>(
-              value: selectedActuator,
-              items: widget.node.actuators
-                  .map((a) => DropdownMenuItem(
-                value: a,
-                child: Text(a.name),
-              ))
-                  .toList(),
-              onChanged: (value) {
-                selectedActuator = value;
-              },
-              decoration: InputDecoration(labelText: "Chọn actuator"),
+            TextField(
+              controller: maxController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: "Max$unit"),
             ),
           ],
         ),
@@ -238,165 +292,40 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
             child: Text("Hủy"),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              final minValue = double.tryParse(minController.text);
+              final maxValue = double.tryParse(maxController.text);
+
+              if (minValue == null ||
+                  maxValue == null ||
+                  minValue >= maxValue) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text("Ngưỡng không hợp lệ")));
+                return;
+              }
+
               setState(() {
-                device.threshold = double.tryParse(controller.text);
-                device.linkedActuatorId = selectedActuator?.id;
+                device.minThreshold = minValue;
+                device.maxThreshold = maxValue;
               });
+              widget.onDataChanged();
 
-              Navigator.pop(context);
-            },
-            child: Text("Lưu"),
-          ),
-        ],
-      ),
-    );
-  }
-  // ➕ ADD DEVICE
-  void showAddDeviceDialog(BuildContext context) {
-
-    final nameController = TextEditingController();
-    String selectedType = "sensor";
-    String selectedActuatorType = "relay";
-
-    showDialog(
-      context: context,
-      builder: (_) => StatefulBuilder(
-        builder: (context, setStateDialog) {
-          return AlertDialog(
-            title: Text("Thêm thiết bị"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: "Tên"),
-                ),
-
-                // 🔥 CHỌN SENSOR / ACTUATOR
-                DropdownButtonFormField<String>(
-                  value: selectedType,
-                  items: [
-                    DropdownMenuItem(value: "sensor", child: Text("Sensor")),
-                    DropdownMenuItem(value: "actuator", child: Text("Actuator")),
-                  ],
-                  onChanged: (value) {
-                    setStateDialog(() {
-                      selectedType = value!;
-                    });
+              final currentJwt = await ensureJwt();
+              if (currentJwt != null) {
+                await ThingsboardService.sendSharedAttributes(
+                  jwt: currentJwt,
+                  deviceId: ThingsboardService.deviceId,
+                  data: {
+                    "threshold_${device.id}_min": minValue,
+                    "threshold_${device.id}_max": maxValue,
                   },
-                ),
+                );
+              }
 
-                // 🔥 CHỈ HIỆN KHI LÀ ACTUATOR
-                if (selectedType == "actuator")
-                  DropdownButtonFormField<String>(
-                    value: selectedActuatorType,
-                    items: [
-                      DropdownMenuItem(
-                          value: "relay", child: Text("Relay (ON/OFF)")),
-                      DropdownMenuItem(
-                          value: "ac", child: Text("Điều hòa (nhiệt độ)")),
-                    ],
-                    onChanged: (value) {
-                      setStateDialog(() {
-                        selectedActuatorType = value!;
-                      });
-                    },
-                    decoration:
-                    InputDecoration(labelText: "Loại actuator"),
-                  ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text("Hủy"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    if (selectedType == "sensor") {
-                      widget.node.sensors.add(
-                        Device(
-                          id: DateTime.now().toString(),
-                          name: nameController.text,
-                          type: "sensor",
-                          value: "--",
-                        ),
-                      );
-                    } else {
-                      widget.node.actuators.add(
-                        Device(
-                          id: DateTime.now().toString(),
-                          name: nameController.text,
-                          type: "actuator",
-                          value: selectedActuatorType == "relay" ? "1":"",
-                          actuatorType: selectedActuatorType,
-                        ),
-                      );
-                    }
-                  });
-
-                  Navigator.pop(context);
-                },
-                child: Text("Thêm"),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  // 🗑️ DELETE
-  void showDeleteDeviceDialog(List<Device> list, int index) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Xóa thiết bị"),
-        content: Text("Bạn có chắc muốn xóa không?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                list.removeAt(index);
-              });
-              Navigator.pop(context);
-            },
-            child: Text("Xóa"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ✏️ EDIT
-  void showEditDeviceDialog(Device device) {
-    final controller = TextEditingController(text: device.name);
-
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Sửa thiết bị"),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(labelText: "Tên mới"),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                device.name = controller.text;
-              });
-              Navigator.pop(context);
+              if (mounted) {
+                Navigator.pop(context);
+              }
             },
             child: Text("Lưu"),
           ),
@@ -404,11 +333,25 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
       ),
     );
   }
+
   void showACControlDialog(Device device) {
-    int temp = int.tryParse(device.value) ?? 25;
-    String mode = "cool"; // cool / dry / fan
-    String fan = "auto"; // auto / low / high
-    bool isOn = true;
+    // final savedTemp = int.tryParse(device.value);
+    // int temp = savedTemp != null && savedTemp >= 16 && savedTemp <= 30
+    //     ? savedTemp
+    //     : 25;
+    bool isOn = device.value != "0";
+
+    Future<void> sendACRpc(String method, dynamic params) async {
+      final currentJwt = await ensureJwt();
+      if (currentJwt == null) return;
+
+      await ThingsboardService.sendRPC(
+        jwt: currentJwt,
+        deviceId: ThingsboardService.deviceId,
+        method: method,
+        params: params,
+      );
+    }
 
     showDialog(
       context: context,
@@ -419,7 +362,6 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 // 🔥 ON/OFF
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -427,10 +369,11 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                     Text("Trạng thái"),
                     Switch(
                       value: isOn,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setStateDialog(() {
                           isOn = value;
                         });
+                        await sendACRpc("setACStatus", value ? 1 : 0);
                       },
                     ),
                   ],
@@ -444,27 +387,35 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                   children: [
                     IconButton(
                       icon: Icon(Icons.remove),
-                      onPressed: () {
-                        setStateDialog(() {
-                          if (temp > 16) temp--;
-                        });
+                      onPressed: () async {
+                      //  var shouldSendRpc = false;
+                        //setStateDialog(() {
+                          // if (temp > 16) {
+                          //   temp--;
+                          //   shouldSendRpc = true;
+                          // }
+                        // });
+                      //  if (shouldSendRpc) {
+                          await sendACRpc("decreaseAC", true);
+                       // }
                       },
                     ),
 
-                    Text(
-                      "$temp°C",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    SizedBox(width: 20),
 
                     IconButton(
                       icon: Icon(Icons.add),
-                      onPressed: () {
-                        setStateDialog(() {
-                          if (temp < 30) temp++;
-                        });
+                      onPressed: () async {
+                        // var shouldSendRpc = false;
+                        // setStateDialog(() {
+                        //   if (temp < 30) {
+                        //     temp++;
+                        //     shouldSendRpc = true;
+                        //   }
+                        // });
+                        // if (shouldSendRpc) {
+                          await sendACRpc("increaseAC", true);
+                        //}
                       },
                     ),
                   ],
@@ -472,38 +423,12 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
 
                 SizedBox(height: 10),
 
-                // ❄️ MODE
-                DropdownButtonFormField<String>(
-                  value: mode,
-                  items: [
-                    DropdownMenuItem(value: "cool", child: Text("Cool")),
-                    DropdownMenuItem(value: "dry", child: Text("Dry")),
-                    DropdownMenuItem(value: "fan", child: Text("Fan")),
-                  ],
-                  onChanged: (value) {
-                    setStateDialog(() {
-                      mode = value!;
-                    });
-                  },
-                  decoration: InputDecoration(labelText: "Chế độ"),
-                ),
-
-                SizedBox(height: 10),
-
-                // 💨 FAN SPEED
-                DropdownButtonFormField<String>(
-                  value: fan,
-                  items: [
-                    DropdownMenuItem(value: "auto", child: Text("Auto")),
-                    DropdownMenuItem(value: "low", child: Text("Low")),
-                    DropdownMenuItem(value: "high", child: Text("High")),
-                  ],
-                  onChanged: (value) {
-                    setStateDialog(() {
-                      fan = value!;
-                    });
-                  },
-                  decoration: InputDecoration(labelText: "Quạt"),
+                Text(
+                  isOn ? "Điều hòa đang bật" : "Điều hòa đang tắt",
+                  style: TextStyle(
+                    color: isOn ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -517,13 +442,9 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    device.value = "$temp"; // lưu nhiệt độ
-
-                    // 🔥 bạn có thể lưu thêm nếu muốn:
-                    // device.mode = mode;
-                    // device.fan = fan;
-                    // device.isOn = isOn;
+                   // device.value = isOn ? "$temp" : "0";
                   });
+                  widget.onDataChanged();
 
                   Navigator.pop(context);
                 },
