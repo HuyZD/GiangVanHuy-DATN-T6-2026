@@ -6,12 +6,16 @@
  */
 // Recommend only use IRLibRecvPCI or IRLibRecvLoop for best results
 #include <IRLibRecvPCI.h> 
-
-IRrecvPCI myReceiver(2);//pin number for the receiver
+#define PowEn3 A3 // 5V
+IRrecvPCI myReceiver(4);//pin number for the receiver
 
 void setup() {
   Serial.begin(9600);
   delay(2000); while (!Serial); //delay for Leonardo
+  pinMode(PowEn3, OUTPUT);
+
+  // Bật nguồn
+  digitalWrite(PowEn3, LOW);
   myReceiver.enableIRIn(); // Start the receiver
   Serial.println(F("Ready to receive IR signals"));
   myReceiver.setFrameTimeout(100000);
