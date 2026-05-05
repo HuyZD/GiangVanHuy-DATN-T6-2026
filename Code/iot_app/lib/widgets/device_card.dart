@@ -2,21 +2,17 @@ import 'package:flutter/material.dart';
 import '../models/device.dart';
 
 class DeviceCard extends StatelessWidget {
-  final bool autoMode;
   final Device device;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
-  final VoidCallback? onThreshold;
 
   const DeviceCard({
     super.key,
     required this.device,
-    required this.autoMode,
     this.onTap,
     this.onDelete,
     this.onEdit,
-    this.onThreshold, // 🔥 thêm
   });
 
   IconData get deviceIcon {
@@ -47,14 +43,11 @@ class DeviceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showMenu = onEdit != null || onDelete != null || onThreshold != null;
+    final showMenu = onEdit != null || onDelete != null;
     final unit = device.unit ?? "";
     final sensorValue = unit.isEmpty || device.value == "--"
         ? device.value
         : "${device.value} $unit";
-    final thresholdText = unit.isEmpty
-        ? "${device.minThreshold?.toStringAsFixed(1)} - ${device.maxThreshold?.toStringAsFixed(1)}"
-        : "${device.minThreshold?.toStringAsFixed(1)} - ${device.maxThreshold?.toStringAsFixed(1)} $unit";
 
     return GestureDetector(
       onTap: onTap,
@@ -84,11 +77,6 @@ class DeviceCard extends StatelessWidget {
                         : (device.value == "1" ? "ON" : "OFF"),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  if (device.type == "sensor" &&
-                      device.minThreshold != null &&
-                      device.maxThreshold != null &&
-                      autoMode == true)
-                    Text(thresholdText, style: TextStyle(fontSize: 12)),
                 ],
               ),
             ),
@@ -103,8 +91,6 @@ class DeviceCard extends StatelessWidget {
                       onEdit?.call();
                     } else if (value == "delete") {
                       onDelete?.call();
-                    } else if (value == "threshold") {
-                      onThreshold?.call();
                     }
                   },
                   itemBuilder: (context) {
@@ -119,17 +105,6 @@ class DeviceCard extends StatelessWidget {
                     if (onDelete != null) {
                       items.add(
                         PopupMenuItem(value: "delete", child: Text("Xóa")),
-                      );
-                    }
-
-                    if (onThreshold != null &&
-                        device.type == "sensor" &&
-                        autoMode == true) {
-                      items.add(
-                        PopupMenuItem(
-                          value: "threshold",
-                          child: Text("Thiết lập ngưỡng"),
-                        ),
                       );
                     }
 
