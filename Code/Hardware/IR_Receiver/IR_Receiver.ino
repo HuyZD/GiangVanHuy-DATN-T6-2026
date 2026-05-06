@@ -6,8 +6,8 @@
  */
 // Recommend only use IRLibRecvPCI or IRLibRecvLoop for best results
 #include <IRLibRecvPCI.h> 
-#define PowEn3 A3 // 5V
-IRrecvPCI myReceiver(4);//pin number for the receiver
+#define PowEn3 4                                 // 5V
+IRrecvPCI myReceiver(3);//pin number for the receiver
 
 void setup() {
   Serial.begin(9600);

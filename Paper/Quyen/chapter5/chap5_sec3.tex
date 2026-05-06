@@ -1,0 +1,31 @@
+\section{Quá trình thiết lập và cập nhật Gradient}
+
+\subsubsection{Thiết lập Gradient ban đầu}
+
+Quá trình thiết lập gradient được khởi tạo từ sink node:
+
+\begin{enumerate}
+    \item \textbf{Sink node broadcast:} Sink node (gradient = 0) broadcast message GRADIENT\_STATUS chứa gradient value = 0.
+    
+    \item \textbf{Node lân cận nhận và cập nhật:} Các node nhận được message, cập nhật gradient = 1, lưu địa chỉ sink làm parent, và broadcast tiếp với gradient = 1.
+    
+    \item \textbf{Lan truyền:} Quá trình tiếp tục cho đến khi tất cả node trong mạng đều có giá trị gradient.
+\end{enumerate}
+
+\subsubsection{Cập nhật Gradient định kỳ}
+
+Để duy trì tính nhất quán của gradient trong mạng động, các node trong mạng định kỳ publish message GRADIENT\_STATUS với giá trị gradient hiện tại. Khi node khởi động node sẽ gửi message này ngay lập tức để khởi tạo Publication Buffer của Model với giá trị Gradient của node. Sau đó, node sẽ tự động gửi message này với chu kỳ được cấu hình từ trước theo cơ chế Publication của BLE Mesh. Khi Gradient của node thay đổi node sẽ publish message GRADIENT\_STATUS ngay lập tức để cập nhật thông tin cho các node lân cận.
+
+Khi nhận được gói tin GRADIENT\_STATUS từ một node lân cận, node sẽ gọi hàm handle GRADIENT\_STATUS, hàm này sẽ thực hiện các bước sau:
+
+\begin{enumerate}
+    \item \textit{Trích xuất thông tin:} Parse gói tin để lấy địa chỉ nguồn, giá trị gradient của node gửi, và đo RSSI của gói tin nhận được sau đó đẩy vào message queue.
+    
+    \item \textit{Xử lý Non-Blocking:} Để đảm bảo tính phản hồi cao và tránh làm tắc nghẽn BLE Mesh stack, handler được thiết kế để thực hiện các thao tác nhanh chóng. Mọi xử lý phức tạp hơn sẽ được chuyển sang một task riêng biệt giúp giảm tải khối lượng công việc của luồng hiện tại. Nhờ vậy node có thể tiếp tục nhận và xử lý các gói tin khác một cách hiệu quả, tránh trường hợp bị mất gói tin khi đang xử lý một gói tin trước đó.
+    
+    \item \textit{Cập nhật Forwarding Table:} Tìm kiếm entry tương ứng với địa chỉ nguồn trong bảng. Nếu entry đã tồn tại, cập nhật gradient, RSSI, và timestamp. Nếu chưa tồn tại và bảng còn chỗ trống, thêm entry mới. Nếu bảng đầy, so sánh Gradient và RSSI với các entry trong bảng để tìm vị trí có thể thay thế.
+    
+    \item \textit{Đánh giá cập nhật gradient:} So sánh gradient của node tốt nhất trong bảng với gradient hiện tại của node. Nếu gradient của neighbor cộng thêm 1 nhỏ hơn gradient hiện tại, điều này có nghĩa đã tìm được đường đi ngắn hơn đến sink. Trong trường hợp này, cập nhật gradient của node thành (gradient\_best\_neighbor + 1).
+    
+    \item \textit{Lan truyền thông tin:} Nếu gradient của node đã thay đổi, broadcast gói tin GRADIENT\_STATUS mới để thông báo cho các node lân cận khác. Cơ chế này đảm bảo thông tin gradient được lan truyền ra toàn mạng một cách tự động và nhanh chóng.
+\end{enumerate}

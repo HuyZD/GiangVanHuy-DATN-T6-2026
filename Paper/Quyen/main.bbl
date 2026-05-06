@@ -1,0 +1,45 @@
+\begin{thebibliography}{10}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem{nordic_mesh_architecture}
+{Nordic Semiconductor} (2024), \enquote{{Bluetooth Mesh Architecture}}. \url{https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/protocols/bt/bt_mesh/overview/architecture.html}. NRF Connect SDK Documentation, Accessed: December 2024.
+
+\bibitem{bluetooth_mesh_profile}
+{Bluetooth Special Interest Group} (2023), \emph{{Mesh Profile Specification}}. Bluetooth SIG, \urlprefix\url{https://www.bluetooth.com/specifications/specs/mesh-profile-1-1/}. Revision 1.1.
+
+\bibitem{heinzelman2000leach}
+W.R. Heinzelman, A.~Chandrakasan và H~Balakrishnan (2000), \enquote{Energy-efficient communication protocol for wireless microsensor networks}. Trong \enquote{Proceedings of the 33rd Annual Hawaii International Conference on System Sciences}, .
+
+\bibitem{younis2004heed}
+O.~Younis và S.~Fahmy (2004), \enquote{Heed: a hybrid, energy-efficient, distributed clustering approach for ad hoc sensor networks}. \emph{IEEE Transactions on Mobile Computing}, tập~3, số~4, tr. 366--379, \doi{10.1109/TMC.2004.41}.
+
+\bibitem{zhikai2022gleach}
+Yang Zhikai và Li~Yongzhen (2022), \enquote{Research on gradient-based low-energy routing protocols}. Trong \enquote{2022 IEEE International Conference on Artificial Intelligence and Computer Applications (ICAICA)}, tr. 615--619, \doi{10.1109/ICAICA54878.2022.9844475}.
+
+\bibitem{perkins1994dsdv}
+Charles~E. Perkins và Pravin Bhagwat (1994), \enquote{Highly dynamic destination-sequenced distance-vector routing (dsdv) for mobile computers}. Trong \enquote{Proceedings of the Conference on Communications Architectures, Protocols and Applications}, SIGCOMM '94, tr. 234–244 (Association for Computing Machinery, New York, NY, USA), ISBN 0897916824, \doi{10.1145/190314.190336}, \urlprefix\url{https://doi.org/10.1145/190314.190336}.
+
+\bibitem{jacquet2001olsr}
+P.~Jacquet, P.~Muhlethaler, T.~Clausen, A.~Laouiti, A.~Qayyum và L.~Viennot (2001), \enquote{Optimized link state routing protocol for ad hoc networks}. Trong \enquote{Proceedings. IEEE International Multi Topic Conference, 2001. IEEE INMIC 2001. Technology for the 21st Century.}, tr. 62--68, \doi{10.1109/INMIC.2001.995315}.
+
+\bibitem{perkins1999aodv}
+C.E. Perkins và E.M. Royer (1999), \enquote{Ad-hoc on-demand distance vector routing}. Trong \enquote{Proceedings WMCSA'99. Second IEEE Workshop on Mobile Computing Systems and Applications}, tr. 90--100, \doi{10.1109/MCSA.1999.749281}.
+
+\bibitem{bluetooth2023DF}
+{Bluetooth SIG} (2023), \enquote{{Bluetooth® Mesh Directed Forwarding}}. \url{https://www.bluetooth.com/learn-about-bluetooth/feature-enhancements/mesh-directed-forwarding/}.
+
+\bibitem{johnson1996}
+David~B. Johnson và David~A. Maltz (1996), \emph{Dynamic Source Routing in Ad Hoc Wireless Networks}, tr. 153--181 (Springer US, Boston, MA), ISBN 978-0-585-29603-6, \doi{10.1007/978-0-585-29603-6_5}, \urlprefix\url{https://doi.org/10.1007/978-0-585-29603-6_5}.
+
+\bibitem{Haas1997zrp}
+Z.J. Haas (1997), \enquote{A new routing protocol for the reconfigurable wireless networks}. Trong \enquote{Proceedings of ICUPC 97 - 6th International Conference on Universal Personal Communications}, tập~2, tr. 562--566 vol.2, \doi{10.1109/ICUPC.1997.627227}.
+
+\bibitem{nordic_nrf54l15_ps}
+{Nordic Semiconductor} (2024), \emph{{nRF54L15 Product Specification}}. \urlprefix\url{https://docs.nordicsemi.com/bundle/ps_nrf54L15/page/keyfeatures_html5.html}. Accessed: 2024.
+
+\end{thebibliography}

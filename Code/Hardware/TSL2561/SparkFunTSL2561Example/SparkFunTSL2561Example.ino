@@ -48,7 +48,7 @@ Updated to Arduino 1.6.4 5/2015
 
 #include <SparkFunTSL2561.h>
 #include <Wire.h>
-
+#define PowEn3 A3 
 // Create an SFE_TSL2561 object, here called "light":
 
 SFE_TSL2561 light;
@@ -64,7 +64,8 @@ void setup()
   
   Serial.begin(9600);
   Serial.println("TSL2561 example sketch");
-
+         pinMode(PowEn3, OUTPUT);
+  digitalWrite(PowEn3, LOW); 
   // Initialize the SFE_TSL2561 library
 
   // You can pass nothing to light.begin() for the default I2C address (0x39),

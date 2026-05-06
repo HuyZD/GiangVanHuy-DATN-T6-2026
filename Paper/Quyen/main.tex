@@ -1,0 +1,150 @@
+\documentclass[14pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese=nohyphenation]{hyphsubst}
+\usepackage[vietnamese]{babel}
+\usepackage{titlesec, blindtext, color}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+
+\title{Demo Document}
+\author{PQH}
+
+
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{6pt}}
+\titleformat{\chapter}[hang]{\small\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+
+\usepackage[left=3cm,right=2cm,top=2.5cm,bottom=3cm]{geometry}
+\setlength{\parindent}{1cm}
+\usepackage{indentfirst}    
+\setlength{\parskip}{6pt}
+\usepackage{sectsty}
+\chapterfont{\centering}
+\renewcommand{\baselinestretch}{1.3} %format distance between lines
+\usepackage{xcolor}
+\usepackage[unicode]{hyperref}
+\hypersetup{
+colorlinks = false,
+linkbordercolor = {white}
+}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage[font=large,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+
+% abbreviation
+\usepackage{nomencl}
+\makenomenclature
+\renewcommand{\nomname}{Bảng ký hiệu và chữ viết tắt}
+%% This code creates the groups
+% -----------------------------------------
+\usepackage{etoolbox}
+\renewcommand\nomgroup[1]{%
+  \item[\bfseries
+  \ifstrequal{#1}{T}{Chữ viết tắt}{%
+  \ifstrequal{#1}{K}{Ký hiệu}}%
+]}
+% ------
+
+
+\usepackage{subcaption}
+\usepackage{bm}
+\usepackage[para]{footmisc}
+\usepackage{amsfonts}
+\usepackage{afterpage}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{pdfpages}
+\usepackage{xspace}
+\usepackage{multirow}
+% \usepackage{subfiles}
+
+\usepackage{algpseudocode}
+\usepackage{algorithm2e}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usetikzlibrary{calc}
+\usepackage{frontespizio}
+% \usepackage[perpage]{footmisc}
+\usepackage{perpage}
+\MakePerPage{footnote}
+\usepackage{longtable}
+\usepackage{sectsty}
+\titleformat{\chapter}[display]
+{\large}
+{
+	\large\MakeUppercase{\chaptertitlename}~\thechapter}
+{1pc}
+{\titlerule\huge}
+
+\titleformat*{\section}{\normalfont \Large}
+\titleformat*{\subsection}{\normalfont \large}
+
+
+\begin{document}
+
+\include{overview/title}
+\include{overview/subtitle}
+\include{overview/subtitle_english}
+\pagenumbering{roman}
+\include{overview/abstract}
+\include{overview/thank}
+\include{overview/authorship}
+\include{overview/approval}
+\include{overview/contents}
+% \include{overview/update}
+\include{overview/abbreviation}
+
+\pagenumbering{arabic}
+\fontsize{13}{15}\selectfont
+
+\chapter{GIỚI THIỆU}
+\input{chapter1/chap1_sec1}
+\input{chapter1/chap1_sec2}
+\input{chapter1/chap1_sec3}
+\input{chapter1/chap1_sec4}
+\input{chapter1/chap1_sec5}
+\input{chapter1/chap1_sec6}
+\input{chapter1/chap1_sec7}
+
+
+\chapter{Cơ sở lý thuyết}
+\input{chapter3/chap3_sec1}
+\input{chapter3/chap3_sec2}
+\input{chapter3/chap3_sec3}
+\input{chapter3/chap3_sec4}
+\input{chapter3/chap3_sec5}
+
+% \chapter{GIẢI THUẬT LẬP ĐƯỜNG ĐI BAO PHỦ}
+% \input{chapter4/chap4_sec1}
+% \input{chapter4/chap4_sec2}
+% \input{chapter4/chap4_sec3}
+% \input{chapter4/chap4_sec4}
+% \input{chapter4/chap4_sec5}
+
+\chapter{Giải pháp định tuyến sử dụng thuật toán Gradient trên vi xử lý nRF54L15}
+\input{chapter5/chap5_sec1}
+\input{chapter5/chap5_sec2}
+\input{chapter5/chap5_sec3}
+\input{chapter5/chap5_sec4}
+
+\chapter{Kết quả và thảo luận}
+\input{chapter2/chap2_sec1}
+\input{chapter2/chap2_sec2}
+\input{chapter2/chap2_sec3}
+\input{chapter2/chap2_sec4}
+\input{chapter2/chap2_sec5}
+
+\chapter*{KẾT LUẬN}
+\addcontentsline{toc}{chapter}{KẾT LUẬN}
+\input{chapter6/chap6_sec1}
+\input{chapter6/chap6_sec2}
+
+% \printbibliography
+\bibliographystyle{vietnumeric}
+\bibliography{reference}
+\end{document}
+\addcontentsline{toc}{chapter}{TÓM TẮT}
+\fontsize{13}{15}\selectfont

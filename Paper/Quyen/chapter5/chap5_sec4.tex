@@ -1,0 +1,13 @@
+\section{Quá trình chuyển tiếp dữ liệu}
+
+Khi một node có dữ liệu cần gửi về sink node sẽ đưa dữ liệu vào Network Buffer và gọi hàm gửi của BLE Mesh stack. Hàm này sẽ gửi dữ liệu đến node ở vị trí đầu tiên trong Forwarding Table - neighbor có gradient thấp nhất. Nếu gửi thành công, quá trình kết thúc. Nếu gửi thất bại, node sẽ thử gửi đến neighbor tiếp theo trong bảng. Quá trình này lặp lại cho đến khi dữ liệu được gửi thành công hoặc hết các neighbor hợp lệ.
+
+Khi các node trung gian nhận được gói DATA, chúng sẽ gọi hàm xử lý gói tin DATA. Quy trình xử lý như sau:
+
+\begin{enumerate}
+    \item \textit{Kiểm tra đích đến:} Nếu node hiện tại là sink (gradient = 0), gói tin đã đến đích. Trích xuất payload và đẩy dữ liệu lên server để lưu trữ và xử lý.
+      
+    \item \textit{Chuyển tiếp gói tin:} Chuyển tiếp gói tin đến neighbor tốt nhất (địa chỉ tại index 0 trong Forwarding Table). Nếu gửi gới tin thất bại, thử gửi đến neighbor tiếp theo trong bảng.  
+\end{enumerate}
+
+

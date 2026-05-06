@@ -1,0 +1,112 @@
+% \section{Mô hình robot E-puck}
+% \subsection{Chi tiết phần cứng}
+
+% E-puck là mẫu robot 2 bánh vi sai nhỏ, được thiết kế với mục đích giáo dục kĩ thuật bởi Michael Bonani và Francesco Mondada tại phòng thí nghiệm ASL của Giáo sư Roland Siegwart tại EPFL (Lausanne, Thụy Sĩ). Cũng bởi mang tính giáo dục cao nên robot E-puck được thiết kế nhỏ gọn, giá thành thấp, được trang bị nhiều loại cảm biến đủ để sử dụng trong môi trường giáo dục cho sinh viên, phần cứng và phần mề của robot đều là mã nguồn mở, vì vậy mẫu robot này được sản xuất và bán bởi một vài công ty khác nhau.
+
+% \begin{figure}[h!]
+% \centering
+% \includegraphics[width=0.7\textwidth]{chapter2/images/epuck.jpeg}
+% \caption{Hình minh họa robot E-puck}
+% \end{figure}
+
+
+% Robot có đường kính 71 mm và chiều cao phụ thuộc vào các module mở rộng được kết nối. Các kết cấu cơ khí của robot đều được làm bằng nhựa để giảm giá thành. Cấu trúc của robot rất đơn giản, chỉ gồm 4 bộ phận: thân chính, vòng đèn và 2 bánh xe, tất cả đều được làm bằng nhựa. Phần thân chính là cốt lõi của robot và bao bọc pin. Pin có thể được tháo rời từ phần dưới của E-puck. 2 Động cơ được gắn đơn giản vào thân chính, với bánh xe gắn trực tiếp vào trục động cơ. Phần bảng mạch in PCB chứa hầu hết các linh kiện điện tử nằm ở phía trên thân chính. Bên trên bảng mạch chính là vòng khuếch tán ánh sáng và một bẳng mạch mở rộng mặc định, bảng mạch mở rộng mặc định này có thể được thay thế bằng các bảng mạch mở rộng chuyên dụng khác. Tất cả các phần vỏ cơ khí đều được làm trong suốt, cho phép quan sát toàn bộ các bộ phận bên trong.
+
+% Ngoài ra không thể không kể tới tới cấu hình của E-puck, tuy nhiên sẽ là quá nhiều nếu nói đến tất cả các bộ phận của của robot vì vậy dưới đây robot E-puck sẽ được mô tả chi tiết ở cấu hình cơ bản nhất.
+
+% \begin{enumerate}
+%     \item \textit{Vi điều khiển}: Hệ thống của E-puck được thiết kế xung quanh vi điều khiển Microchip dsPIC 30F6014A, CPU này chạy ở tốc độ 64 MHz và cung cấp 16 MIPS công suất xử lý cao nhất. Đây là một vi điều khiển loại 16 bits và trên E-puck được trang bị phiên bản vi điều khiển với 8 kB RAM và 144kB bộ nhớ Flash. Đặc biệt, tập lệnh của nó bao gồm cả các lệnh nhân tích lũy và lặp phần cứng phù hợp cho điều khiển đợn vị xử lí tin hiệu số (DPS), chẳng hạn như có thể tính toán hiệu quả các phép tính nhân vôi hướng hay biến đổi fourier nhanh. Cuối cùng, Vi điều khiển này được hỗ trợ bởi một phiên bản thiết kế riêng của trình biên dịch GCC C.
+%     \item \textit{Cảm biến}:
+%     \begin{itemize}
+%         \item 8 cảm biến tiệm cận hồng ngoại được đặt ở xung quanh thân của robot để đo khoảng cách của vật cản hoặc đo cường độ hồng ngoại xung quanh. Đây là loại cảm biến điển hình để điều hướng robot trong một môi trường có vật cản.
+        
+%         \item 1 gia tốc kế cung cấp cho robot vector gia tốc. Vector này có thể được sử dụng để đo độ nghiêng của E-puck và gia tốc được tạo ra bởi chuyển động của chính nó. CŨng có thể sử dụng gia tốc kế để phát hiện va chạm và nếu robot bị rơi. Cảm biến này hiếm khi được trang bị cho các mẫu robot di động mini giá rẻ.
+        
+%         \item 3 micro thu âm. Nhiều micro thu âm cho phép E-puck xác định vị trí của nguồn âm dựa vào phương pháp tam giác. Băng thông tín hiệu lớn hơn rất nhiều so với gia tốc kế hay cảm biến hồng ngoại do đòi hỏi khối lượng tính toán lớn hơn, làm cho micro thu âm trờ thành công cụ lí tưởng thể học cách sử dụng đơn vị xử lí tín hiệu số.
+        
+%         \item 1 máy ảnh CMOS màu có độ phân giải 640×480 pixels. Tuy nhiên, chỉ có thể lấy một phần phụ của hình ảnh do kích thước nhận được bị giới hạn bởi bộ nhớ của vi xử lí dsPIC và tốc độ bị giới hạn bởi khả năng xử lí của nó. Bất kì định dạng nào của ảnh phụ cũng có thể được chấp nhận miễn là chúng đáp ứng được 2 ràng buộc đã nêu trên. Ví dụ, E-puck có thể lấy hình ảnh màu cỡ 40x40 pixels ở tốc độ 4 khung hình/ giây, tốc độ khung hình được tăng gấp dôi nếu sử dụng ảnh xám. Hạn chế này cho thấy tác động của các cảm biến băng thông cao như camera.
+%     \end{itemize}
+    
+%     \item \textit{Thiết bị đầu ra}:
+%     \begin{itemize}
+%         \item 2 động cơ bước kiểm soát chuyển động của bánh xe với độ phân giải 1000 bước cho mỗi vòng quay của bánh xe.
+        
+%         \item 1 loa kết nối với một bộ giải mã âm thanh. Kết hợp với micro thu âm, loa có thể tạo ra một mạng truyền thông có khả năng phát hiện ra hướng của các robot khác. Ngoài ra nó cũng là thiết bị đầu ra để tương tác với con người.
+        
+%         \item 8 đèn LED được đặt xung quanh robot. Các đèn LED này được bao phủ bởi một lớp nhựa mờ và E-puck có thể điều chỉnh cường độ sáng của chúng. Hơn nữa, các E-puck khác có thể quan sát chúng qua camera, điều này cho phép các robot tương tác một cách trực quan lẫn nhau.
+
+%         \item Một số đèn LED màu xanh lá cây được đặt bên trong thân robot trong suốt. Bằng cách chiếu sáng cơ thể, chúng cải thiện tương tác với người dùng.
+
+%         \item 1 đèn LED phía trước màu đỏ được đặt bên cạnh camera. Đèn LED này tạo ra một chùm sáng tập trung chiếu thành một điểm mày đỏ lên vật thể phía trước E-puck. Kết hợp với camera, điểm này cho phép đo một khoảng cách xa hơn nhiều so với sử dụng cảm biến tiệm cận hồng ngoại.
+%     \end{itemize}
+
+%     \item \textit{Tương tác với người dùng}:
+%     \begin{itemize}
+%         \item 2 đèn LED hiển thị trạng thái của pin: một đèn hiển thị trạng thái của robot bật hay tắt, đèn còn lại để thông báo trạng thái pin yếu.
+
+%         \item 1 đầu nối để giao tiếp với bộ gỡ lỗi trong mạch, để lập trình lên bộ nhớ Flash và sửa lỗi code.
+
+%         \item 1 đầu thu hông ngoại điều khiển từ xa. Để điều khiển E-puck thông qua điều khiển từ xa TV thông thường.
+
+%         \item 1 cổng giao tiếp RS232 nối tiếp loại cổ điển để giao tiếp với máy tính.
+
+%         \item 1 module truyền thông bluetooth để kết nối với máy tính hoặc giao tiếp với 7 E-puck khác.
+        
+%         \item 1 nút Reset.
+
+%         \item 1 công tắc 4 bit có thể được dùng để chọn các hành vi hoặc tham số đã được lập trình trước.
+%     \end{itemize}
+
+% \end{enumerate}
+
+
+
+
+% \subsection{Mô hình động học}
+
+% Nhiều robot di động ngày nay sử dụng một cơ truyền động khiển được gọi là cơ chế truyền động vi sai. Cơ chế này bao gồm 2 bánh xe được truyền động một cách độc lập, được gắn trên một trục chung. Robot E-puck cũng không phải một ngoại lệ khi được thiết kế dựa trên mô hình này. vì vậy trong phần này, mô hình và phương trình điều khiển của mô hình 2 bánh vi sai sẽ được trình bày.
+
+% \begin{figure}[h!]
+% \centering
+% \includegraphics[width=0.5\textwidth]{chapter2/images/dw_kinematic.drawio.png}
+% \caption{Mô hình 2 bánh vi sai}
+% \end{figure}
+
+% Từ mô hình của robot ta có được biểu diễn mô hình bằng phương trình sau:
+
+% \begin{align}
+%     \begin{cases}
+%         \dot{x} =  v\cos{\phi} \\
+%         \dot{y} =  v\sin{\phi} \\
+%         \dot{\phi} =  \omega
+%     \end{cases}
+%     \label{eqn:kinematic_model1}
+% \end{align}
+
+% Vì:
+
+% \begin{align}
+%     v = \frac{R}{2}(v_r + v_l) \\
+%     \omega = \frac{R}{2}(v_r - v_l) 
+% \end{align}
+
+% Thay vào phương trình \ref{eqn:kinematic_model1} ta có được phương trình mới:
+
+% \begin{align}
+%     \begin{cases}
+%         \dot{x} =  \frac{R}{2}(v_r + v_l)\cos{\phi} \\
+%         \dot{y} =  \frac{R}{2}(v_r + v_l)\sin{\phi} \\
+%         \dot{\phi} =  \frac{R}{2}(v_r - v_l)
+%     \end{cases}
+%     \label{eqn:kinematic_model2}
+% \end{align}
+
+% Đây cũng là mô hình của mô hình 2 bánh vi sai, với $L$ là độ dài trục giữa 2 bánh xe, $R$ là bán kính bánh xe của robot, $v$ là vận tốc dài và $\omega$ là vận tốc quay của robot, $v_l$ và $v_r$ là vận tốc quay của bánh trái và bánh phải của robot. Ta có thể thấy được $v$ và $\omega$ chính là thông số đầu vào điều khiển của mô hình này, còn $v_l$, $v_r$ chính là vận tốc mà ta cần truyền xuống động cơ để đạt được góc quay và vận tốc mong muốn. Do đó phương trình \ref{eqn:kinematic_model2} có thể được biến đổi như sau để có thể tính được $v_l$, $v_r$:
+
+% \begin{align}
+%     \begin{cases}
+%         v_r = \frac{2v + \omega L}{2R} \\
+%         v_l = \frac{2v - \omega L}{2R}
+%     \end{cases}
+%     \label{eqn:kinematic_model3}
+% \end{align}

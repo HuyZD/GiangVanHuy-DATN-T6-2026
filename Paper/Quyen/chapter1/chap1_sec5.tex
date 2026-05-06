@@ -1,0 +1,16 @@
+\section{Phương pháp nghiên cứu}
+
+Khóa luận sử dụng kết hợp nhiều phương pháp nghiên cứu nhằm đảm bảo tính khoa học và thực tiễn của giải pháp đề xuất.
+
+Phương pháp nghiên cứu lý thuyết được thực hiện thông qua việc thu thập, phân tích và tổng hợp các tài liệu khoa học liên quan đến mạng cảm biến không dây, mạng ad-hoc và các thuật toán định tuyến. Bên cạnh đó, khóa luận tập trung nghiên cứu nguyên lý hoạt động của thuật toán định tuyến dựa trên Gradient cũng như cơ chế managed flooding mặc định của BLE Mesh để làm cơ sở cho việc thiết kế và so sánh. Ngoài ra, việc tìm hiểu kiến trúc phần cứng nRF54L15, nền tảng phát triển nRF Connect SDK của Nordic Semiconductor và đặc tả kỹ thuật của giao thức Bluetooth Low Energy Mesh cũng được thực hiện nhằm nắm vững các công cụ và nền tảng sử dụng trong khóa luận.
+
+Quá trình thiết kế và triển khai firmware cho vi xử lý nRF54L15 được thực hiện trên nền tảng nRF Connect SDK sử dụng ngôn ngữ lập trình C. Quy trình phát triển bắt đầu từ việc phân tích yêu cầu và thiết kế kiến trúc hệ thống, sau đó tiến hành thiết kế và triển khai thuật toán định tuyến Gradient cho giao thức BLE Mesh. Cuối cùng, quá trình kiểm thử và gỡ lỗi được thực hiện trực tiếp trên phần cứng thực tế để đảm bảo tính ổn định và chính xác của hệ thống.
+
+Thí nghiệm được triển khai trên mạng cảm biến với số lượng node dao động từ 10 đến 20 node, sử dụng mạch custom với vi xử lý nRF54L15. Để đảm bảo tính chính xác của kết quả, mỗi thí nghiệm được lặp lại nhiều lần. Dữ liệu đánh giá hiệu năng được thu thập thông qua phương pháp in log ra terminal, sử dụng logic analyzer và quan sát bằng mắt thường.
+
+Khóa luận thiết kế ba kịch bản thí nghiệm chính. Kịch bản thứ nhất là mạng tĩnh (Static topology), trong đó các node được đặt cố định trong suốt quá trình thí nghiệm nhằm đánh giá cơ chế hình thành, cập nhật đường đi và đo tỷ lệ gói tin truyền thành công. Kịch bản thứ hai là mạng động (Dynamic topology), tập trung đánh giá khả năng thích ứng của mạng khi topology thay đổi thông qua các tình huống như node thay đổi vị trí, node rời khỏi mạng hoặc node mới tham gia mạng, đồng thời đo thời gian hội tụ và khả năng cập nhật đường đi mới. Kịch bản thứ ba là mạng thẳng (Linear topology), trong đó các node được sắp xếp theo đường thẳng với số hop tăng dần để đánh giá độ trễ truyền tin và phân tích mối quan hệ giữa số hop và độ trễ end-to-end.
+
+Các tiêu chí đánh giá bao gồm: tỷ lệ gói tin thành công là tỷ lệ giữa số gói tin nhận được thành công tại node đích so với tổng số gói tin được gửi đi; độ trễ truyền tin (End-to-end Delay) là thời gian từ khi gói tin được gửi từ node nguồn đến khi được nhận tại node đích; và khả năng thích ứng là khả năng của mạng trong việc cập nhật đường đi khi topology thay đổi.
+
+Hiệu năng của thuật toán định tuyến Gradient đề xuất được so sánh với các thuật toán định tiếng phố biến. Dựa trên các tiêu chí đánh giá đã xác định, khóa luận phân tích ưu nhược điểm của từng phương pháp. Từ kết quả thực nghiệm thu được, khóa luận đề xuất các cải tiến và hướng phát triển nhằm nâng cao hiệu năng của giải pháp định tuyến.
+

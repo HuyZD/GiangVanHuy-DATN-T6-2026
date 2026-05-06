@@ -1,0 +1,51 @@
+\section{Chiến lược bao phủ quét sạch của đội hình Robot hình chữ V}
+Chiến lược bao phủ quét của đội hình Robot chữ V được mô tả trong thuật toán \ref{alg:Covestrategy}. Mỗi Robot trong bầy đóng một trong hai vai trò sau:
+\begin{itemize}
+     \item Leader (dòng 2-19): Đầu tiên, Robot leader chịu trách nhiệm tìm ra một đường bao phủ tối ưu theo mô hình gấp khúc bằng cách sử dụng thuật toán RCPP như được mô tả trong phần \ref{subsec:Oppath}. Khi đường đi được xác định, Robot dẫn đầu bay dọc theo đường đi qua các mục tiêu tạm thời bằng cách sử dụng điều khiển dựa trên hành vi cho đến khi đạt được mục tiêu cuối cùng. Tại mỗi bước thời gian, leader tạo cấu trúc hình chữ V ảo theo các tham số $\psi$, $\varphi$ và $\ell$ như được mô tả trong phần \ref{subsec:VTG}. Và sau đó, nó chỉ định các mục tiêu ảo cho các Robot theo sau theo quy tắc khoảng cách ngắn nhất. Điều khiển dựa trên hành vi cho phép Robot leader di chuyển đến mục tiêu của mình trong khi duy trì đội hình với các Robot theo sau bằng cách tự động điều chỉnh vận tốc của nó theo lỗi vị trí của những Robot follower.
+     \item Follower (dòng 20-26): Robot theo sau có trách nhiệm bám theo mục tiêu ảo được chỉ định bằng cách sử dụng điều khiển dựa trên hành vi để duy trì đội hình chữ V trong khi tránh va chạm với chướng ngại vật và các Robot khác
+\end{itemize}
+
+Quá trình khảo sát đội hình Robot hình chữ V được coi là `` hoàn thành '' khi Robot dẫn đầu đạt được mục tiêu cuối cùng trên lộ trình bao phủ.
+
+
+\begin{algorithm}[!t]
+\Switch{Robot}
+{
+    \Case{Leader}
+    {
+        \If {(Không tồn tại đường)}
+        {
+            Tìm đường đi bao phủ tối ưu\\
+        }
+        \Else
+        {
+            Với \textbf{node hiện tại} and \textbf{node kết thúc} trên đường\\
+            \If{(\textbf{node hiện tại} $\neq$ \textbf{node kết thúc})}
+            {
+             Tạo ra Mục tiêu ảo $\psi$, $\varphi$, $\ell$\\
+             Gắn Mục tiêu ảo cho followers \\
+             Chuyển sang \textbf{node hiện tại} bằng Điều khiển hành vi\\
+             \textbf{node hiện tại}=\textbf{node tiếp theo}\\
+            }
+            \Else
+            {
+                Phát tín hiệu ``Done'' đến followers\\
+                Kết thúc quy trình khảo sát \\
+            }
+        }
+    }
+    
+    \Case{Followers}
+    {
+        Nhận mục tiêu ảo từ leader\\
+        Theo dõi mục tiêu ảo để duy trì đội hình hình chữ V bằng điều khiển dựa trên hành vi\\ 
+        \If{(Nhận tín hiệu ``Done``)}
+        {
+             Kết thúc quy trình khảo sát\\
+        }
+    }
+}
+\caption{Chiến lược bao phủ quét tối ưu của đội hình robot hình chữ V}
+\label{alg:Covestrategy} 
+\end{algorithm}
+

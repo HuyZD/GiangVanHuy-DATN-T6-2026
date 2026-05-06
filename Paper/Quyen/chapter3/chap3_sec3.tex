@@ -1,0 +1,475 @@
+\section{Các giao thức định tuyến trong mạng ad-hoc}
+\label{sec:Oppath}
+\usetikzlibrary{decorations.pathreplacing}
+
+Định tuyến là một trong những vấn đề quan trọng nhất trong mạng ad-hoc, quyết định cách thức dữ liệu được truyền từ node nguồn đến node đích thông qua các node trung gian. Do đặc điểm topology động và tài nguyên hạn chế của mạng ad-hoc, các giao thức định tuyến cần được thiết kế để thích ứng với sự thay đổi của mạng đồng thời tối ưu hóa việc sử dụng năng lượng và băng thông. Phần này trình bày các phương pháp phân loại và các giao thức định tuyến phổ biến trong mạng ad-hoc.
+
+\subsection{Phân loại các giao thức định tuyến}
+
+Các giao thức định tuyến trong mạng ad-hoc có thể được phân loại theo nhiều tiêu chí khác nhau. Dựa trên cơ chế cập nhật thông tin định tuyến, các giao thức được chia thành ba nhóm chính: giao thức chủ động (Proactive), giao thức phản ứng (Reactive) và giao thức lai (Hybrid). Dựa trên cấu trúc mạng có thể được chia thành phân cấp và không phân cấp. 
+
+\subsection{Giao thức định tuyến chủ động (Proactive Routing Protocols)}
+
+Giao thức định tuyến chủ động, còn được gọi là giao thức định tuyến theo bảng (Table-driven), duy trì thông tin định tuyến đến tất cả các node trong mạng một cách liên tục. Mỗi node lưu trữ một bảng định tuyến chứa thông tin về đường đi đến các node khác trong mạng. Các bảng này được cập nhật định kỳ hoặc khi có sự thay đổi trong topology mạng thông qua việc trao đổi các gói tin điều khiển giữa các node.
+
+Ưu điểm của giao thức chủ động là độ trễ thấp khi cần truyền dữ liệu vì đường đi đã được xác định sẵn trong bảng định tuyến. Tuy nhiên, nhược điểm lớn nhất là overhead cao do việc trao đổi thông tin định tuyến liên tục, đặc biệt trong mạng có topology thay đổi thường xuyên. Điều này dẫn đến tiêu tốn nhiều băng thông và năng lượng, không phù hợp với các node có tài nguyên hạn chế.
+
+\textbf{DSDV (Destination-Sequenced Distance-Vector)} là một trong những giao thức định tuyến chủ động tiêu biểu. DSDV được phát triển dựa trên thuật toán Bellman-Ford cổ điển với cải tiến sử dụng số thứ tự đích (destination sequence number) để tránh vòng lặp định tuyến. Mỗi node trong mạng duy trì một bảng định tuyến chứa thông tin về tất cả các node đích có thể đến được, bao gồm: địa chỉ đích, số hop đến đích, node kế tiếp (next hop) và số thứ tự đích. Khi topology mạng thay đổi, node phát hiện sự thay đổi sẽ tăng số thứ tự và broadcast thông tin cập nhật đến các node lân cận. Các node nhận được thông tin sẽ cập nhật bảng định tuyến nếu thông tin mới có số thứ tự cao hơn hoặc có số hop nhỏ hơn với cùng số thứ tự.
+
+\textbf{OLSR (Optimized Link State Routing)} là giao thức định tuyến chủ động dựa trên trạng thái liên kết (link state) được tối ưu hóa cho mạng ad-hoc. OLSR được chuẩn hóa trong RFC 3626 và là một trong những giao thức định tuyến phổ biến nhất cho mạng MANET.
+
+Điểm khác biệt quan trọng nhất của OLSR so với các giao thức link state truyền thống là việc sử dụng khái niệm Multipoint Relay (MPR). Trong các giao thức link state thông thường như OSPF, mỗi node phải broadcast thông tin trạng thái liên kết đến tất cả các node trong mạng, gây ra overhead rất lớn. OLSR giải quyết vấn đề này bằng cách chỉ cho phép các node được chọn làm MPR thực hiện việc chuyển tiếp gói tin điều khiển.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        node/.style={circle, draw, minimum size=0.8cm, font=\small},
+        mpr/.style={circle, draw, fill=gray!40, minimum size=0.8cm, font=\small},
+        source/.style={circle, draw, fill=blue!30, minimum size=0.8cm, font=\small},
+    ]
+        % Source node
+        \node[source] (S) at (0,0) {S};
+        
+        % 1-hop neighbors
+        \node[mpr] (A) at (-2,1.5) {A};
+        \node[node] (B) at (0,2) {B};
+        \node[mpr] (C) at (2,1.5) {C};
+        \node[mpr] (D) at (-2,-1.5) {D};
+        \node[mpr] (E) at (2,-1.5) {E};
+        
+        % 2-hop neighbors
+        \node[node] (F) at (-3.5,2.5) {F};
+        \node[node] (G) at (-1,3.5) {G};
+        \node[node] (H) at (1,3.5) {H};
+        \node[node] (I) at (3.5,2.5) {I};
+        \node[node] (J) at (-3.5,-2.5) {J};
+        \node[node] (K) at (3.5,-2.5) {K};
+        
+        % Connections from S to 1-hop
+        \draw (S) -- (A);
+        \draw (S) -- (B);
+        \draw (S) -- (C);
+        \draw (S) -- (D);
+        \draw (S) -- (E);
+        
+        % Connections from 1-hop to 2-hop
+        \draw (A) -- (F);
+        \draw (A) -- (G);
+        \draw (B) -- (G);
+        \draw (B) -- (H);
+        \draw (C) -- (H);
+        \draw (C) -- (I);
+        \draw (D) -- (J);
+        \draw (E) -- (K);
+        
+        % Legend
+        \node[source, label=right:{\small Node nguồn}] at (5.5,1.5) {};
+        \node[mpr, label=right:{\small Node MPR}] at (5.5,0.5) {};
+        \node[node, label=right:{\small Node thường}] at (5.5,-0.5) {};
+        
+        % Zone labels
+        \draw[dashed] (0,0) circle (2.8cm);
+        \draw[dashed] (0,0) circle (4.8cm);
+        \node at (2.2,-3.2) {\small Vùng 1-hop};
+        \node at (3.8,-4.5) {\small Vùng 2-hop};
+    \end{tikzpicture}
+    \caption{Minh họa cơ chế chọn Multipoint Relay (MPR) trong OLSR}
+    \label{fig:olsr_mpr}
+\end{figure}
+
+Hình \ref{fig:olsr_mpr} minh họa cơ chế chọn MPR trong OLSR. Node nguồn S có 5 node lân cận 1-hop là A, B, C, D và E. Các node lân cận 2-hop bao gồm F, G, H, I, J và K. Để giảm thiểu số lượng node chuyển tiếp gói tin, node S cần chọn một tập con tối thiểu các node 1-hop sao cho tập này có thể phủ tất cả các node 2-hop.
+
+Phân tích khả năng phủ của từng node 1-hop cho thấy: node A có thể tiếp cận F và G; node B có thể tiếp cận G và H; node C có thể tiếp cận H và I; node D chỉ tiếp cận được J; và node E chỉ tiếp cận được K. Áp dụng thuật toán chọn MPR, node S sẽ ưu tiên chọn các node có khả năng phủ nhiều node 2-hop nhất. Trong trường hợp này, node A được chọn vì phủ được F và G, node C được chọn vì phủ được H và I. Tuy nhiên, J và K chỉ được phủ bởi duy nhất D và E, do đó D và E cũng phải được chọn làm MPR.
+
+Kết quả là tập MPR của node S bao gồm \{A, C, D, E\}. Khi node S cần broadcast gói tin điều khiển, chỉ các node trong tập MPR mới chuyển tiếp gói tin, giúp giảm số lượng gói tin từ 5 (nếu tất cả node 1-hop đều chuyển tiếp) xuống còn 4. Trong các mạng có mật độ cao hơn, hiệu quả giảm overhead của cơ chế MPR sẽ càng rõ rệt.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        node/.style={circle, draw, minimum size=0.7cm, font=\scriptsize},
+        mpr/.style={circle, draw, fill=gray!40, minimum size=0.7cm, font=\scriptsize},
+        source/.style={circle, draw, fill=blue!30, minimum size=0.7cm, font=\scriptsize},
+        packet/.style={->, >=stealth, thick, red},
+        scale=0.9
+    ]
+        % === Left side: Pure Flooding ===
+        
+        % Title moved higher
+        \node at (-4, 5.5) {\textbf{(a) Pure Flooding}};
+        
+        % Source node
+        \node[source] (S1) at (-4,2) {S};
+        
+        % 1-hop neighbors
+        \node[node] (A1) at (-6,3) {A};
+        \node[node] (B1) at (-4,3.5) {B};
+        \node[node] (C1) at (-2,3) {C};
+        \node[node] (D1) at (-5.5,1) {D};
+        \node[node] (E1) at (-2.5,1) {E};
+        
+        % 2-hop neighbors
+        \node[node] (F1) at (-7,3.5) {F};
+        \node[node] (G1) at (-5,4.5) {G};
+        \node[node] (H1) at (-3,4.5) {H};
+        \node[node] (I1) at (-1,3.5) {I};
+        
+        % Connections
+        \draw (S1) -- (A1); \draw (S1) -- (B1); \draw (S1) -- (C1);
+        \draw (S1) -- (D1); \draw (S1) -- (E1);
+        \draw (A1) -- (F1); \draw (A1) -- (G1); \draw (B1) -- (G1);
+        \draw (B1) -- (H1); \draw (C1) -- (H1); \draw (C1) -- (I1);
+        
+        % Flooding arrows (all nodes forward)
+        \draw[packet] (S1) -- (A1); \draw[packet] (S1) -- (B1);
+        \draw[packet] (S1) -- (C1); \draw[packet] (S1) -- (D1);
+        \draw[packet] (S1) -- (E1);
+        \draw[packet] (A1) -- (F1); \draw[packet] (A1) -- (G1);
+        \draw[packet] (B1) -- (G1); \draw[packet] (B1) -- (H1);
+        \draw[packet] (C1) -- (H1); \draw[packet] (C1) -- (I1);
+        
+        \node at (-4, -0.5) {\small Số gói tin: 11};
+        
+        % === Right side: MPR Flooding ===
+        
+        % Title moved higher
+        \node at (4, 5.5) {\textbf{(b) MPR-based Flooding}};
+        
+        % Source node
+        \node[source] (S2) at (4,2) {S};
+        
+        % 1-hop neighbors (A and C are MPR)
+        \node[mpr] (A2) at (2,3) {A};
+        \node[node] (B2) at (4,3.5) {B};
+        \node[mpr] (C2) at (6,3) {C};
+        \node[node] (D2) at (2.5,1) {D};
+        \node[node] (E2) at (5.5,1) {E};
+        
+        % 2-hop neighbors
+        \node[node] (F2) at (1,3.5) {F};
+        \node[node] (G2) at (3,4.5) {G};
+        \node[node] (H2) at (5,4.5) {H};
+        \node[node] (I2) at (7,3.5) {I};
+        
+        % Connections
+        \draw (S2) -- (A2); \draw (S2) -- (B2); \draw (S2) -- (C2);
+        \draw (S2) -- (D2); \draw (S2) -- (E2);
+        \draw (A2) -- (F2); \draw (A2) -- (G2); \draw (B2) -- (G2);
+        \draw (B2) -- (H2); \draw (C2) -- (H2); \draw (C2) -- (I2);
+        
+        % MPR arrows (only MPR nodes forward)
+        \draw[packet] (S2) -- (A2); \draw[packet] (S2) -- (C2);
+        \draw[packet] (A2) -- (F2); \draw[packet] (A2) -- (G2);
+        \draw[packet] (C2) -- (H2); \draw[packet] (C2) -- (I2);
+        
+        \node at (4, -0.5) {\small Số gói tin: 6};
+    \end{tikzpicture}
+    \caption{So sánh Pure Flooding và MPR-based Flooding trong OLSR}
+    \label{fig:olsr_flooding_comparison}
+\end{figure}
+
+Hình \ref{fig:olsr_flooding_comparison} so sánh hai cơ chế phát tán gói tin: Pure Flooding và MPR-based Flooding. Trong Pure Flooding (Hình \ref{fig:olsr_flooding_comparison}a), tất cả các node nhận được gói tin đều chuyển tiếp, dẫn đến tổng cộng 11 gói tin được gửi đi. Ngược lại, trong MPR-based Flooding (Hình \ref{fig:olsr_flooding_comparison}b), chỉ các node A và C được chọn làm MPR mới chuyển tiếp gói tin, giảm số lượng gói tin xuống còn 6. Điều này thể hiện hiệu quả giảm overhead khoảng 45\% trong ví dụ đơn giản này, và tỷ lệ giảm sẽ còn cao hơn trong các mạng có mật độ node lớn.
+
+Cơ chế hoạt động của OLSR bao gồm ba thành phần chính. Thứ nhất là quá trình phát hiện hàng xóm (Neighbor Discovery), trong đó mỗi node định kỳ broadcast gói tin HELLO chứa thông tin về các node lân cận 1-hop và 2-hop của nó. Thông qua việc trao đổi gói tin HELLO, mỗi node xây dựng được danh sách các node lân cận trực tiếp (1-hop neighbors) và các node cách 2-hop (2-hop neighbors).
+
+Thứ hai là quá trình chọn MPR (MPR Selection). Mỗi node chọn một tập con tối thiểu các node lân cận 1-hop làm MPR sao cho tập hợp này có thể bao phủ tất cả các node lân cận 2-hop. Thuật toán chọn MPR thường ưu tiên các node có số lượng kết nối đến các node 2-hop nhiều nhất giống như ví dụ ở trên. Chỉ các node được chọn làm MPR mới có trách nhiệm chuyển tiếp các gói tin điều khiển, giúp giảm đáng kể số lượng gói tin broadcast trong mạng. Ví dụ, trong một mạng có mật độ cao với mỗi node có 10 hàng xóm, việc sử dụng MPR có thể giảm số lượng gói tin chuyển tiếp xuống còn 30-40\% so với flooding thông thường.
+
+Thứ ba là quá trình phát tán thông tin topology (Topology Dissemination). Mỗi node định kỳ broadcast gói tin TC (Topology Control) chứa thông tin về các node đã chọn nó làm MPR (gọi là MPR Selector Set). Các gói tin TC chỉ được chuyển tiếp bởi các node MPR, tạo thành một cây broadcast hiệu quả. Dựa trên thông tin từ các gói tin TC, mỗi node xây dựng bảng topology của toàn mạng và sử dụng thuật toán Dijkstra để tính toán đường đi ngắn nhất đến tất cả các node đích.
+
+OLSR có một số ưu điểm nổi bật. Giao thức cung cấp đường đi tối ưu (shortest path) đến mọi đích trong mạng. Độ trễ khi bắt đầu truyền dữ liệu thấp vì đường đi đã được tính toán sẵn. Cơ chế MPR giúp giảm đáng kể overhead so với các giao thức link state truyền thống. Tuy nhiên, OLSR cũng có nhược điểm là vẫn tiêu tốn năng lượng do việc trao đổi gói tin HELLO và TC định kỳ, không phù hợp với các mạng cảm biến có yêu cầu tiết kiệm năng lượng cao. Ngoài ra, trong mạng có topology thay đổi nhanh, thông tin định tuyến có thể bị lỗi thời trước khi được cập nhật.
+
+\subsection{Giao thức định tuyến phản ứng (Reactive Routing Protocols)}
+
+Giao thức định tuyến phản ứng, còn được gọi là giao thức định tuyến theo yêu cầu (On-demand), chỉ thiết lập đường đi khi có nhu cầu truyền dữ liệu. Khi một node nguồn muốn gửi dữ liệu đến node đích mà chưa có thông tin định tuyến, nó sẽ khởi tạo quá trình khám phá đường đi (route discovery). Sau khi đường đi được thiết lập, nó sẽ được duy trì cho đến khi không còn cần thiết hoặc bị hỏng do sự thay đổi của topology mạng.
+
+Ưu điểm của giao thức phản ứng là tiết kiệm băng thông và năng lượng trong các mạng có lưu lượng truyền thông thấp hoặc không đều. Tuy nhiên, nhược điểm là độ trễ cao khi bắt đầu truyền dữ liệu do phải thực hiện quá trình khám phá đường đi trước.
+
+\textbf{AODV (Ad-hoc On-demand Distance Vector)} là giao thức định tuyến phản ứng được sử dụng rộng rãi nhất. AODV kết hợp cơ chế khám phá đường đi theo yêu cầu với việc sử dụng số thứ tự đích tương tự như DSDV để đảm bảo tính mới của thông tin định tuyến. Quá trình khám phá đường đi trong AODV bao gồm hai giai đoạn: phát tán gói tin Route Request (RREQ) từ node nguồn và trả về gói tin Route Reply (RREP) từ node đích hoặc node trung gian có thông tin định tuyến hợp lệ.
+
+Khi node nguồn cần gửi dữ liệu đến node đích mà không có đường đi trong bảng định tuyến, nó sẽ broadcast gói tin RREQ chứa thông tin về địa chỉ nguồn, địa chỉ đích, số thứ tự nguồn, số thứ tự đích đã biết gần nhất và một định danh yêu cầu duy nhất. Mỗi node nhận được RREQ sẽ tạo hoặc cập nhật đường đi ngược (reverse route) về node nguồn, sau đó kiểm tra xem nó có phải là node đích hoặc có đường đi hợp lệ đến đích hay không. Nếu có, node sẽ gửi unicast gói tin RREP ngược về node nguồn theo đường đi ngược đã thiết lập. Nếu không, node sẽ broadcast RREQ tiếp đến các node lân cận.
+
+\textbf{DSR (Dynamic Source Routing)} là một giao thức định tuyến phản ứng khác sử dụng cơ chế định tuyến nguồn (source routing). Trong DSR, toàn bộ đường đi từ nguồn đến đích được lưu trữ trong header của gói tin dữ liệu. Điều này có nghĩa là các node trung gian không cần duy trì bảng định tuyến mà chỉ cần đọc thông tin trong header để chuyển tiếp gói tin. Ưu điểm của DSR là không cần trao đổi thông tin định tuyến định kỳ, tuy nhiên nhược điểm là overhead trong header gói tin tăng theo độ dài đường đi.
+
+\subsection{Giao thức định tuyến lai (Hybrid Routing Protocols)}
+
+Giao thức định tuyến lai kết hợp ưu điểm của cả hai loại giao thức chủ động và phản ứng. Ý tưởng chính là sử dụng giao thức chủ động cho các địa chỉ mà node thường xuyên giao tiếp như node lân cận hoặc sink node và giao thức phản ứng cho các địa chỉ mà node chỉ giao tiếp khi cần. Cách tiếp cận này giúp giảm overhead của giao thức chủ động đồng thời giảm độ trễ của giao thức phản ứng.
+
+\textbf{ZRP (Zone Routing Protocol)} là giao thức định tuyến lai tiêu biểu. ZRP định nghĩa một vùng định tuyến (routing zone) cho mỗi node với bán kính được xác định bởi số hop. Trong vùng định tuyến, ZRP sử dụng giao thức chủ động IARP (Intrazone Routing Protocol) để duy trì thông tin định tuyến đến tất cả các node. Đối với các node nằm ngoài vùng định tuyến, ZRP sử dụng giao thức phản ứng IERP (Interzone Routing Protocol) để khám phá đường đi khi cần thiết. Kích thước của vùng định tuyến có thể được điều chỉnh để cân bằng giữa overhead và độ trễ tùy theo đặc điểm của mạng.
+
+\textbf{SHARP (Sharp Hybrid Adaptive Routing Protocol)} là giao thức định tuyến lai được thiết kế để cải thiện hiệu suất so với ZRP bằng cách thích ứng động với điều kiện mạng. Điểm khác biệt quan trọng của SHARP so với ZRP là khả năng điều chỉnh ranh giới giữa vùng chủ động và vùng phản ứng dựa trên mẫu lưu lượng truyền thông thực tế của mạng.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        node/.style={circle, draw, minimum size=0.6cm, font=\scriptsize},
+        proactive/.style={circle, draw, fill=green!30, minimum size=0.6cm, font=\scriptsize},
+        reactive/.style={circle, draw, fill=yellow!30, minimum size=0.6cm, font=\scriptsize},
+        source/.style={circle, draw, fill=blue!30, minimum size=0.7cm, font=\scriptsize},
+        dest/.style={circle, draw, fill=red!30, minimum size=0.6cm, font=\scriptsize},
+        scale=0.85
+    ]
+        % === Left side: ZRP Fixed Zone ===
+        \node at (-4, 6) {\textbf{(a) ZRP - Vùng cố định}};
+        
+        % Source node
+        \node[source] (S1) at (-4,2) {S};
+        
+        % Proactive zone (fixed radius = 2 hops)
+        \node[proactive] (A1) at (-5.5,2.5) {A};
+        \node[proactive] (B1) at (-4,3.5) {B};
+        \node[proactive] (C1) at (-2.5,2.5) {C};
+        \node[proactive] (D1) at (-5,1) {D};
+        \node[proactive] (E1) at (-3,1) {E};
+        
+        % Reactive zone
+        \node[reactive] (F1) at (-6.5,3.5) {F};
+        \node[reactive] (G1) at (-4,5) {G};
+        \node[reactive] (H1) at (-1.5,3.5) {H};
+        \node[dest] (Dest1) at (-1,5) {Đích};
+        
+        % Connections
+        \draw (S1) -- (A1); \draw (S1) -- (B1); \draw (S1) -- (C1);
+        \draw (S1) -- (D1); \draw (S1) -- (E1);
+        \draw (A1) -- (F1); \draw (B1) -- (G1); \draw (C1) -- (H1);
+        \draw (H1) -- (Dest1); \draw (G1) -- (Dest1);
+        
+        % Zone boundary
+        \draw[dashed, thick, green!60!black] (-4,2) circle (2.2cm);
+        \node at (-4,-0.8) {\scriptsize Vùng Proactive};
+        \node at (-4,-1.3) {\scriptsize (bán kính cố định)};
+        
+        % === Right side: SHARP Adaptive Zone ===
+        \node at (4, 6) {\textbf{(b) SHARP - Vùng thích ứng}};
+        
+        % Source node
+        \node[source] (S2) at (4,2) {S};
+        
+        % Proactive zone (adaptive - extends toward frequent destination)
+        \node[proactive] (A2) at (2.5,2.5) {A};
+        \node[proactive] (B2) at (4,3.5) {B};
+        \node[proactive] (C2) at (5.5,2.5) {C};
+        \node[proactive] (D2) at (3,1) {D};
+        \node[proactive] (E2) at (5,1) {E};
+        \node[proactive] (H2) at (6.5,3.5) {H};  % Extended proactively
+        \node[proactive] (G2) at (4,5) {G};      % Extended proactively
+        
+        % Reactive zone (smaller)
+        \node[reactive] (F2) at (1.5,3.5) {F};
+        \node[dest] (Dest2) at (7,5) {Đích};
+        
+        % Connections
+        \draw (S2) -- (A2); \draw (S2) -- (B2); \draw (S2) -- (C2);
+        \draw (S2) -- (D2); \draw (S2) -- (E2);
+        \draw (A2) -- (F2); \draw (B2) -- (G2); \draw (C2) -- (H2);
+        \draw (H2) -- (Dest2); \draw (G2) -- (Dest2);
+        
+        % Adaptive zone boundary (irregular shape)
+        \draw[dashed, thick, green!60!black] 
+            (2.2,1) -- (1.8,2.5) -- (2.5,4) -- (4,5.8) -- (5.5,5.5) -- (7.2,4) -- (6.2,2) -- (5.5,0.5) -- (2.8,0.5) -- cycle;
+        \node at (4,-0.8) {\scriptsize Vùng Proactive};
+        \node at (4,-1.3) {\scriptsize (mở rộng theo lưu lượng)};
+    \end{tikzpicture}
+    \caption{So sánh cơ chế phân vùng của ZRP và SHARP}
+    \label{fig:sharp_comparison}
+\end{figure}
+
+Hình \ref{fig:sharp_comparison} minh họa sự khác biệt giữa ZRP và SHARP trong việc phân vùng định tuyến. Trong ZRP (Hình \ref{fig:sharp_comparison}a), vùng proactive có bán kính cố định được xác định trước, không phụ thuộc vào mẫu lưu lượng thực tế. Ngược lại, SHARP (Hình \ref{fig:sharp_comparison}b) mở rộng vùng proactive theo hướng của các node đích thường xuyên giao tiếp, giúp giảm độ trễ cho các luồng dữ liệu phổ biến.
+
+Cơ chế hoạt động của SHARP dựa trên hai thành phần chính. Thành phần thứ nhất là cơ chế theo dõi lưu lượng (Traffic Monitoring), trong đó mỗi node giám sát các gói tin dữ liệu đi qua và xây dựng bảng thống kê về tần suất giao tiếp với các node đích khác nhau. Dựa trên thông tin này, node xác định được các node đích "nóng" (hot destinations) - những node mà nó thường xuyên gửi dữ liệu đến.
+
+Thành phần thứ hai là cơ chế điều chỉnh vùng thích ứng (Adaptive Zone Adjustment). Khi một node đích được xác định là "nóng", SHARP sẽ thiết lập và duy trì đường đi chủ động đến node đó, ngay cả khi node nằm ngoài vùng định tuyến mặc định. Ngược lại, đối với các node đích ít giao tiếp, SHARP sử dụng cơ chế phản ứng để tiết kiệm overhead. Quá trình điều chỉnh được thực hiện động dựa trên ngưỡng tần suất giao tiếp:
+
+\begin{equation}
+    Zone(d) = \begin{cases}
+        \text{Proactive} & \text{nếu } f(d) \geq \theta \\
+        \text{Reactive} & \text{nếu } f(d) < \theta
+    \end{cases}
+    \label{eq:sharp_zone}
+\end{equation}
+
+Trong đó $f(d)$ là tần suất giao tiếp với node đích $d$ trong một khoảng thời gian nhất định, và $\theta$ là ngưỡng quyết định. Giá trị $\theta$ có thể được điều chỉnh động dựa trên tài nguyên của node và điều kiện mạng.
+
+Ưu điểm của SHARP so với ZRP bao gồm: giảm độ trễ trung bình cho các luồng dữ liệu thường xuyên nhờ duy trì đường đi chủ động đến các đích "nóng"; tiết kiệm overhead hơn ZRP trong các mạng có mẫu lưu lượng không đồng đều; và khả năng thích ứng tự động với sự thay đổi của mẫu lưu lượng theo thời gian. Tuy nhiên, SHARP có độ phức tạp cao hơn do cần theo dõi và phân tích lưu lượng liên tục, đồng thời yêu cầu bộ nhớ bổ sung để lưu trữ thống kê lưu lượng.
+
+\subsection{Giao thức định tuyến phân cụm (Hierarchical/Cluster-based Routing Protocols)}
+
+Giao thức định tuyến phân cụm là một hướng tiếp cận quan trọng trong mạng cảm biến không dây, trong đó các node được tổ chức thành các cụm (cluster) với cấu trúc phân cấp. Mỗi cụm bao gồm một node đầu cụm (Cluster Head - CH) và các node thành viên (Cluster Member - CM). Node đầu cụm có trách nhiệm thu thập dữ liệu từ các node thành viên trong cụm, tổng hợp và chuyển tiếp đến sink node hoặc các node đầu cụm khác. Cách tiếp cận này giúp giảm đáng kể lưu lượng truyền thông trong mạng và kéo dài tuổi thọ của các node cảm biến.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        node/.style={circle, draw, minimum size=0.6cm, font=\scriptsize},
+        ch/.style={circle, draw, fill=orange!50, minimum size=0.8cm, font=\scriptsize},
+        sink/.style={rectangle, draw, fill=green!40, minimum size=0.8cm, font=\scriptsize},
+        scale=0.85
+    ]
+        % Sink node
+        \node[sink] (Sink) at (0,4.5) {Sink};
+        
+        % Cluster 1 (left)
+        \node[ch] (CH1) at (-4,2) {CH1};
+        \node[node] (A1) at (-5.5,2.5) {A};
+        \node[node] (B1) at (-5,1) {B};
+        \node[node] (C1) at (-3.5,0.5) {C};
+        \node[node] (D1) at (-2.5,2.5) {D};
+        
+        % Cluster 2 (center)
+        \node[ch] (CH2) at (0,1.5) {CH2};
+        \node[node] (E2) at (-1.2,0.5) {E};
+        \node[node] (F2) at (1.2,0.5) {F};
+        \node[node] (G2) at (-0.8,2.8) {G};
+        \node[node] (H2) at (1,2.5) {H};
+        
+        % Cluster 3 (right)
+        \node[ch] (CH3) at (4,2) {CH3};
+        \node[node] (I3) at (3,0.5) {I};
+        \node[node] (J3) at (5,0.8) {J};
+        \node[node] (K3) at (5.5,2.5) {K};
+        \node[node] (L3) at (3.2,3) {L};
+        
+        % Intra-cluster connections (dashed)
+        \draw[dashed, gray] (CH1) -- (A1);
+        \draw[dashed, gray] (CH1) -- (B1);
+        \draw[dashed, gray] (CH1) -- (C1);
+        \draw[dashed, gray] (CH1) -- (D1);
+        
+        \draw[dashed, gray] (CH2) -- (E2);
+        \draw[dashed, gray] (CH2) -- (F2);
+        \draw[dashed, gray] (CH2) -- (G2);
+        \draw[dashed, gray] (CH2) -- (H2);
+        
+        \draw[dashed, gray] (CH3) -- (I3);
+        \draw[dashed, gray] (CH3) -- (J3);
+        \draw[dashed, gray] (CH3) -- (K3);
+        \draw[dashed, gray] (CH3) -- (L3);
+        
+        % Inter-cluster connections to Sink (solid, thick)
+        \draw[thick, ->, >=stealth] (CH1) -- (Sink);
+        \draw[thick, ->, >=stealth] (CH2) -- (Sink);
+        \draw[thick, ->, >=stealth] (CH3) -- (Sink);
+        
+        % Cluster boundaries
+        \draw[dotted, thick, blue] (-4,2) circle (2.2cm);
+        \draw[dotted, thick, blue] (0,1.5) circle (2cm);
+        \draw[dotted, thick, blue] (4,2) circle (2.2cm);
+        
+        % Labels
+        \node at (-4,-0.8) {\small Cụm 1};
+        \node at (0,-1) {\small Cụm 2};
+        \node at (4,-0.8) {\small Cụm 3};
+        
+        % Legend
+        \node[sink, label=right:{\small Sink node}] at (7,4) {};
+        \node[ch, label=right:{\small Cluster Head}] at (7,3) {};
+        \node[node, label=right:{\small Cluster Member}] at (7,2) {};
+    \end{tikzpicture}
+    \caption{Mô hình định tuyến phân cụm trong mạng cảm biến không dây}
+    \label{fig:cluster_routing}
+\end{figure}
+
+Hình \ref{fig:cluster_routing} minh họa mô hình định tuyến phân cụm điển hình. Mạng được chia thành ba cụm, mỗi cụm có một node đầu cụm (CH1, CH2, CH3) và các node thành viên. Dữ liệu từ các node thành viên được gửi đến node đầu cụm thông qua truyền thông trong cụm (intra-cluster communication). Sau đó, các node đầu cụm tổng hợp dữ liệu và truyền trực tiếp đến sink node thông qua truyền thông giữa các cụm (inter-cluster communication).
+
+\textbf{LEACH (Low-Energy Adaptive Clustering Hierarchy)} là giao thức định tuyến phân cụm được nghiên cứu rộng rãi nhất trong mạng cảm biến không dây. LEACH hoạt động theo các vòng (round), mỗi vòng bao gồm hai giai đoạn: giai đoạn thiết lập (setup phase) và giai đoạn ổn định (steady-state phase).
+
+Trong giai đoạn thiết lập, các node tự quyết định có trở thành node đầu cụm hay không dựa trên một xác suất. Cụ thể, mỗi node $n$ chọn một số ngẫu nhiên trong khoảng $[0, 1]$ và so sánh với ngưỡng $T(n)$ được tính theo công thức:
+
+\begin{equation}
+    T(n) = \begin{cases}
+        \dfrac{p}{1 - p \times (r \mod \frac{1}{p})} & \text{nếu } n \in G \\
+        0 & \text{nếu } n \notin G
+    \end{cases}
+    \label{eq:leach_threshold}
+\end{equation}
+
+Trong đó $p$ là tỷ lệ mong muốn các node trở thành đầu cụm (thường là 5\%), $r$ là số vòng hiện tại, và $G$ là tập hợp các node chưa làm đầu cụm trong $1/p$ vòng gần nhất. Nếu số ngẫu nhiên nhỏ hơn $T(n)$, node sẽ trở thành đầu cụm và broadcast thông báo đến các node khác. Các node không phải đầu cụm sẽ chọn tham gia cụm có tín hiệu mạnh nhất (tức là gần nhất).
+
+Trong giai đoạn ổn định, các node thành viên gửi dữ liệu đến node đầu cụm theo lịch TDMA (Time Division Multiple Access) được phân bổ bởi đầu cụm. Node đầu cụm tổng hợp dữ liệu từ các thành viên và truyền trực tiếp đến sink node. Giai đoạn này kéo dài lâu hơn giai đoạn thiết lập để giảm overhead.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        scale=0.9,
+        box/.style={rectangle, draw, minimum width=2cm, minimum height=0.8cm, font=\small},
+        arrow/.style={->, >=stealth, thick}
+    ]
+        % Timeline
+        \draw[thick, ->] (0,0) -- (14,0) node[right] {\small Thời gian};
+        
+        % Round 1
+        \draw[thick] (0,-0.2) -- (0,0.2);
+        \node[box, fill=yellow!30] at (1,1) {Setup};
+        \node[box, fill=green!30, minimum width=4cm] at (4,1) {Steady-state};
+        \draw[decorate, decoration={brace, amplitude=5pt, raise=2pt}] (0,1.6) -- (6,1.6) node[midway, above=8pt] {\small Vòng 1};
+        
+        % Round 2
+        \draw[thick] (6,-0.2) -- (6,0.2);
+        \node[box, fill=yellow!30] at (7,1) {Setup};
+        \node[box, fill=green!30, minimum width=4cm] at (10,1) {Steady-state};
+        \draw[decorate, decoration={brace, amplitude=5pt, raise=2pt}] (6,1.6) -- (12,1.6) node[midway, above=8pt] {\small Vòng 2};
+        
+        % Round 3
+        \draw[thick] (12,-0.2) -- (12,0.2);
+        \node at (13,1) {...};
+        
+        % Labels
+        \node at (1,-0.8) {\scriptsize Chọn CH};
+        \node at (4,-0.8) {\scriptsize Truyền dữ liệu};
+    \end{tikzpicture}
+    \caption{Cấu trúc vòng hoạt động của giao thức LEACH}
+    \label{fig:leach_round}
+\end{figure}
+
+Hình \ref{fig:leach_round} minh họa cấu trúc vòng hoạt động của LEACH. Việc xoay vòng vai trò đầu cụm giữa các node giúp phân tán đều mức tiêu thụ năng lượng trong mạng, tránh tình trạng một số node cạn kiệt năng lượng sớm hơn các node khác.
+
+Ưu điểm của LEACH bao gồm: khả năng tiết kiệm năng lượng thông qua việc tổng hợp dữ liệu tại đầu cụm, cân bằng năng lượng nhờ xoay vòng vai trò đầu cụm, và đơn giản trong triển khai. Tuy nhiên, LEACH có một số hạn chế như: giả định tất cả các node có thể truyền trực tiếp đến sink node (không phù hợp với mạng lớn), việc chọn đầu cụm ngẫu nhiên có thể dẫn đến phân bố cụm không đều, và không xem xét năng lượng còn lại của node khi chọn đầu cụm.
+
+\textbf{HEED (Hybrid Energy-Efficient Distributed clustering)} là giao thức cải tiến của LEACH, khắc phục một số hạn chế bằng cách xem xét năng lượng còn lại của node và mật độ node lân cận khi chọn đầu cụm. Trong HEED, xác suất một node trở thành đầu cụm được tính dựa trên tỷ lệ năng lượng còn lại so với năng lượng ban đầu:
+
+\begin{equation}
+    CH_{prob} = C_{prob} \times \frac{E_{residual}}{E_{max}}
+    \label{eq:heed_prob}
+\end{equation}
+
+Trong đó $C_{prob}$ là xác suất cơ sở (thường là 5\%), $E_{residual}$ là năng lượng còn lại của node, và $E_{max}$ là năng lượng ban đầu. Cách tiếp cận này đảm bảo các node có nhiều năng lượng hơn có xác suất cao hơn trở thành đầu cụm, giúp kéo dài tuổi thọ mạng.
+
+\textbf{So sánh với các loại giao thức khác:} Giao thức phân cụm có overhead thiết lập cao hơn so với giao thức phẳng (flat routing) do quá trình hình thành cụm. Tuy nhiên, trong giai đoạn ổn định, lưu lượng truyền thông giảm đáng kể nhờ việc tổng hợp dữ liệu tại đầu cụm. Điều này làm cho giao thức phân cụm đặc biệt phù hợp với các ứng dụng thu thập dữ liệu định kỳ trong mạng cảm biến không dây, nơi các node gửi dữ liệu đều đặn về sink node.
+
+\subsection{Cơ chế Flooding trong định tuyến}
+
+Flooding là cơ chế truyền tin đơn giản nhất trong mạng ad-hoc, trong đó mỗi node nhận được gói tin sẽ broadcast gói tin đó đến tất cả các node lân cận. Quá trình này tiếp tục cho đến khi gói tin đến được node đích hoặc TTL (Time-to-Live) của gói tin hết hạn. Mặc dù đơn giản và đảm bảo gói tin sẽ đến được đích nếu tồn tại đường đi, flooding gây ra overhead rất lớn do số lượng gói tin tăng theo cấp số nhân, đặc biệt trong các mạng có mật độ node cao.
+
+\textbf{Managed Flooding} là phiên bản cải tiến của flooding, được sử dụng trong nhiều giao thức mesh network bao gồm BLE Mesh. Trong managed flooding, các cơ chế được áp dụng để giảm thiểu số lượng gói tin trùng lặp như: sử dụng bộ nhớ đệm để loại bỏ các gói tin đã xử lý, giới hạn TTL, và áp dụng thời gian trễ ngẫu nhiên trước khi chuyển tiếp để giảm xung đột. Tuy nhiên, managed flooding vẫn có overhead đáng kể và không tối ưu về mặt năng lượng, đặc biệt khi mạng có kích thước lớn.
+
+\subsection{So sánh các giao thức định tuyến}
+
+Bảng \ref{tab:routing_comparison} tổng hợp và so sánh các đặc điểm chính của các loại giao thức định tuyến trong mạng ad-hoc.
+
+\begin{table}[h!]
+\centering
+\caption{So sánh các loại giao thức định tuyến trong mạng ad-hoc}
+\label{tab:routing_comparison}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Tiêu chí} & \textbf{Proactive} & \textbf{Reactive} & \textbf{Hybrid} & \textbf{Hierarchical} \\
+\hline
+Độ trễ khởi tạo & Thấp & Cao & Trung bình & Trung bình \\
+\hline
+Overhead điều khiển & Cao & Thấp & Trung bình & Trung bình-Cao \\
+\hline
+Tiêu thụ năng lượng & Cao & Thấp-TB & Trung bình & Thấp \\
+\hline
+Khả năng mở rộng & Thấp & Trung bình & Cao & Cao \\
+\hline
+Thích ứng topology & Chậm & Nhanh & Trung bình & Chậm-TB \\
+\hline
+Độ phức tạp & Trung bình & Trung bình & Cao & Cao \\
+\hline
+Cân bằng tải & Không & Không & Một phần & Có \\
+\hline
+Tổng hợp dữ liệu & Không & Không & Không & Có \\
+\hline
+\end{tabular}
+\end{table}
+
+Từ bảng so sánh có thể thấy rằng mỗi loại giao thức có ưu và nhược điểm riêng, phù hợp với các ứng dụng và môi trường mạng khác nhau. Giao thức phân cụm (Hierarchical) có ưu điểm nổi bật về khả năng tiết kiệm năng lượng nhờ cơ chế tổng hợp dữ liệu tại node đầu cụm và khả năng mở rộng tốt cho mạng lớn. Tuy nhiên, giao thức này có overhead thiết lập cụm và thời gian thích ứng với thay đổi topology chậm hơn so với giao thức phản ứng.
+
+Đối với mạng cảm biến ad-hoc với yêu cầu tiết kiệm năng lượng và khả năng thích ứng với topology động, cần một giải pháp định tuyến có overhead thấp, tiêu thụ năng lượng ít và khả năng phản ứng nhanh với sự thay đổi của mạng. Thuật toán định tuyến dựa trên Gradient, được trình bày trong phần tiếp theo, là một hướng tiếp cận đáp ứng các yêu cầu này.

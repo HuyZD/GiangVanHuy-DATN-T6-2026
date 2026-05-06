@@ -8,7 +8,7 @@
 
 #include <IRLibSendBase.h>    //We need the base code
 #include <IRLib_HashRaw.h>    //Only use raw sender
-#define PowEn3 A3 // 5V
+#define PowEn3 4 // 5V
 IRsendRaw mySender;
 
 void setup() {
@@ -75,19 +75,20 @@ uint16_t rawDataOff[RAW_DATA_LEN]={
 	490, 582, 494, 578, 494, 1646, 494, 1650, 
 	490, 1650, 490, 1654, 490, 1654, 490, 1000};
 void loop() {
-  //if (Serial.available()){
-    //char command = Serial.read();
-   // if (command == 'a') {
+  if (Serial.available()){
+    char command = Serial.read();
+   if (command == 'a') {
       mySender.send(rawDataOn,RAW_DATA_LEN,40);//Pass the buffer,length, optionally frequency
      Serial.println(F("AC Switched On"));
-  //  }
-  //  else if (command == 'b') {
-		 delay(500);
-     // mySender.send(rawDataOff,RAW_DATA_LEN,40);//Pass the buffer,length, optionally frequency
-     // Serial.println(F("AC Switched Off"));
-   // }
-   // delay(500);
-  //}
+		  delay(500);
+   }
+   else if (command == 'b') {
+		
+     mySender.send(rawDataOff,RAW_DATA_LEN,40);//Pass the buffer,length, optionally frequency
+     Serial.println(F("AC Switched Off"));
+   }
+   delay(500);
+  }
   
 
 }
