@@ -118,13 +118,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
       itemBuilder: (context, index) {
         return DeviceCard(
           device: devices[index],
-          autoMode: widget.node.autoMode,
           onTap: () async {
-            if (widget.node.autoMode && devices[index].type == "sensor") {
-              showThresholdDialog(devices[index]);
-              return;
-            }
-
             if (!widget.node.autoMode && devices[index].type == "actuator") {
               if (devices[index].actuatorType == "relay") {
                 // 🔥 ON/OFF
@@ -191,18 +185,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     return jwt;
   }
 
-  List<String> get sharedAttributeKeys {
-    final thresholdKeys = widget.node.sensors.expand(
-      (device) => ["threshold_${device.id}_min", "threshold_${device.id}_max"],
-    );
-
-    return ["autoMode", ...thresholdKeys];
-  }
-
-  double? parseAttributeDouble(dynamic value) {
-    if (value == null) return null;
-    return double.tryParse(value.toString());
-  }
+  List<String> get sharedAttributeKeys => ["autoMode"];
 
   Future<void> loadSharedAttributes() async {
     final currentJwt = jwt;
@@ -222,14 +205,6 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         widget.node.autoMode = autoMode == true || autoMode == "true";
       }
 
-      for (final device in widget.node.sensors) {
-        device.minThreshold = parseAttributeDouble(
-          attributes["threshold_${device.id}_min"],
-        );
-        device.maxThreshold = parseAttributeDouble(
-          attributes["threshold_${device.id}_max"],
-        );
-      }
     });
   }
 
@@ -255,83 +230,6 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         }
       }
     });
-  }
-
-  void showThresholdDialog(Device device) {
-    final unit = device.unit == null ? "" : " (${device.unit})";
-    final minController = TextEditingController(
-      text: device.minThreshold?.toString() ?? "",
-    );
-    final maxController = TextEditingController(
-      text: device.maxThreshold?.toString() ?? "",
-    );
-
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Set ngưỡng ${device.name}"),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: minController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: "Min$unit"),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: maxController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: "Max$unit"),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final minValue = double.tryParse(minController.text);
-              final maxValue = double.tryParse(maxController.text);
-
-              if (minValue == null ||
-                  maxValue == null ||
-                  minValue >= maxValue) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text("Ngưỡng không hợp lệ")));
-                return;
-              }
-
-              setState(() {
-                device.minThreshold = minValue;
-                device.maxThreshold = maxValue;
-              });
-              widget.onDataChanged();
-
-              final currentJwt = await ensureJwt();
-              if (currentJwt != null) {
-                await ThingsboardService.sendSharedAttributes(
-                  jwt: currentJwt,
-                  deviceId: ThingsboardService.deviceId,
-                  data: {
-                    "threshold_${device.id}_min": minValue,
-                    "threshold_${device.id}_max": maxValue,
-                  },
-                );
-              }
-
-              if (mounted) {
-                Navigator.pop(context);
-              }
-            },
-            child: Text("Lưu"),
-          ),
-        ],
-      ),
-    );
   }
 
   void showACControlDialog(Device device) {
