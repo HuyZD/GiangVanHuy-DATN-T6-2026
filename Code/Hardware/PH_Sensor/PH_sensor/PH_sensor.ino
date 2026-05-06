@@ -1,7 +1,11 @@
-#define PH_PIN A1
-
+#define PH_PIN A7
+#define PowEn3 A3 // 5V
 void setup() {
   Serial.begin(9600);
+     pinMode(PowEn3, OUTPUT);
+
+  // Bật nguồn
+  digitalWrite(PowEn3, LOW);
 }
 
 void loop() {

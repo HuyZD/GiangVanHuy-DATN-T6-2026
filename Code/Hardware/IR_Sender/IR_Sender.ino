@@ -1,17 +1,23 @@
 /*
+
  * autor: JOSEPH DREAM
  * 2020/01/17
  * website: https://josephdream.tech/
  *   
  */
+
 #include <IRLibSendBase.h>    //We need the base code
 #include <IRLib_HashRaw.h>    //Only use raw sender
-
+#define PowEn3 A3 // 5V
 IRsendRaw mySender;
 
 void setup() {
   Serial.begin(9600);
   delay(2000); 
+	  pinMode(PowEn3, OUTPUT);
+
+  // Bật nguồn
+  digitalWrite(PowEn3, LOW);
 }
 
 #define RAW_DATA_LEN 200
