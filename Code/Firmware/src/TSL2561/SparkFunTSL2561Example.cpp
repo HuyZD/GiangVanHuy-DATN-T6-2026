@@ -61,7 +61,6 @@ void TSL2561_setup()
 {
   // Initialize the Serial port:
 
-  Serial.println("TSL2561 Setup");
 
   // Initialize the SFE_TSL2561 library
 
@@ -84,9 +83,6 @@ void TSL2561_setup()
 
   if (light.getID(ID))
   {
-    Serial.print("Got factory ID: 0X");
-    Serial.print(ID, HEX);
-    Serial.println(", should be 0X5X");
   }
   // Most library commands will return true if communications was successful,
   // and false if there was a problem. You can ignore this returned value,
@@ -118,12 +114,10 @@ void TSL2561_setup()
   // setTiming() will set the third parameter (ms) to the
   // requested integration time in ms (this will be useful later):
 
-  Serial.println("Set timing...");
   light.setTiming(gain, time, ms);
 
   // To start taking measurements, power up the sensor:
 
-  Serial.println("Powerup...");
   light.setPowerUp();
 
   // The sensor will now gather light during the integration time.
@@ -133,7 +127,6 @@ void TSL2561_setup()
 
 double TSL2561_read()
 {
-  Serial.println("TSL2561 Read");
   // Wait between measurements before retrieving the result
   // (You can also configure the sensor to issue an interrupt
   // when measurements are complete)
@@ -157,15 +150,11 @@ double TSL2561_read()
   // Retrieve the data from the device:
 
   unsigned int data0, data1;
-double lux;
+double lux = 0;
   if (light.getData(data0, data1))
   {
     // getData() returned true, communication was successful
 
-    Serial.print("data0: ");
-    Serial.print(data0);
-    Serial.print(" data1: ");
-    Serial.print(data1);
 
     // To calculate lux, pass all your settings and readings
     // to the getLux() function.
@@ -177,20 +166,12 @@ double lux;
     // For more information see the hookup guide at: https://learn.sparkfun.com/tutorials/getting-started-with-the-tsl2561-luminosity-sensor
 
      // Resulting lux value
-    boolean good; // True if neither sensor is saturated
-
     // Perform lux calculation:
 
-    good = light.getLux(gain, ms, data0, data1, lux);
+    light.getLux(gain, ms, data0, data1, lux);
 
     // Print out the results:
 
-    Serial.print(" lux: ");
-    Serial.print(lux);
-    if (good)
-      Serial.println(" (good)");
-    else
-      Serial.println(" (BAD)");
   }
   else
   {
@@ -206,28 +187,5 @@ void printError(byte error)
 // If there's an I2C error, this function will
 // print out an explanation.
 {
-  Serial.print("printError");
-  Serial.print(error, DEC);
-  Serial.print(", ");
-
-  switch (error)
-  {
-  case 0:
-    Serial.println("success");
-    break;
-  case 1:
-    Serial.println("data too long for transmit buffer");
-    break;
-  case 2:
-    Serial.println("received NACK on address (disconnected?)");
-    break;
-  case 3:
-    Serial.println("received NACK on data");
-    break;
-  case 4:
-    Serial.println("other error");
-    break;
-  default:
-    Serial.println("unknown error");
-  }
+  (void)error;
 }

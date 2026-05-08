@@ -2,16 +2,18 @@
 // Project details: https://RandomNerdTutorials.com/arduino-tds-water-quality-sensor/
 #include "TDSSensor.h"
 
+int analogBuffer[SCOUNT];     // store the analog value in the array, read from ADC
+int analogBufferTemp[SCOUNT];
 int analogBufferIndex = 0;
 int copyIndex = 0;
 
 float averageVoltage = 0;
-float tdsValue = 0;
+
 float temperature = 16; // current temperature for compensation
 
 int getMedianNum(int bArray[], int iFilterLen)
 {
-  Serial.println("getMedianNum");
+  // Serial.println("getMedianNum");
   int bTab[iFilterLen];
   for (byte i = 0; i < iFilterLen; i++)
     bTab[i] = bArray[i];
@@ -41,14 +43,12 @@ int getMedianNum(int bArray[], int iFilterLen)
 
 void TDS_Sensor_setup()
 {
-  Serial.println("TDS Sensor Setup");
-  Serial.begin(115200);
-  pinMode(TdsSensorPin, INPUT);
+  // pinMode(TdsSensorPin, INPUT);
 }
 
 float TDS_Sensor_read()
 {
-  Serial.println("TDS Sensor Read");
+  float tdsValue = 0;
   static unsigned long analogSampleTimepoint = millis();
   if (millis() - analogSampleTimepoint > 40U)
   { // every 40 milliseconds,read the analog value from the ADC
@@ -83,9 +83,9 @@ float TDS_Sensor_read()
       // Serial.print("voltage:");
       // Serial.print(averageVoltage,2);
       // Serial.print("V   ");
-      Serial.print("TDS Value:");
-      Serial.print(tdsValue, 0);
-      Serial.println("ppm");
+      // Serial.print("TDS Value:");
+      // Serial.print(tdsValue, 0);
+      // Serial.println("ppm");
     }
   }
   return tdsValue;

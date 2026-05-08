@@ -10,6 +10,6 @@
 #define DIO0 A0
 extern int counter;
 void LoRa_Sender_setup();
-void LoRa_Sender(float temperature, float humidity, float tdsValue, double lightValue, float co2Value, float phValue, bool relay1State, bool relay2State, bool relay3State );
+void LoRa_Sender(float temperature, float humidity, float tdsValue, double lightValue, float co2Value, float phValue, bool relay1State, bool relay2State);
 
 #endif	//LORA_SENDER_H

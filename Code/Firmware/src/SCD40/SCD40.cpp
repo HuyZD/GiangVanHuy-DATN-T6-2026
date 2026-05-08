@@ -2,7 +2,7 @@
 SensirionI2cScd4x scd4x;
 void SCD40_setup()
 {
-  Serial.println("SCD40 Setup");
+  // Serial.println("SCD40 Setup");
   Wire.begin();
   scd4x.begin(Wire, 0x62);
   // scd4x.wakeUp();
@@ -13,7 +13,7 @@ void SCD40_setup()
 }
 float SCD40_read()
 {
-  Serial.println("SCD40 Read");
+  // Serial.println("SCD40 Read");
   bool dataReady = false;
   uint16_t co2;
   float temp, humidity;
@@ -22,12 +22,8 @@ float SCD40_read()
 
     if (scd4x.readMeasurement(co2, temp, humidity) == 0)
     {
-      Serial.print("CO2 [ppm]: ");
-      Serial.println(co2);
-      Serial.print("Temp [°C]: ");
-      Serial.println(temp);
-      Serial.print("Humidity   [%]: ");
-      Serial.println(humidity);
+      // Serial.print("CO2 [ppm]: ");
+      // Serial.println(co2);
     }
   }
 

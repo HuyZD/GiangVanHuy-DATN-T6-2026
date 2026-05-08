@@ -1,14 +1,15 @@
 #include <SPI.h>
 #include <LoRa.h>
 #include <ModbusMaster.h>
-#define MAX485_CONTROL 2  
+#define MAX485_CONTROL 4  
 // LoRa pins
 #define SS 10
 #define RST A1
 #define DIO0 A0
 #define  PowEn1 A2
-#define PowEn2 7
-#define  PowEn3 4
+#define PowEn3 A3 // 5V
+#define PowEn1 A2 // 3.3V
+#define PowEn2 7 // 12V
 int counter = 0;
 ModbusMaster node;
 void preTransmission() {
