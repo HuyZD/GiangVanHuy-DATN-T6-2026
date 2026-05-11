@@ -24,9 +24,12 @@ class NodeDetailScreen extends StatefulWidget {
 
 class _NodeDetailScreenState extends State<NodeDetailScreen>
     with SingleTickerProviderStateMixin {
+  static const String airConditionerPowerKey = "airConditionerPower";
+
   late TabController _tabController;
 
   StreamSubscription<ThingsboardRealtimeUpdate>? realtimeSubscription;
+  final Map<String, dynamic> sharedAttributeSnapshot = {};
 
   @override
   void initState() {
@@ -67,15 +70,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                     setState(() {
                       widget.node.autoMode = value;
                     });
-                    widget.onDataChanged();
-                    final currentJwt = await ensureJwt();
-                    if (currentJwt != null) {
-                      await ThingsboardService.sendSharedAttributes(
-                        jwt: currentJwt,
-                        deviceId: ThingsboardService.deviceId,
-                        data: {"autoMode": value},
-                      );
-                    }
+                    await sendSharedAttributeUpdates({"autoMode": value});
                   },
                 ),
               ],
@@ -205,6 +200,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
 
   List<String> get sharedAttributeKeys => [
     "autoMode",
+    airConditionerPowerKey,
     ...Node.defaultThresholds.keys,
   ];
 
@@ -226,6 +222,8 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         widget.node.autoMode = autoMode == true || autoMode == "true";
       }
 
+      applyAirConditionerPower(attributes[airConditionerPowerKey]);
+
       for (final key in Node.defaultThresholds.keys) {
         final parsedValue = parseThresholdValue(attributes[key]);
         if (parsedValue != null) {
@@ -233,6 +231,9 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         }
       }
     });
+    sharedAttributeSnapshot
+      ..clear()
+      ..addAll(currentSharedAttributes());
   }
 
   void startRealtimeUpdates() {
@@ -264,11 +265,17 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         widget.node.autoMode = autoMode == true || autoMode == "true";
       }
 
+      applyAirConditionerPower(update.attributes[airConditionerPowerKey]);
+
       for (final key in Node.defaultThresholds.keys) {
         final parsedValue = parseThresholdValue(update.attributes[key]);
         if (parsedValue != null) {
           widget.node.thresholds[key] = parsedValue;
         }
+      }
+
+      if (update.attributes.isNotEmpty) {
+        sharedAttributeSnapshot.addAll(update.attributes);
       }
 
       for (var device in widget.node.sensors) {
@@ -295,12 +302,90 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     return null;
   }
 
+  bool? parsePowerValue(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      if (normalized == "1" || normalized == "true" || normalized == "on") {
+        return true;
+      }
+      if (normalized == "0" || normalized == "false" || normalized == "off") {
+        return false;
+      }
+    }
+    return null;
+  }
+
+  Device? findAirConditioner() {
+    for (final device in widget.node.actuators) {
+      if (device.actuatorType == "ac") {
+        return device;
+      }
+    }
+    return null;
+  }
+
+  void applyAirConditionerPower(dynamic value) {
+    final isOn = parsePowerValue(value);
+    if (isOn == null) return;
+
+    final airConditioner = findAirConditioner();
+    if (airConditioner != null) {
+      airConditioner.value = isOn ? "1" : "0";
+    }
+  }
+
   double thresholdValue(String key) {
     return (widget.node.thresholds[key] ?? Node.defaultThresholds[key]!)
         .toDouble();
   }
 
-  Future<void> sendThresholds() async {
+  Map<String, dynamic> currentSharedAttributes() {
+    final airConditioner = findAirConditioner();
+
+    return {
+      "autoMode": widget.node.autoMode,
+      if (airConditioner != null)
+        airConditionerPowerKey: airConditioner.value == "1" ? 1 : 0,
+      ...widget.node.thresholds,
+    };
+  }
+
+  bool isSameSharedAttributeValue(dynamic currentValue, dynamic nextValue) {
+    if (currentValue is num && nextValue is num) {
+      return currentValue == nextValue;
+    }
+    final currentPower = parsePowerValue(currentValue);
+    final nextPower = parsePowerValue(nextValue);
+    if (currentPower != null && nextPower != null) {
+      return currentPower == nextPower;
+    }
+    final currentNumber = parseThresholdValue(currentValue);
+    final nextNumber = parseThresholdValue(nextValue);
+    if (currentNumber != null && nextNumber != null) {
+      return currentNumber == nextNumber;
+    }
+    return currentValue == nextValue;
+  }
+
+  Future<void> sendSharedAttributeUpdates(
+    Map<String, dynamic> requestedUpdates,
+  ) async {
+    final changedUpdates = <String, dynamic>{};
+
+    for (final entry in requestedUpdates.entries) {
+      if (!isSameSharedAttributeValue(
+        sharedAttributeSnapshot[entry.key],
+        entry.value,
+      )) {
+        changedUpdates[entry.key] = entry.value;
+      }
+    }
+
+    if (changedUpdates.isEmpty) return;
+
     widget.onDataChanged();
 
     final currentJwt = await ensureJwt();
@@ -309,8 +394,10 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     await ThingsboardService.sendSharedAttributes(
       jwt: currentJwt,
       deviceId: ThingsboardService.deviceId,
-      data: Map<String, dynamic>.from(widget.node.thresholds),
+      data: changedUpdates,
     );
+
+    sharedAttributeSnapshot.addAll(changedUpdates);
   }
 
   Widget buildThresholdPanel() {
@@ -454,7 +541,10 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                         );
                 });
               },
-              onChangeEnd: (_) => sendThresholds(),
+              onChangeEnd: (_) => sendSharedAttributeUpdates({
+                minKey: widget.node.thresholds[minKey],
+                maxKey: widget.node.thresholds[maxKey],
+              }),
             ),
           ],
         ),
@@ -497,11 +587,10 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                     Text("Trạng thái"),
                     Switch(
                       value: isOn,
-                      onChanged: (value) async {
+                      onChanged: (value) {
                         setStateDialog(() {
                           isOn = value;
                         });
-                        await sendACRpc("setACStatus", value ? 1 : 0);
                       },
                     ),
                   ],
@@ -524,7 +613,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                         // }
                         // });
                         //  if (shouldSendRpc) {
-                        await sendACRpc("decreaseAC", true);
+                        await sendACRpc("decreaseAirConditionerTemp", true);
                         // }
                       },
                     ),
@@ -542,7 +631,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                         //   }
                         // });
                         // if (shouldSendRpc) {
-                        await sendACRpc("increaseAC", true);
+                        await sendACRpc("increaseAirConditionerTemp", true);
                         //}
                       },
                     ),
@@ -568,13 +657,18 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
               ),
 
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
-                    // device.value = isOn ? "$temp" : "0";
+                    device.value = isOn ? "1" : "0";
                   });
-                  widget.onDataChanged();
+                  await sendSharedAttributeUpdates({
+                    airConditionerPowerKey: isOn ? 1 : 0,
+                  });
+                  await sendACRpc("setAirConditionerPower", isOn ? 1 : 0);
 
-                  Navigator.pop(context);
+                  if (mounted) {
+                    Navigator.pop(context);
+                  }
                 },
                 child: Text("Lưu"),
               ),

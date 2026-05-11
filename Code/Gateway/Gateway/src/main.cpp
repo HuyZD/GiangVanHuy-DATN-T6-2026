@@ -20,10 +20,60 @@ constexpr uint8_t LORA_DIO0_PIN = 26;
 constexpr long LORA_FREQUENCY = 433000000L;
 constexpr uint8_t LORA_SPREADING_FACTOR = 12;
 constexpr size_t LORA_PACKET_BUFFER_SIZE = 256;
+constexpr size_t LORA_MAX_PAYLOAD_SIZE = 255;
+constexpr uint32_t TELEMETRY_REQUEST_INTERVAL_MS = 20000U;
+constexpr uint32_t NODE_RESPONSE_TIMEOUT_MS = 8000U;
 
 constexpr uint8_t LED_PIN = 4;
 
+constexpr char ATTR_AUTO_MODE[] = "autoMode";
+constexpr char ATTR_LIGHT_MIN[] = "light_min";
+constexpr char ATTR_LIGHT_MAX[] = "light_max";
+constexpr char ATTR_CO2_MAX[] = "co2_max";
+constexpr char ATTR_CO2_SAFE[] = "co2_safe";
+constexpr char ATTR_TEMP_MAX[] = "temp_max";
+constexpr char ATTR_TEMP_SAFE[] = "temp_safe";
+constexpr char ATTR_HUMIDITY_MAX[] = "humidity_max";
+constexpr char ATTR_HUMIDITY_SAFE[] = "humidity_safe";
+constexpr char ATTR_TDS_MIN[] = "tds_min";
+constexpr char ATTR_TDS_MAX[] = "tds_max";
+constexpr char ATTR_PH_MIN[] = "ph_min";
+constexpr char ATTR_PH_MAX[] = "ph_max";
+
+constexpr std::array<const char *, 13U> SHARED_CONFIG_ATTRIBUTES = {
+  ATTR_AUTO_MODE,
+  ATTR_LIGHT_MIN,
+  ATTR_LIGHT_MAX,
+  ATTR_CO2_MAX,
+  ATTR_CO2_SAFE,
+  ATTR_TEMP_MAX,
+  ATTR_TEMP_SAFE,
+  ATTR_HUMIDITY_MAX,
+  ATTR_HUMIDITY_SAFE,
+  ATTR_TDS_MIN,
+  ATTR_TDS_MAX,
+  ATTR_PH_MIN,
+  ATTR_PH_MAX
+};
+
+struct AutoConfig {
+  bool autoMode = false;
+  double lightMin = 1000.0;
+  double lightMax = 1500.0;
+  double co2Max = 1000.0;
+  double co2Safe = 800.0;
+  double tempMax = 30.0;
+  double tempSafe = 28.0;
+  double humidityMax = 75.0;
+  double humiditySafe = 70.0;
+  double tdsMin = 400.0;
+  double tdsMax = 800.0;
+  double phMin = 5.8;
+  double phMax = 6.5;
+};
+
 unsigned long lastSendTime = 0;
+unsigned long lastTelemetryRequestTime = 0;
 volatile double temperature = 0.0;
 volatile double humidity = 0.0; 
 volatile double PH = 0.0;
@@ -34,15 +84,17 @@ volatile int RSSI = 0;
 volatile bool RL1 = false;
 volatile bool RL2 = false;
 String serialPacket = "";
+AutoConfig autoConfig;
 
 // Global variables
 bool ledState = false;  // LED state
-bool subscribed = false; // Indicates if RPC subscription is done
+bool sharedConfigSubscribed = false;
+bool sharedConfigRequested = false;
 bool telemetryProbeSent = false;
 
 WiFiClient wifiClient;
 Arduino_MQTT_Client mqttClient(wifiClient);
-ThingsBoard tb(mqttClient, MAX_MESSAGE_SIZE);
+ThingsBoardSized<16U> tb(mqttClient, MAX_MESSAGE_SIZE);
 
 void initWiFi();
 void initLoRa();
@@ -50,21 +102,42 @@ bool reconnect();
 RPC_Response processSetLedStatus(const RPC_Data &data);
 RPC_Response processRelay1(const RPC_Data &data);
 RPC_Response processRelay2(const RPC_Data &data); 
+RPC_Response processAirConditionerPower(const RPC_Data &data);
+RPC_Response processAirConditionerTempUp(const RPC_Data &data);
+RPC_Response processAirConditionerTempDown(const RPC_Data &data);
 void processTime(const JsonVariantConst& data);
-void sendRelayCommandToNode(uint8_t relayNumber, bool relayState);
+void processSharedConfigUpdate(const Shared_Attribute_Data &data);
+void processSharedConfigRequest(const Shared_Attribute_Data &data);
+void requestTelemetryFromNode();
+bool sendRelayCommandToNode(uint8_t relayNumber, bool relayState);
+bool sendAirConditionerPowerToNode(bool enabled);
+bool sendAirConditionerTempChangeToNode(bool increase);
+void sendConfigToNode(const String &configPayload);
+bool sendLoRaMessage(const String &message);
+bool sendLoRaMessageAndWaitAck(const String &message, uint32_t timeoutMs);
+bool waitForNodePacket(String &packet, int &packetRssi, uint32_t timeoutMs);
+bool isAckPacket(const String &packet);
 void processPacket(const String &packet, int packetRssi, bool usePacketRssi);
 bool readSerialPacket(String &packet);
 bool readLoRaPacket(String &packet, int &packetRssi, bool &packetOverflow);
 bool parseSensorPacket(const String &packet, int packetRssi, bool usePacketRssi);
 bool parseDoubleField(const String &packet, const char *label, double &value);
 bool parseIntField(const String &packet, const char *label, int &value);
+bool updateAutoConfig(const Shared_Attribute_Data &data, String &changedPayload);
+bool updateBoolAttribute(const Shared_Attribute_Data &data, const char *key, bool &value, String &changedPayload);
+bool updateDoubleAttribute(const Shared_Attribute_Data &data, const char *key, double &value, String &changedPayload, uint8_t decimals = 2U);
+void appendJsonField(String &payload, const char *key, const String &value);
+String buildFullConfigPayload();
 void sendDataToThingsBoard(double temperature, double humidity, double PH, double TDS, double CO2, double light, int RSSI, bool RL1, bool RL2) ;
 
 
-const std::array<RPC_Callback, 3U> callbacks = {
+const std::array<RPC_Callback, 6U> callbacks = {
   RPC_Callback{ "setLedStatus", processSetLedStatus },
   RPC_Callback{ "setRelay1Status", processRelay1 },
-  RPC_Callback{ "setRelay2Status", processRelay2 }
+  RPC_Callback{ "setRelay2Status", processRelay2 },
+  RPC_Callback{ "setAirConditionerPower", processAirConditionerPower },
+  RPC_Callback{ "increaseAirConditionerTemp", processAirConditionerTempUp },
+  RPC_Callback{ "decreaseAirConditionerTemp", processAirConditionerTempDown }
 };
 
 void setup() {
@@ -105,25 +178,40 @@ void loop() {
     }
 
     telemetryProbeSent = false;
+    sharedConfigSubscribed = false;
+    sharedConfigRequested = false;
+  }
+
+  if (!sharedConfigSubscribed) {
+    Serial.println("Subscribing for shared config attributes...");
+    const Shared_Attribute_Callback callback(&processSharedConfigUpdate, SHARED_CONFIG_ATTRIBUTES.cbegin(), SHARED_CONFIG_ATTRIBUTES.cend());
+    if (!tb.Shared_Attributes_Subscribe(callback)) {
+      Serial.println("Failed to subscribe for shared config attributes");
+      return;
+    }
+    sharedConfigSubscribed = true;
+  }
+
+  if (!sharedConfigRequested) {
+    Serial.println("Requesting shared config attributes...");
+    const Attribute_Request_Callback callback(&processSharedConfigRequest, SHARED_CONFIG_ATTRIBUTES.cbegin(), SHARED_CONFIG_ATTRIBUTES.cend());
+    sharedConfigRequested = tb.Shared_Attributes_Request(callback);
+    if (!sharedConfigRequested) {
+      Serial.println("Failed to request shared config attributes");
+      return;
+    }
   }
 
   digitalWrite(LED_PIN, ledState ? HIGH : LOW);
 
   if (!telemetryProbeSent) {
-    sendDataToThingsBoard(1, 1, 1, 1, 1, 1, 1, true, true);
+    requestTelemetryFromNode();
     telemetryProbeSent = true;
   }
 
-  int packetRssi = 0;
-  bool packetOverflow = false;
   String packet;
-  if (readLoRaPacket(packet, packetRssi, packetOverflow)) {
-    if (packetOverflow) {
-      Serial.println("LoRa packet too long, telemetry was not sent");
-    } else {
-      processPacket(packet, packetRssi, true);
-    }
-    lastSendTime = millis();
+  if (millis() - lastTelemetryRequestTime >= TELEMETRY_REQUEST_INTERVAL_MS) {
+    requestTelemetryFromNode();
   }
 
   if (readSerialPacket(packet)) {
@@ -176,36 +264,163 @@ RPC_Response processRelay1(const RPC_Data &data) {
   int dataInt = data;
   RL1 = dataInt == 1;
   Serial.println(RL1 ? "RELAY1 ON" : "RELAY1 OFF");
-  sendRelayCommandToNode(1, RL1);
-  return RPC_Response("newStatus", dataInt);
+  const bool acknowledged = sendRelayCommandToNode(1, RL1);
+  return RPC_Response("acknowledged", acknowledged);
 }
 RPC_Response processRelay2(const RPC_Data &data) {
   int dataInt = data;
   RL2 = dataInt == 1;
   Serial.println(RL2   ? "RELAY2 ON" : "RELAY2 OFF");
-  sendRelayCommandToNode(2, RL2);
-  return RPC_Response("newStatus", dataInt);
+  const bool acknowledged = sendRelayCommandToNode(2, RL2);
+  return RPC_Response("acknowledged", acknowledged);
+}
+RPC_Response processAirConditionerPower(const RPC_Data &data) {
+  int dataInt = data;
+  const bool enabled = dataInt == 1;
+  Serial.println(enabled ? "AIR CONDITIONER ON" : "AIR CONDITIONER OFF");
+  const bool acknowledged = sendAirConditionerPowerToNode(enabled);
+  return RPC_Response("acknowledged", acknowledged);
+}
+RPC_Response processAirConditionerTempUp(const RPC_Data &data) {
+  (void)data;
+  Serial.println("AIR CONDITIONER TEMP UP");
+  const bool acknowledged = sendAirConditionerTempChangeToNode(true);
+  return RPC_Response("acknowledged", acknowledged);
+}
+RPC_Response processAirConditionerTempDown(const RPC_Data &data) {
+  (void)data;
+  Serial.println("AIR CONDITIONER TEMP DOWN");
+  const bool acknowledged = sendAirConditionerTempChangeToNode(false);
+  return RPC_Response("acknowledged", acknowledged);
 }
 void processTime(const JsonVariantConst& data) {
   Serial.print("Received time from ThingsBoard: ");
   Serial.println(data["time"].as<String>());
 }
 
-void sendRelayCommandToNode(uint8_t relayNumber, bool relayState) {
+void processSharedConfigUpdate(const Shared_Attribute_Data &data) {
+  Serial.println("Shared config update received");
+  String changedPayload;
+  if (updateAutoConfig(data, changedPayload)) {
+    sendConfigToNode(changedPayload);
+  }
+}
+
+void processSharedConfigRequest(const Shared_Attribute_Data &data) {
+  Serial.println("Shared config request received");
+  String changedPayload;
+  updateAutoConfig(data, changedPayload);
+  sendConfigToNode(buildFullConfigPayload());
+}
+
+void requestTelemetryFromNode() {
+  lastTelemetryRequestTime = millis();
+  Serial.println("Requesting telemetry from node...");
+
+  if (!sendLoRaMessage("sensor:read")) {
+    return;
+  }
+
+  String packet;
+  int packetRssi = 0;
+  if (!waitForNodePacket(packet, packetRssi, NODE_RESPONSE_TIMEOUT_MS)) {
+    Serial.println("Node telemetry response timeout");
+    return;
+  }
+
+  processPacket(packet, packetRssi, true);
+}
+
+bool sendRelayCommandToNode(uint8_t relayNumber, bool relayState) {
   String command = "relay";
   command += String(relayNumber);
   command += "-";
   command += relayState ? "1" : "0";
 
+  return sendLoRaMessageAndWaitAck(command, NODE_RESPONSE_TIMEOUT_MS);
+}
+
+bool sendAirConditionerPowerToNode(bool enabled) {
+  String command = "ac-power-";
+  command += enabled ? "1" : "0";
+  return sendLoRaMessageAndWaitAck(command, NODE_RESPONSE_TIMEOUT_MS);
+}
+
+bool sendAirConditionerTempChangeToNode(bool increase) {
+  const String command = increase ? "ac-temp-up" : "ac-temp-down";
+  return sendLoRaMessageAndWaitAck(command, NODE_RESPONSE_TIMEOUT_MS);
+}
+
+void sendConfigToNode(const String &configPayload) {
+  const String command = "config:" + configPayload;
+  sendLoRaMessageAndWaitAck(command, NODE_RESPONSE_TIMEOUT_MS);
+}
+
+bool sendLoRaMessage(const String &message) {
+  if (message.length() > LORA_MAX_PAYLOAD_SIZE) {
+    Serial.print("LoRa message too long, not sent: ");
+    Serial.println(message.length());
+    return false;
+  }
+
   LoRa.idle();
   LoRa.beginPacket();
-  LoRa.print(command);
+  LoRa.print(message);
   const int result = LoRa.endPacket();
   LoRa.receive();
 
-  Serial.print("LoRa command ");
+  Serial.print("LoRa message ");
   Serial.print(result == 1 ? "sent: " : "failed: ");
-  Serial.println(command);
+  Serial.println(message);
+  return result == 1;
+}
+
+bool sendLoRaMessageAndWaitAck(const String &message, uint32_t timeoutMs) {
+  if (!sendLoRaMessage(message)) {
+    return false;
+  }
+
+  String packet;
+  int packetRssi = 0;
+  if (!waitForNodePacket(packet, packetRssi, timeoutMs)) {
+    Serial.print("Node ACK timeout for: ");
+    Serial.println(message);
+    return false;
+  }
+
+  if (isAckPacket(packet)) {
+    Serial.print("Node ACK received: ");
+    Serial.println(packet);
+    return true;
+  }
+
+  Serial.print("Unexpected node response: ");
+  Serial.println(packet);
+  return false;
+}
+
+bool waitForNodePacket(String &packet, int &packetRssi, uint32_t timeoutMs) {
+  const unsigned long startedAt = millis();
+  bool packetOverflow = false;
+
+  while (millis() - startedAt < timeoutMs) {
+    if (readLoRaPacket(packet, packetRssi, packetOverflow)) {
+      lastSendTime = millis();
+      if (packetOverflow) {
+        Serial.println("LoRa response too long");
+        return false;
+      }
+      return true;
+    }
+
+    delay(10);
+  }
+
+  return false;
+}
+
+bool isAckPacket(const String &packet) {
+  return packet == "ack" || packet.startsWith("ack:") || packet.startsWith("ACK");
 }
 
 void processPacket(const String &packet, int packetRssi, bool usePacketRssi) {
@@ -281,7 +496,7 @@ bool parseSensorPacket(const String &packet, int packetRssi, bool usePacketRssi)
   double phSensorValue = 0.0;
   int relay1State = 0;
   int relay2State = 0;
-  int rssiValue = 0;
+  // int rssiValue = 0;
 
   if (!parseDoubleField(packet, "temperature", temperatureValue)) return false;
   if (!parseDoubleField(packet, "humidity", humidityValue)) return false;
@@ -291,11 +506,11 @@ bool parseSensorPacket(const String &packet, int packetRssi, bool usePacketRssi)
   if (!parseDoubleField(packet, "phValue", phSensorValue)) return false;
   if (!parseIntField(packet, "relay1State", relay1State)) return false;
   if (!parseIntField(packet, "relay2State", relay2State)) return false;
-  if (usePacketRssi) {
-    rssiValue = packetRssi;
-  } else if (!parseIntField(packet, "RSSI", rssiValue)) {
-    return false;
-  }
+  // if (usePacketRssi) {
+  //   rssiValue = packetRssi;
+  // } else if (!parseIntField(packet, "RSSI", rssiValue)) {
+  //   return false;
+  // }
 
   temperature = temperatureValue;
   humidity = humidityValue;
@@ -305,7 +520,7 @@ bool parseSensorPacket(const String &packet, int packetRssi, bool usePacketRssi)
   PH = phSensorValue;
   RL1 = relay1State == 1;
   RL2 = relay2State == 1;
-  RSSI = rssiValue;
+  // RSSI = rssiValue;
 
   return true;
 }
@@ -360,6 +575,99 @@ bool parseIntField(const String &packet, const char *label, int &value) {
 
   value = packet.substring(valueStart).toInt();
   return true;
+}
+
+bool updateAutoConfig(const Shared_Attribute_Data &data, String &changedPayload) {
+  changedPayload = "{";
+  bool changed = false;
+  changed |= updateBoolAttribute(data, ATTR_AUTO_MODE, autoConfig.autoMode, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_LIGHT_MIN, autoConfig.lightMin, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_LIGHT_MAX, autoConfig.lightMax, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_CO2_MAX, autoConfig.co2Max, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_CO2_SAFE, autoConfig.co2Safe, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_TEMP_MAX, autoConfig.tempMax, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_TEMP_SAFE, autoConfig.tempSafe, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_HUMIDITY_MAX, autoConfig.humidityMax, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_HUMIDITY_SAFE, autoConfig.humiditySafe, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_TDS_MIN, autoConfig.tdsMin, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_TDS_MAX, autoConfig.tdsMax, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_PH_MIN, autoConfig.phMin, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_PH_MAX, autoConfig.phMax, changedPayload);
+  changedPayload += "}";
+
+  if (!changed) {
+    changedPayload = "";
+  }
+  return changed;
+}
+
+bool updateBoolAttribute(const Shared_Attribute_Data &data, const char *key, bool &value, String &changedPayload) {
+  if (!data.containsKey(key)) {
+    return false;
+  }
+
+  const bool newValue = data[key].as<bool>();
+  if (newValue == value) {
+    return false;
+  }
+
+  value = newValue;
+  Serial.print("Updated ");
+  Serial.print(key);
+  Serial.print(": ");
+  Serial.println(value ? "true" : "false");
+
+  appendJsonField(changedPayload, key, value ? "true" : "false");
+  return true;
+}
+
+bool updateDoubleAttribute(const Shared_Attribute_Data &data, const char *key, double &value, String &changedPayload, uint8_t decimals) {
+  if (!data.containsKey(key)) {
+    return false;
+  }
+
+  const double newValue = data[key].as<double>();
+  if (newValue == value) {
+    return false;
+  }
+
+  value = newValue;
+  Serial.print("Updated ");
+  Serial.print(key);
+  Serial.print(": ");
+  Serial.println(value);
+
+  appendJsonField(changedPayload, key, String(value, static_cast<unsigned int>(decimals)));
+  return true;
+}
+
+void appendJsonField(String &payload, const char *key, const String &value) {
+  if (payload.length() > 1) {
+    payload += ",";
+  }
+  payload += "\"";
+  payload += key;
+  payload += "\":";
+  payload += value;
+}
+
+String buildFullConfigPayload() {
+  String payload = "{";
+  appendJsonField(payload, ATTR_AUTO_MODE, autoConfig.autoMode ? "true" : "false");
+  appendJsonField(payload, ATTR_LIGHT_MIN, String(autoConfig.lightMin, 2));
+  appendJsonField(payload, ATTR_LIGHT_MAX, String(autoConfig.lightMax, 2));
+  appendJsonField(payload, ATTR_CO2_MAX, String(autoConfig.co2Max, 2));
+  appendJsonField(payload, ATTR_CO2_SAFE, String(autoConfig.co2Safe, 2));
+  appendJsonField(payload, ATTR_TEMP_MAX, String(autoConfig.tempMax, 2));
+  appendJsonField(payload, ATTR_TEMP_SAFE, String(autoConfig.tempSafe, 2));
+  appendJsonField(payload, ATTR_HUMIDITY_MAX, String(autoConfig.humidityMax, 2));
+  appendJsonField(payload, ATTR_HUMIDITY_SAFE, String(autoConfig.humiditySafe, 2));
+  appendJsonField(payload, ATTR_TDS_MIN, String(autoConfig.tdsMin, 2));
+  appendJsonField(payload, ATTR_TDS_MAX, String(autoConfig.tdsMax, 2));
+  appendJsonField(payload, ATTR_PH_MIN, String(autoConfig.phMin, 2));
+  appendJsonField(payload, ATTR_PH_MAX, String(autoConfig.phMax, 2));
+  payload += "}";
+  return payload;
 }
 
 void sendDataToThingsBoard(double temperature, double humidity, double PH, double TDS, double CO2, double light, int RSSI, bool RL1, bool RL2) {

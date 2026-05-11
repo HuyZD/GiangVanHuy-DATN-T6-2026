@@ -1,6 +1,7 @@
 #include "LoRaReceiver.h"
 
-static LoRaRelayCallback relayCallback = nullptr;
+static const uint8_t LORA_RX_BUFFER_SIZE = 240;
+static LoRaCommandCallback commandCallback = nullptr;
 
 void LoRa_Receiver_setup()
 {
@@ -22,9 +23,9 @@ void LoRa_Receiver_setup()
   LoRa.receive();
 }
 
-void LoRa_Receiver_setRelayCallback(LoRaRelayCallback callback)
+void LoRa_Receiver_setCommandCallback(LoRaCommandCallback callback)
 {
-  relayCallback = callback;
+  commandCallback = callback;
 }
 
 void LoRa_Receiver()
@@ -34,18 +35,41 @@ void LoRa_Receiver()
 
   if (packetSize)
   {
-    String payload = "";
+    static char payload[LORA_RX_BUFFER_SIZE + 1];
+    uint8_t payloadLength = 0;
+    bool payloadOverflow = false;
+
     while (LoRa.available())
     {
-      payload += (char)LoRa.read();
+      const char c = static_cast<char>(LoRa.read());
+      if (payloadLength < LORA_RX_BUFFER_SIZE)
+      {
+        payload[payloadLength++] = c;
+      }
+      else
+      {
+        payloadOverflow = true;
+      }
     }
+    payload[payloadLength] = '\0';
 
-    Serial.print("LoRa received: ");
+    Serial.print(F("LoRa received: "));
     Serial.println(payload);
+    Serial.print(F("LoRa length: "));
+    Serial.println(payloadLength);
 
-    if (relayCallback != nullptr)
+    if (payloadOverflow)
     {
-      relayCallback(payload);
+      Serial.println(F("LoRa command too long, packet ignored"));
+      LoRa.receive();
+      return;
     }
+
+    if (commandCallback != nullptr)
+    {
+      commandCallback(payload);
+    }
+
+    LoRa.receive();
   }
 }

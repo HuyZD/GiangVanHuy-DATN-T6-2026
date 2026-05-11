@@ -7,9 +7,9 @@
 #define RST A1
 #define DIO0 A0
 
-typedef void (*LoRaRelayCallback)(String command);
+typedef void (*LoRaCommandCallback)(const char *command);
 
 void LoRa_Receiver_setup();
-void LoRa_Receiver_setRelayCallback(LoRaRelayCallback callback);
+void LoRa_Receiver_setCommandCallback(LoRaCommandCallback callback);
 void LoRa_Receiver();
 #endif	//LORA_RECEIVER_H
