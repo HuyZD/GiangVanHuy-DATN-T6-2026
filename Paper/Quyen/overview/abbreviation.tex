@@ -1,93 +1,24 @@
-% % Chữ viết tắt
-\nomenclature[T]{RCPP}{Rotating calipers path planner - Điều khiển dự đoán mô hình}
+% Chữ viết tắt
+\nomenclature[T]{IoT}{Internet of Things - Internet vạn vật}
+\nomenclature[T]{IAQ}{Indoor Air Quality - Chất lượng không khí trong nhà}
+\nomenclature[T]{TDS}{Total Dissolved Solids - Tổng chất rắn hòa tan}
+\nomenclature[T]{pH}{Potential of Hydrogen - Chỉ số axit/kiềm của dung dịch}
+\nomenclature[T]{CO2}{Carbon dioxide - Khí cacbon dioxit}
+\nomenclature[T]{LoRa}{Long Range - Công nghệ truyền thông không dây tầm xa, công suất thấp}
+\nomenclature[T]{MQTT}{Message Queuing Telemetry Transport - Giao thức truyền bản tin nhẹ cho IoT}
+\nomenclature[T]{HTTP}{HyperText Transfer Protocol - Giao thức truyền siêu văn bản}
+\nomenclature[T]{API}{Application Programming Interface - Giao diện lập trình ứng dụng}
+\nomenclature[T]{IR}{Infrared - Hồng ngoại}
+\nomenclature[T]{PWM}{Pulse Width Modulation - Điều chế độ rộng xung}
+\nomenclature[T]{ADC}{Analog-to-Digital Converter - Bộ chuyển đổi tương tự sang số}
+\nomenclature[T]{GPIO}{General Purpose Input/Output - Chân vào/ra đa dụng}
 
-% \nomenclature[T]{LNMPC}{Lyapunov-based nonlinear model predictive control - Điều khiển dự đoán mô hình phi tuyến dựa trên Lyapunov}
-% \nomenclature[T]{NMPC}{Nonlinear model predictive control - Điều khiển dự đoán mô hình phi tuyến}
-% \nomenclature[T]{MPC}{Model predictive control - Điều khiển dự đoán mô hình}
-% \nomenclature[T]{BSC}{Backstepping control - Điều khiển bước lùi}
-% \nomenclature[T]{SMC}{Sliding mode control - Điều khiển chế độ trượt}
-% \nomenclature[T]{DSC}{Dynamic surface control - Điều khiển bề mặt động}
-% \nomenclature[T]{PID}{Proportional–integral–derivative - Tỷ lệ-tích phân-đạo hàm}
-% \nomenclature[T]{LQR}{Linear quadratic regulator - Bộ điều chỉnh bậc hai tuyến tính}
-% \nomenclature[T]{DWA}{Dynamic window approach - Phương pháp tiếp cận cửa sổ động}
-% \nomenclature[T]{ROS}{Robot operating system - Hệ điều hành robot}
-% \nomenclature[T]{AGV}{Autonated Guided Vehivlce - Xe tự hành}
-% \nomenclature[T]{QP}{Quadratic Program - Chương trình
-% bậc hai}
-% \nomenclature[T]{SQP}{Sequential quadratic programming - Lập trình bậc hai tuần tự}
-
-% % Ký hiệu
-% \nomenclature[K]{$\boldsymbol{x}$}{Véc tơ vị trí của robot}
-% \nomenclature[K]{$x$}{Vị trí theo trục x trong hệ tọa độ toàn cục}
-% \nomenclature[K]{$y$}{Vị trí theo trục y trong hệ tọa độ toàn cục}
-% \nomenclature[K]{$\theta$}{Hướng của robot trong hệ tọa độ toàn cục}
-
-% \nomenclature[K]{$\boldsymbol{v}$}{Véc tơ vận tốc của robot}
-% \nomenclature[K]{$v_x$}{Vận tốc tuyến tính theo trục x}
-% \nomenclature[K]{$v_y$}{Vận tốc tuyến tính theo trục y}
-% \nomenclature[K]{$\omega$}{Vận tốc quay theo trục z}
-
-% \nomenclature[K]{$Rx_Ry_R$}{Hệ tọa độ robot}
-% \nomenclature[K]{$\beta_i$}{Góc tạo bởi bánh xe và hướng của robot}
-% \nomenclature[K]{$\omega_i$}{Vận tốc quay của bánh xe}
-% \nomenclature[K]{$\boldsymbol{\omega}$}{Véc tơ vận tốc bánh xe}
-% \nomenclature[K]{$r$}{Bán kính bánh xe}
-% \nomenclature[K]{$d$}{Khoảng cách từ tâm robot đến bánh xe}
-
-% \nomenclature[K]{$\boldsymbol{h}_i$}{Hàm chuyển đổi giữa khùn tọa độ robot và bánh xe thứ $i$}
-% \nomenclature[K]{$\boldsymbol{H}_1$}{Ma trận chuyển đổi từ hệ trục tọa độ bánh xe sang hệ trục tọa độ robot }
-
-% \nomenclature[K]{$\boldsymbol{H}'_1$}{Ma trận chuyển đổi từ hệ trục tọa độ vận tốc sang hệ trục tọa độ bánh xe}
-
-% \nomenclature[K]{$\boldsymbol{H}$}{Ma trận động học thuận}
-
-% \nomenclature[K]{$m$}{Khối lượng robot}
-% \nomenclature[K]{$J$}{Momen quán tính của robot}
-
-% \nomenclature[K]{$\boldsymbol{F}$}{Véc tơ lực, momen}
-% \nomenclature[K]{$F_x$}{Lực theo trục x}
-% \nomenclature[K]{$F_y$}{Lực theo trục y}
-% \nomenclature[K]{$T$}{Momen xoắn}
-
-% \nomenclature[K]{$F_{Bx}$}{Lực ma sát nhớt theo trục x}
-% \nomenclature[K]{$F_{By}$}{Lực ma sát nhớt theo trục y}
-% \nomenclature[K]{$T_{B\omega}$}{Momen ma sát nhớt}
-% \nomenclature[K]{$\boldsymbol{G}$}{Ma trận chuyển đổi động lực học từ bánh xe sang hệ tọa độ robot}
-% \nomenclature[K]{$\tau_i$}{Momen xoắn tạo bởi động cơ thứ $i$}
-% \nomenclature[K]{$\boldsymbol{u}$}{Véc tơ lực tạo bởi các bánh xe}
-% \nomenclature[K]{$f_i$}{Lực tạo bởi bánh xe thứ $i$}
-
-% \nomenclature[K]{$\eta_x$}{Hệ số ma sát nhớt theo trục x}
-% \nomenclature[K]{$\eta_y$}{Hệ số ma sát nhớt theo trục y}
-% \nomenclature[K]{$\eta_\omega$}{Hệ số ma sát nhớt ứng với $\omega$}
-
-% \nomenclature[K]{$\boldsymbol{B}$}{Ma trận hệ số ma sát nhớt}
-
-% \nomenclature[K]{$F_{Cx}$}{Lực ma sát Coulomb theo trục x}
-% \nomenclature[K]{$F_{Cy}$}{Lực ma sát Coulomb theo trục y}
-% \nomenclature[K]{$T_{C\omega}$}{Momen ma sát Coulomb}
-
-% \nomenclature[K]{$C_x$}{Hệ số Coulomb theo trục x}
-% \nomenclature[K]{$C_y$}{Hằng số Coulomb theo trục y}
-% \nomenclature[K]{$C_\omega$}{Hằng số Coulomb ứng với $\omega$}
-% \nomenclature[K]{$\boldsymbol{C}$}{Ma trận hệ số ma sát Coulomb}
-
-% \nomenclature[K]{$\boldsymbol{x}_1$}{Véc tơ vị trí của robot}
-% \nomenclature[K]{$\boldsymbol{x}_2$}{Véc tơ vận tốc của robot}
-% \nomenclature[K]{$\mathcal{X}$}{Véc tơ trạng thái của robot}
-
-% \nomenclature[K]{$\boldsymbol{x}_{1d}$}{Véc tơ vị trí tham chiếu của robot}
-% \nomenclature[K]{$\boldsymbol{x}_{2d}$}{Véc tơ vận tốc tham chiếu của robot}
-% \nomenclature[K]{$\mathcal{X}_{ref}$}{Véc tơ trạng thái tham chiếu của robot}
-
-% \nomenclature[K]{$\boldsymbol{z}_1$}{Véc tơ sai lệch vị trí của robot}
-% \nomenclature[K]{$\boldsymbol{z}_2$}{Véc tơ sai lệch vận tốc của robot}
-% \nomenclature[K]{$\boldsymbol{\xi}$}{Véc tơ sai lệch trạng thái của robot}
-
-% \nomenclature[K]{$\boldsymbol{P},\boldsymbol{Q},\boldsymbol{R}$}{Các ma trận trọng số dương của MPC}
-
-% \nomenclature[K]{$V$}{Hàm Lyapunov}
-% \nomenclature[K]{$s$}{Mặt trượt}
-
-% \nomenclature[K]{$\lambda, c_1, c_2$}{Các ma trận trọng số dương của SMC}
-% \printnomenclature
+% Ký hiệu
+\nomenclature[K]{$T$}{Nhiệt độ không khí trong phòng}
+\nomenclature[K]{$H$}{Độ ẩm tương đối của không khí}
+\nomenclature[K]{$C_{CO2}$}{Nồng độ CO2}
+\nomenclature[K]{$E$}{Cường độ ánh sáng}
+\nomenclature[K]{$V_{TDS}$}{Điện áp đầu ra của cảm biến TDS}
+\nomenclature[K]{$V_{pH}$}{Điện áp đầu ra của cảm biến pH}
+\nomenclature[K]{$Q$}{Chỉ số chất lượng môi trường tổng hợp}
+\printnomenclature

@@ -1,98 +1,126 @@
 \babel@toc {vietnamese}{}\relax 
 \contentsline {chapter}{TÓM TẮT}{i}{chapter*.1}%
-\contentsline {chapter}{LỜI CẢM ƠN}{ii}{chapter*.2}%
-\contentsline {chapter}{LỜI CAM ĐOAN}{iii}{chapter*.3}%
-\contentsline {chapter}{PHÊ DUYỆT CỦA CÁN BỘ HƯỚNG DẪN}{iv}{chapter*.4}%
+\contentsline {chapter}{LỜI CẢM ƠN}{iii}{chapter*.2}%
+\contentsline {chapter}{LỜI CAM ĐOAN}{iv}{chapter*.3}%
+\contentsline {chapter}{PHÊ DUYỆT CỦA CÁN BỘ HƯỚNG DẪN}{v}{chapter*.4}%
 \contentsline {chapter}{\numberline {1}GIỚI THIỆU}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Đặt vấn đề}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Tổng quan nghiên cứu}{2}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Mục tiêu nghiên cứu}{5}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Phạm vi nghiên cứu}{6}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Phương pháp nghiên cứu}{7}{section.1.5}%
-\contentsline {section}{\numberline {1.6}Ý nghĩa khoa học và thực tiễn}{8}{section.1.6}%
-\contentsline {section}{\numberline {1.7}Bố cục của khóa luận}{9}{section.1.7}%
-\contentsline {chapter}{\numberline {2}Cơ sở lý thuyết}{10}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Tổng quan về mạng cảm biến không dây}{10}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Kiến trúc mạng cảm biến không dây}{10}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}Các thành phần của node cảm biến}{11}{subsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.1.3}Đặc điểm và hạn chế của WSN}{11}{subsection.2.1.3}%
-\contentsline {section}{\numberline {2.2}Tổng quan về mạng ad-hoc}{12}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Khái niệm mạng ad-hoc}{12}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Đặc điểm của mạng ad-hoc}{13}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.2.3}Ứng dụng của mạng ad-hoc}{13}{subsection.2.2.3}%
-\contentsline {subsection}{\numberline {2.2.4}Thách thức trong mạng ad-hoc}{14}{subsection.2.2.4}%
-\contentsline {section}{\numberline {2.3}Các giao thức định tuyến trong mạng ad-hoc}{14}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Phân loại các giao thức định tuyến}{15}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Giao thức định tuyến chủ động (Proactive Routing Protocols)}{15}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Giao thức định tuyến phản ứng (Reactive Routing Protocols)}{18}{subsection.2.3.3}%
-\contentsline {subsection}{\numberline {2.3.4}Giao thức định tuyến lai (Hybrid Routing Protocols)}{19}{subsection.2.3.4}%
-\contentsline {subsection}{\numberline {2.3.5}Giao thức định tuyến phân cụm (Hierarchical/Cluster-based Routing Protocols)}{21}{subsection.2.3.5}%
-\contentsline {subsection}{\numberline {2.3.6}Cơ chế Flooding trong định tuyến}{23}{subsection.2.3.6}%
-\contentsline {subsection}{\numberline {2.3.7}So sánh các giao thức định tuyến}{24}{subsection.2.3.7}%
-\contentsline {section}{\numberline {2.4}Thuật toán Gradient trong định tuyến mạng}{25}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Nguyên lý hoạt động}{26}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Quá trình thiết lập Gradient}{27}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}Quá trình chuyển tiếp dữ liệu}{28}{subsection.2.4.3}%
-\contentsline {subsection}{\numberline {2.4.4}Cơ chế duy trì và cập nhật Gradient}{28}{subsection.2.4.4}%
-\contentsline {subsection}{\numberline {2.4.5}Các biến thể của thuật toán Gradient}{29}{subsection.2.4.5}%
-\contentsline {subsubsection}{Gradient với đa metric}{29}{section*.19}%
-\contentsline {subsubsection}{Gradient với cân bằng tải}{30}{section*.20}%
-\contentsline {subsection}{\numberline {2.4.6}Ưu điểm và nhược điểm}{30}{subsection.2.4.6}%
-\contentsline {subsection}{\numberline {2.4.7}So sánh với các phương pháp định tuyến khác}{31}{subsection.2.4.7}%
-\contentsline {section}{\numberline {2.5}Tổng quan về nền tảng Nordic}{33}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}Vi điều khiển nRF54L15 series}{33}{subsection.2.5.1}%
-\contentsline {subsubsection}{Kiến trúc bộ xử lý}{34}{section*.23}%
-\contentsline {subsubsection}{Hệ thống bộ nhớ}{36}{section*.25}%
-\contentsline {subsubsection}{Khối Radio 2.4 GHz}{36}{section*.26}%
-\contentsline {subsubsection}{Hệ thống bảo mật}{37}{section*.27}%
-\contentsline {subsubsection}{Peripheral và I/O}{38}{section*.28}%
-\contentsline {subsubsection}{Thông số năng lượng}{39}{section*.30}%
-\contentsline {subsubsection}{So sánh với các dòng chip trước}{40}{section*.32}%
-\contentsline {subsection}{\numberline {2.5.2}Môi trường phát triển}{40}{subsection.2.5.2}%
-\contentsline {subsubsection}{nRF Connect SDK}{40}{section*.34}%
-\contentsline {subsubsection}{Công cụ phát triển tích hợp}{41}{section*.35}%
-\contentsline {subsubsection}{Development Kit nRF54L15 DK}{42}{section*.36}%
-\contentsline {subsection}{\numberline {2.5.3}Bluetooth Low Energy Mesh}{43}{subsection.2.5.3}%
-\contentsline {subsubsection}{Kiến trúc BLE Mesh}{43}{section*.37}%
-\contentsline {subsubsection}{Cơ chế truyền tin trong BLE Mesh}{45}{section*.40}%
-\contentsline {subsubsection}{Provisioning và Security}{46}{section*.41}%
-\contentsline {subsubsection}{Các loại Node trong BLE Mesh}{47}{section*.42}%
-\contentsline {subsubsection}{Model trong BLE Mesh}{47}{section*.43}%
-\contentsline {chapter}{\numberline {3}Giải pháp định tuyến sử dụng thuật toán Gradient trên vi xử lý nRF54L15}{49}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Kiến trúc tổng thể}{49}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Tổng quan Gradient Server Model}{49}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Cấu trúc Gradient Server Model}{49}{subsection.3.1.2}%
-\contentsline {subsubsection}{States (Trạng thái)}{50}{section*.46}%
-\contentsline {subsubsection}{Message Handlers (Hàm xử lý gói tin)}{52}{section*.47}%
-\contentsline {section}{\numberline {3.2}Cấu trúc gói tin}{52}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Định nghĩa Opcode}{52}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Gói tin GRADIENT\_STATUS}{53}{subsection.3.2.2}%
-\contentsline {subsubsection}{Cấu trúc gói tin}{53}{section*.49}%
-\contentsline {subsection}{\numberline {3.2.3}Gói tin DATA}{54}{subsection.3.2.3}%
-\contentsline {subsubsection}{Cấu trúc gói tin}{54}{section*.51}%
-\contentsline {section}{\numberline {3.3}Quá trình thiết lập và cập nhật Gradient}{54}{section.3.3}%
-\contentsline {subsubsection}{Thiết lập Gradient ban đầu}{54}{section*.53}%
-\contentsline {subsubsection}{Cập nhật Gradient định kỳ}{55}{section*.54}%
-\contentsline {section}{\numberline {3.4}Quá trình chuyển tiếp dữ liệu}{56}{section.3.4}%
-\contentsline {chapter}{\numberline {4}Kết quả và thảo luận}{57}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Thí nghiệm 1: Mạng cấu trúc tĩnh}{57}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Thiết lập thí nghiệm}{57}{subsection.4.1.1}%
-\contentsline {subsubsection}{Phần cứng sử dụng}{57}{section*.55}%
-\contentsline {subsubsection}{Cấu hình các node mạng}{58}{section*.57}%
-\contentsline {subsubsection}{Tiêu chí đánh giá}{58}{section*.58}%
-\contentsline {subsubsection}{Phần mềm debug}{59}{section*.59}%
-\contentsline {subsection}{\numberline {4.1.2}Topology mạng dạng cây}{59}{subsection.4.1.2}%
-\contentsline {subsubsection}{Giải thích kết quả}{61}{section*.62}%
-\contentsline {subsubsection}{Kết quả thí nghiệm}{61}{section*.63}%
-\contentsline {subsection}{\numberline {4.1.3}Topology mạng dạng lưới}{61}{subsection.4.1.3}%
-\contentsline {subsubsection}{Kết quả thí nghiệm}{63}{section*.66}%
-\contentsline {subsection}{\numberline {4.1.4}Nhận xét kết quả thí nghiệm}{63}{subsection.4.1.4}%
-\contentsline {section}{\numberline {4.2}Thí nghiệm 2: Thay đổi cấu trúc mạng}{63}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Các node trong mạng thay đổi vị trí}{64}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Node rời khỏi mạng}{65}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Node mới tham gia mạng}{66}{subsection.4.2.3}%
-\contentsline {section}{\numberline {4.3}Kết luận thí nghiệm}{67}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Kết quả đạt được}{67}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Đánh giá ưu điểm}{67}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {4.3.3}Tổng kết}{68}{subsection.4.3.3}%
-\contentsline {chapter}{KẾT LUẬN}{69}{chapter*.74}%
+\contentsline {section}{\numberline {1.3}Mục tiêu của đề tài}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Đối tượng và phạm vi nghiên cứu}{4}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Phương pháp nghiên cứu}{5}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Ý nghĩa thực tiễn}{5}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Bố cục khóa luận}{6}{section.1.7}%
+\contentsline {chapter}{\numberline {2}CƠ SỞ LÝ THUYẾT}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Chất lượng không khí trong nhà}{7}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Nhiệt độ và độ ẩm}{7}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Nồng độ CO2}{8}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Hợp chất bay hơi và giới hạn của hệ thống}{8}{subsection.2.1.3}%
+\contentsline {section}{\numberline {2.2}Cây trầu bà và các thông số chăm sóc}{8}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}TDS và pH}{9}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Ánh sáng}{9}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Liên hệ giữa chăm sóc cây và IAQ}{10}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Node cảm biến Arduino Pro Mini}{10}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Yêu cầu đối với node}{10}{subsection.2.3.1}%
+\contentsline {section}{\numberline {2.4}Truyền thông LoRa và gateway ESP32}{10}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Luồng truyền dữ liệu}{11}{subsection.2.4.1}%
+\contentsline {section}{\numberline {2.5}ThingsBoard và ứng dụng Flutter}{11}{section.2.5}%
+\contentsline {chapter}{\numberline {3}THIẾT KẾ PHẦN CỨNG NODE}{12}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Yêu cầu thiết kế phần cứng}{12}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Phân rã chức năng theo khối}{13}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Nguyên tắc bố trí chân và tín hiệu}{14}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Thiết kế khối nguồn}{15}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Nguồn đầu vào và bảo vệ}{15}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Mạch hạ áp 5V}{16}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Mạch ổn áp 3.3V}{16}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.4}LED báo nguồn}{17}{subsection.3.4.4}%
+\contentsline {subsection}{\numberline {3.4.5}Rủi ro và biện pháp giảm nhiễu}{17}{subsection.3.4.5}%
+\contentsline {section}{\numberline {3.5}Khối vi điều khiển Arduino Pro Mini}{18}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Vai trò của vi điều khiển}{18}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Bố trí header}{18}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}Quản lý chân vào ra}{19}{subsection.3.5.3}%
+\contentsline {subsection}{\numberline {3.5.4}Chu kỳ hoạt động của node}{19}{subsection.3.5.4}%
+\contentsline {subsection}{\numberline {3.5.5}Quy tắc an toàn khi khởi động}{20}{subsection.3.5.5}%
+\contentsline {section}{\numberline {3.6}Khối giao tiếp LoRa và RS485}{20}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Module LoRa RA-02}{20}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Định dạng gói tin LoRa}{21}{subsection.3.6.2}%
+\contentsline {subsection}{\numberline {3.6.3}Cơ chế kiểm tra lỗi}{21}{subsection.3.6.3}%
+\contentsline {subsection}{\numberline {3.6.4}Mạch MAX485}{22}{subsection.3.6.4}%
+\contentsline {subsection}{\numberline {3.6.5}Kiểm thử khối giao tiếp}{22}{subsection.3.6.5}%
+\contentsline {section}{\numberline {3.7}Khối cảm biến và khối actuator}{23}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Khối cảm biến}{23}{subsection.3.7.1}%
+\contentsline {subsection}{\numberline {3.7.2}Lọc và hiệu chuẩn cảm biến}{24}{subsection.3.7.2}%
+\contentsline {subsection}{\numberline {3.7.3}Khối relay}{24}{subsection.3.7.3}%
+\contentsline {subsection}{\numberline {3.7.4}Khối phát hồng ngoại}{25}{subsection.3.7.4}%
+\contentsline {subsection}{\numberline {3.7.5}Mô hình trạng thái thiết bị}{25}{subsection.3.7.5}%
+\contentsline {subsection}{\numberline {3.7.6}Kiểm thử khối cảm biến và actuator}{26}{subsection.3.7.6}%
+\contentsline {chapter}{\numberline {4}THIẾT KẾ PHẦN MỀM VÀ TRIỂN KHAI HỆ THỐNG}{27}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Kiến trúc tổng thể}{27}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Luồng dữ liệu tổng quát}{28}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Các chế độ vận hành}{28}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Thiết kế node cảm biến}{29}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Khối đọc cảm biến}{29}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Khối điều khiển}{29}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Định dạng gói tin node gửi lên gateway}{30}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}Thuật toán đọc cảm biến}{30}{subsection.4.4.4}%
+\contentsline {subsection}{\numberline {4.4.5}Quản lý trạng thái node}{31}{subsection.4.4.5}%
+\contentsline {subsection}{\numberline {4.4.6}Xử lý lệnh điều khiển tại node}{31}{subsection.4.4.6}%
+\contentsline {section}{\numberline {4.5}Thiết kế gateway ESP32 và ThingsBoard}{32}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Kết nối ThingsBoard}{32}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Mô hình thiết bị trên ThingsBoard}{32}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Rule chain và cảnh báo}{33}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.5.4}Luồng điều khiển xuống node}{33}{subsection.4.5.4}%
+\contentsline {subsection}{\numberline {4.5.5}Xử lý mất kết nối}{33}{subsection.4.5.5}%
+\contentsline {section}{\numberline {4.6}Thiết kế ứng dụng Flutter}{34}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Màn hình đăng nhập}{35}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Màn hình Sensor}{35}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Màn hình Actuator}{35}{subsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.6.4}Ánh xạ dữ liệu từ ThingsBoard sang giao diện}{37}{subsection.4.6.4}%
+\contentsline {subsection}{\numberline {4.6.5}Bảo mật và quyền điều khiển}{37}{subsection.4.6.5}%
+\contentsline {chapter}{\numberline {5}KẾT QUẢ VÀ THẢO LUẬN}{38}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Kịch bản kiểm thử}{38}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Kết quả thu thập dữ liệu cảm biến}{38}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Kết quả truyền thông LoRa và gateway}{39}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Kết quả hiển thị và điều khiển trên ứng dụng}{39}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Thảo luận}{40}{section.5.5}%
+\contentsline {chapter}{KẾT LUẬN}{41}{chapter*.16}%
+\contentsline {chapter}{\numberline {A}PHỤ LỤC THIẾT KẾ FIRMWARE VÀ GÓI TIN}{43}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Mục tiêu của firmware node}{43}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Cấu trúc chương trình node}{43}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Trình tự khởi động}{44}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Vòng lặp chính}{45}{section.A.4}%
+\contentsline {section}{\numberline {A.5}Định dạng dữ liệu telemetry}{46}{section.A.5}%
+\contentsline {section}{\numberline {A.6}Định dạng gói điều khiển}{46}{section.A.6}%
+\contentsline {section}{\numberline {A.7}Gói phản hồi ACK và ERR}{47}{section.A.7}%
+\contentsline {section}{\numberline {A.8}Tính checksum}{47}{section.A.8}%
+\contentsline {section}{\numberline {A.9}Hiệu chuẩn pH}{47}{section.A.9}%
+\contentsline {section}{\numberline {A.10}Hiệu chuẩn TDS}{48}{section.A.10}%
+\contentsline {section}{\numberline {A.11}Xử lý dữ liệu CO2}{48}{section.A.11}%
+\contentsline {section}{\numberline {A.12}Điều khiển IR cho điều hòa}{49}{section.A.12}%
+\contentsline {section}{\numberline {A.13}Firmware gateway}{50}{section.A.13}%
+\contentsline {section}{\numberline {A.14}Quản lý reconnect}{50}{section.A.14}%
+\contentsline {section}{\numberline {A.15}Quy ước log}{51}{section.A.15}%
+\contentsline {section}{\numberline {A.16}Bảng cấu hình đề xuất}{51}{section.A.16}%
+\contentsline {chapter}{\numberline {B}PHỤ LỤC KIỂM THỬ VÀ HƯỚNG DẪN VẬN HÀNH}{52}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Mục tiêu kiểm thử}{52}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Kiểm thử khối nguồn}{52}{section.B.2}%
+\contentsline {section}{\numberline {B.3}Kiểm thử cảm biến}{53}{section.B.3}%
+\contentsline {section}{\numberline {B.4}Kiểm thử LoRa}{54}{section.B.4}%
+\contentsline {section}{\numberline {B.5}Kiểm thử ThingsBoard}{54}{section.B.5}%
+\contentsline {section}{\numberline {B.6}Kiểm thử app Flutter}{55}{section.B.6}%
+\contentsline {section}{\numberline {B.7}Kiểm thử actuator}{55}{section.B.7}%
+\contentsline {section}{\numberline {B.8}Kịch bản vận hành trong căn hộ}{56}{section.B.8}%
+\contentsline {section}{\numberline {B.9}Phân tích dữ liệu mẫu từ ảnh app}{56}{section.B.9}%
+\contentsline {section}{\numberline {B.10}Bảng ngưỡng cảnh báo đề xuất}{57}{section.B.10}%
+\contentsline {section}{\numberline {B.11}Hướng dẫn vận hành}{57}{section.B.11}%
+\contentsline {section}{\numberline {B.12}Bảo trì hệ thống}{58}{section.B.12}%
+\contentsline {section}{\numberline {B.13}Danh sách lỗi thường gặp}{58}{section.B.13}%
+\contentsline {section}{\numberline {B.14}Tiêu chí nghiệm thu}{59}{section.B.14}%
+\contentsline {section}{\numberline {B.15}Đề xuất cải tiến sau kiểm thử}{59}{section.B.15}%
+\contentsline {section}{\numberline {B.16}Mẫu nhật ký kiểm thử}{60}{section.B.16}%
+\contentsline {section}{\numberline {B.17}Phiếu hiệu chuẩn cảm biến pH}{60}{section.B.17}%
+\contentsline {section}{\numberline {B.18}Phiếu hiệu chuẩn TDS}{61}{section.B.18}%
+\contentsline {section}{\numberline {B.19}Bộ luật điều khiển tự động đề xuất}{62}{section.B.19}%
+\contentsline {section}{\numberline {B.20}Checklist lắp đặt node trong căn hộ}{62}{section.B.20}%
+\contentsline {section}{\numberline {B.21}Checklist bảo mật triển khai}{63}{section.B.21}%
+\contentsline {section}{\numberline {B.22}Mẫu biên bản nghiệm thu}{64}{section.B.22}%

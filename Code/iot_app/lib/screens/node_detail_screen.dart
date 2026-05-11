@@ -26,22 +26,19 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  Timer? timer;
+  StreamSubscription<ThingsboardRealtimeUpdate>? realtimeSubscription;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     initThingsboardData();
-
-    timer = Timer.periodic(Duration(seconds: 5), (t) {
-      fetchDataFromThingsboard();
-    });
   }
 
   @override
   void dispose() {
-    timer?.cancel(); // 🔥 cực quan trọng
+    realtimeSubscription?.cancel();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -97,11 +94,33 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
-          buildGrid(widget.node.sensors),
-          buildGrid(widget.node.actuators),
-        ],
+        children: [buildSensorTab(), buildGrid(widget.node.actuators)],
       ),
+    );
+  }
+
+  Widget buildSensorTab() {
+    return ListView(
+      padding: EdgeInsets.all(12),
+      children: [
+        GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          itemCount: widget.node.sensors.length,
+          itemBuilder: (context, index) {
+            return DeviceCard(device: widget.node.sensors[index]);
+          },
+        ),
+        if (!widget.node.autoMode) ...[
+          SizedBox(height: 16),
+          buildThresholdPanel(),
+        ],
+      ],
     );
   }
 
@@ -153,8 +172,6 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         return "setRelay1Status";
       case "RL2":
         return "setRelay2Status";
-      case "RL3":
-        return "setRelay3Status";
       default:
         return "setRelay1Status";
     }
@@ -178,6 +195,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
   Future<void> initThingsboardData() async {
     jwt = await ThingsboardService.login();
     await loadSharedAttributes();
+    startRealtimeUpdates();
   }
 
   Future<String?> ensureJwt() async {
@@ -185,7 +203,10 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     return jwt;
   }
 
-  List<String> get sharedAttributeKeys => ["autoMode"];
+  List<String> get sharedAttributeKeys => [
+    "autoMode",
+    ...Node.defaultThresholds.keys,
+  ];
 
   Future<void> loadSharedAttributes() async {
     final currentJwt = jwt;
@@ -205,31 +226,240 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         widget.node.autoMode = autoMode == true || autoMode == "true";
       }
 
-    });
-  }
-
-  Future<void> fetchDataFromThingsboard() async {
-    if (jwt == null) return;
-
-    var data = await ThingsboardService.getTelemetry(
-      jwt!,
-      ThingsboardService.deviceId,
-    );
-
-    setState(() {
-      for (var device in widget.node.sensors) {
-        String key = device.id.toUpperCase();
-
-        device.value = data[key]?[0]?["value"] ?? "--";
-      }
-      if (widget.node.autoMode) {
-        for (var device in widget.node.actuators) {
-          String key = device.id;
-
-          device.value = data[key]?[0]?["value"] ?? "--";
+      for (final key in Node.defaultThresholds.keys) {
+        final parsedValue = parseThresholdValue(attributes[key]);
+        if (parsedValue != null) {
+          widget.node.thresholds[key] = parsedValue;
         }
       }
     });
+  }
+
+  void startRealtimeUpdates() {
+    final currentJwt = jwt;
+    if (currentJwt == null) return;
+
+    realtimeSubscription?.cancel();
+    realtimeSubscription =
+        ThingsboardService.subscribeDeviceData(
+          jwt: currentJwt,
+          deviceId: ThingsboardService.deviceId,
+        ).listen(
+          applyRealtimeUpdate,
+          onError: (error) {
+            debugPrint("ThingsBoard realtime error: $error");
+          },
+          onDone: () {
+            debugPrint("ThingsBoard realtime connection closed");
+          },
+        );
+  }
+
+  void applyRealtimeUpdate(ThingsboardRealtimeUpdate update) {
+    if (!mounted) return;
+
+    setState(() {
+      final autoMode = update.attributes["autoMode"];
+      if (autoMode != null) {
+        widget.node.autoMode = autoMode == true || autoMode == "true";
+      }
+
+      for (final key in Node.defaultThresholds.keys) {
+        final parsedValue = parseThresholdValue(update.attributes[key]);
+        if (parsedValue != null) {
+          widget.node.thresholds[key] = parsedValue;
+        }
+      }
+
+      for (var device in widget.node.sensors) {
+        final value = update.telemetry[device.id.toUpperCase()];
+        if (value != null) {
+          device.value = value.toString();
+        }
+      }
+
+      if (widget.node.autoMode) {
+        for (var device in widget.node.actuators) {
+          final value = update.telemetry[device.id];
+          if (value != null) {
+            device.value = value.toString();
+          }
+        }
+      }
+    });
+  }
+
+  num? parseThresholdValue(dynamic value) {
+    if (value is num) return value;
+    if (value is String) return num.tryParse(value);
+    return null;
+  }
+
+  double thresholdValue(String key) {
+    return (widget.node.thresholds[key] ?? Node.defaultThresholds[key]!)
+        .toDouble();
+  }
+
+  Future<void> sendThresholds() async {
+    widget.onDataChanged();
+
+    final currentJwt = await ensureJwt();
+    if (currentJwt == null) return;
+
+    await ThingsboardService.sendSharedAttributes(
+      jwt: currentJwt,
+      deviceId: ThingsboardService.deviceId,
+      data: Map<String, dynamic>.from(widget.node.thresholds),
+    );
+  }
+
+  Widget buildThresholdPanel() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          "Sensor Threshold",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8),
+        buildRangeThresholdControl(
+          title: "Light",
+          minKey: "light_min",
+          maxKey: "light_max",
+          min: 0,
+          max: 5000,
+          divisions: 100,
+          unit: "lux",
+        ),
+        buildRangeThresholdControl(
+          title: "CO2",
+          minKey: "co2_safe",
+          maxKey: "co2_max",
+          minLabel: "Safe",
+          maxLabel: "Max",
+          min: 0,
+          max: 3000,
+          divisions: 60,
+          unit: "ppm",
+        ),
+        buildRangeThresholdControl(
+          title: "Temperature",
+          minKey: "temp_safe",
+          maxKey: "temp_max",
+          minLabel: "Safe",
+          maxLabel: "Max",
+          min: 0,
+          max: 50,
+          divisions: 50,
+          unit: "C",
+        ),
+        buildRangeThresholdControl(
+          title: "Humidity",
+          minKey: "humidity_safe",
+          maxKey: "humidity_max",
+          minLabel: "Safe",
+          maxLabel: "Max",
+          min: 0,
+          max: 100,
+          divisions: 100,
+          unit: "%",
+        ),
+        buildRangeThresholdControl(
+          title: "TDS",
+          minKey: "tds_min",
+          maxKey: "tds_max",
+          min: 0,
+          max: 2000,
+          divisions: 100,
+          unit: "ppm",
+        ),
+        buildRangeThresholdControl(
+          title: "pH",
+          minKey: "ph_min",
+          maxKey: "ph_max",
+          min: 0,
+          max: 14,
+          divisions: 140,
+          fractionDigits: 1,
+        ),
+      ],
+    );
+  }
+
+  Widget buildRangeThresholdControl({
+    required String title,
+    required String minKey,
+    required String maxKey,
+    required double min,
+    required double max,
+    required int divisions,
+    String minLabel = "Min",
+    String maxLabel = "Max",
+    String unit = "",
+    int fractionDigits = 0,
+  }) {
+    final start = thresholdValue(minKey).clamp(min, max).toDouble();
+    final end = thresholdValue(maxKey).clamp(min, max).toDouble();
+    final values = RangeValues(
+      start <= end ? start : end,
+      end >= start ? end : start,
+    );
+
+    String formatValue(double value) {
+      final text = value.toStringAsFixed(fractionDigits);
+      return unit.isEmpty ? text : "$text $unit";
+    }
+
+    return Card(
+      margin: EdgeInsets.only(bottom: 10),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(12, 10, 12, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+                Flexible(
+                  child: Text(
+                    "$minLabel ${formatValue(values.start)} - "
+                    "$maxLabel ${formatValue(values.end)}",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
+            RangeSlider(
+              values: values,
+              min: min,
+              max: max,
+              divisions: divisions,
+              labels: RangeLabels(
+                formatValue(values.start),
+                formatValue(values.end),
+              ),
+              onChanged: (newValues) {
+                setState(() {
+                  widget.node.thresholds[minKey] = fractionDigits == 0
+                      ? newValues.start.round()
+                      : double.parse(
+                          newValues.start.toStringAsFixed(fractionDigits),
+                        );
+                  widget.node.thresholds[maxKey] = fractionDigits == 0
+                      ? newValues.end.round()
+                      : double.parse(
+                          newValues.end.toStringAsFixed(fractionDigits),
+                        );
+                });
+              },
+              onChangeEnd: (_) => sendThresholds(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void showACControlDialog(Device device) {
@@ -286,16 +516,16 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                     IconButton(
                       icon: Icon(Icons.remove),
                       onPressed: () async {
-                      //  var shouldSendRpc = false;
+                        //  var shouldSendRpc = false;
                         //setStateDialog(() {
-                          // if (temp > 16) {
-                          //   temp--;
-                          //   shouldSendRpc = true;
-                          // }
+                        // if (temp > 16) {
+                        //   temp--;
+                        //   shouldSendRpc = true;
+                        // }
                         // });
-                      //  if (shouldSendRpc) {
-                          await sendACRpc("decreaseAC", true);
-                       // }
+                        //  if (shouldSendRpc) {
+                        await sendACRpc("decreaseAC", true);
+                        // }
                       },
                     ),
 
@@ -312,7 +542,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                         //   }
                         // });
                         // if (shouldSendRpc) {
-                          await sendACRpc("increaseAC", true);
+                        await sendACRpc("increaseAC", true);
                         //}
                       },
                     ),
@@ -340,7 +570,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                   // device.value = isOn ? "$temp" : "0";
+                    // device.value = isOn ? "$temp" : "0";
                   });
                   widget.onDataChanged();
 

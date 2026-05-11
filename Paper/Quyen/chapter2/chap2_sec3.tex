@@ -1,35 +1,4 @@
-\section{Kết luận thí nghiệm}
-\label{sec:experiment_conclusion}
+\section{Kết quả truyền thông LoRa và gateway}
+Liên kết LoRa giữa node và gateway hoạt động ổn định với các gói dữ liệu có kích thước nhỏ. Gateway ESP32 nhận gói tin, tách trường dữ liệu và gửi lên ThingsBoard theo đúng cấu trúc telemetry. Khi Wi-Fi của gateway hoạt động ổn định, dữ liệu từ node xuất hiện trên dashboard ThingsBoard gần như theo thời gian thực.
 
-Qua các thí nghiệm được thực hiện, thuật toán định tuyến Gradient triển khai trên nền tảng BLE Mesh đã chứng minh được tính hiệu quả và độ tin cậy trong nhiều kịch bản khác nhau.
-
-\subsection{Kết quả đạt được}
-
-Thí nghiệm 1 với mạng cấu trúc tĩnh cho thấy thuật toán thiết lập gradient hội tụ chính xác trên cả hai topology dạng cây và dạng lưới. Tất cả các node đều cập nhật đúng giá trị gradient phản ánh khoảng cách hop đến sink node. Bảng định tuyến tại mỗi node được xây dựng với thứ tự ưu tiên hợp lý: các neighbor có gradient thấp hơn được xếp trước, và trong cùng mức gradient thì neighbor có RSSI cao hơn được ưu tiên. Tỷ lệ truyền gói tin DATA thành công đạt 100\% trong cả hai topology, chứng tỏ cơ chế chuyển tiếp dữ liệu theo hướng gradient giảm dần hoạt động đúng như thiết kế.
-
-Thí nghiệm 2 với mạng thay đổi cấu trúc động đã kiểm chứng khả năng tự thích ứng của thuật toán. Khi các node thay đổi vị trí, thuật toán tự động cập nhật bảng định tuyến dựa trên thông tin RSSI mới mà không làm gián đoạn quá trình truyền dữ liệu. Khi node mới tham gia mạng, node đó nhanh chóng nhận được gradient từ các neighbor và hòa nhập vào hệ thống định tuyến. Khi node rời khỏi mạng, các node còn lại phát hiện sự thay đổi thông qua cơ chế timeout và tự động loại bỏ entry không còn hợp lệ khỏi bảng định tuyến, đồng thời chọn next-hop thay thế nếu có.
-
-\subsection{Đánh giá ưu điểm}
-
-Thuật toán định tuyến Gradient thể hiện một số ưu điểm nổi bật sau:
-
-\begin{itemize}
-    \item \textit{Đơn giản và hiệu quả:} Thuật toán chỉ sử dụng một giá trị gradient duy nhất để ra quyết định định tuyến, giảm thiểu overhead tính toán và bộ nhớ trên các vi điều khiển có tài nguyên hạn chế.
-    
-    \item \textit{Tự tổ chức:} Mạng tự động thiết lập và duy trì cấu trúc định tuyến mà không cần can thiệp từ bên ngoài. Sink node chỉ cần khởi tạo gradient = 0, các node còn lại tự động tính toán gradient của mình.
-    
-    \item \textit{Khả năng phục hồi:} Thuật toán có khả năng tự thích ứng với các thay đổi trong mạng như node di chuyển, node mới tham gia, hoặc node rời khỏi mạng.
-    
-    \item \textit{Tương thích với BLE Mesh:} Giải pháp được triển khai dưới dạng Vendor Model, hoạt động song song với các SIG Model chuẩn mà không gây xung đột.
-\end{itemize}
-
-\subsection{Tổng kết}
-
-Kết quả thí nghiệm khẳng định rằng thuật toán định tuyến Gradient là giải pháp phù hợp cho các ứng dụng thu thập dữ liệu cảm biến trên nền tảng BLE Mesh. Với tỷ lệ truyền thành công 100\% trong môi trường mạng tĩnh và khả năng tự phục hồi trong môi trường động, thuật toán đáp ứng được các yêu cầu cơ bản của một hệ thống mạng cảm biến không dây đáng tin cậy. Các hạn chế được nhận diện sẽ là cơ sở cho các nghiên cứu cải tiến trong tương lai. Đường link đến video demo sản phẩm: \url{https://drive.google.com/drive/u/0/folders/13_3hMPpLS4xxRgjGEQhq99azp1sGqn4f} hoặc quét mã QR dưới đây:
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.59\textwidth]{chapter2/image/qr.png}
-    \label{fig:QR_code_video_Demo}
-\end{figure}
-
+Trong trường hợp gateway mất kết nối Internet tạm thời, dữ liệu không thể gửi lên ThingsBoard nhưng kênh LoRa giữa node và gateway vẫn hoạt động. Điều này cho thấy hệ thống có thể tách biệt vấn đề truyền thông cục bộ và vấn đề kết nối Internet. Để tăng độ tin cậy trong phiên bản sau, gateway có thể bổ sung bộ đệm dữ liệu cục bộ và gửi bù khi Internet khôi phục.

@@ -1,80 +1,13 @@
-\section{Mục tiêu nghiên cứu}
+\section{Mục tiêu của đề tài}
+Mục tiêu tổng quát của khóa luận là thiết kế và phát triển một hệ thống IoT có khả năng giám sát chất lượng không khí trong căn hộ, theo dõi điều kiện chăm sóc cây trầu bà và điều khiển một số thiết bị hỗ trợ cải thiện môi trường sống. Định hướng của đề tài là chứng minh tính khả thi của mô hình kết hợp IAQ, trầu bà/thủy canh quy mô nhỏ và điều khiển thiết bị theo thời gian thực.
 
-Khóa luận tập trung phát triển và triển khai giải pháp định tuyến hiệu quả cho mạng ad-hoc đa cảm biến dựa trên thuật toán Gradient trên nền tảng phần cứng của Nordic Semiconductor, đảm bảo cân bằng giữa hiệu suất, độ truyền dữ liệu và khả năng tiết kiệm năng lượng, bộ nhớ. Các mục tiêu cụ thể của khóa luận bao gồm:
-
+Các mục tiêu cụ thể gồm:
 \begin{itemize}
-    \item Nghiên cứu và phân tích thuật toán Gradient: Tìm hiểu nguyên lý hoạt động của thuật toán định tuyến dựa trên Gradient, đánh giá ưu nhược điểm và khả năng áp dụng trong mạng ad-hoc đa cảm biến.
-    
-    \item Xây dựng giao thức định tuyến dựa trên Gradient phù hợp với đặc điểm của mạng ad-hoc bao gồm:
-    \begin{itemize}
-        \item Cơ chế thiết lập và cập nhật giá trị Gradient.
-        \item Cơ chế chọn đường và chuyển tiếp dữ liệu.
-        \item Cơ chế thích ứng khi topology mạng thay đổi.
-    \end{itemize}
-    
-    \item Triển khai thực tế giải pháp định tuyến trên nền tảng phần cứng Nordic Semiconductor, tận dụng các ưu điểm về tiết kiệm năng lượng và khả năng hỗ trợ giao thức không dây.
-    
-    \item Đánh giá hiệu năng của giải pháp đề xuất trong môi trường thực tế, từ đó đưa ra các cải tiến nhằm nâng cao hiệu suất và độ tin cậy của hệ thống.
+    \item Thiết kế node cảm biến sử dụng Arduino Pro Mini để đọc TDS, pH, nhiệt độ, độ ẩm, CO2 và ánh sáng.
+    \item Xây dựng kênh truyền LoRa giữa node cảm biến và gateway ESP32.
+    \item Phát triển gateway ESP32 để nhận dữ liệu LoRa, kiểm tra gói tin và gửi telemetry lên ThingsBoard.
+    \item Thiết kế ứng dụng Flutter kết nối ThingsBoard để hiển thị dữ liệu, trạng thái cảnh báo, lịch sử thông số và cấu hình ngưỡng vận hành.
+    \item Xây dựng chức năng điều khiển relay bật/tắt quạt, đèn và điều khiển tăng giảm nhiệt độ điều hòa qua IR tại node.
+    \item Đề xuất các luật điều khiển dựa trên ngưỡng CO2, ánh sáng, nhiệt độ, độ ẩm, TDS và pH nhằm hỗ trợ cải thiện IAQ và duy trì điều kiện phù hợp cho trầu bà.
+    \item Đánh giá khả năng hoạt động của hệ thống trong kịch bản căn hộ chung cư.
 \end{itemize}
-
-%Các phương pháp quét bao phủ được phân loại thành chia tách và không chia tách. Ở phương pháp chia tách,trong \cite {barrientos2011aerial, nam2016approach, kapoutsis2017darp}, các tác giả đã phân tách khu vực khảo sát thành các khu vực con được gán cho các Robot thông qua phương pháp đồ thị Voronoi,Morse,... . Tiếp theo, robot quét các tiểu vùng bằng cách sử dụng các chuyển động đơn giản. Mỗi con trong từng vùng nhỏ có nhiệm vụ tuần tra giám sát một vùng xác định và cung cấp dữ liệu đến một máy chủ gần nhất.  
-
-
-%Trong phương pháp không chia tách, khu vực khảo sát không yêu cầu bất kỳ sự phân hủy nào và các robot thường di chuyển trong một đội hình như là: 1 đường thẳng, đội hình chữ V, đội hình hexagon,...
-%Trong \cite{Gabriely2002SpiralSTCAO}, các tác giả đã thực hiện một cách tiếp cận cung cấp các đường đi tối ưu trong một biểu diễn giống như lưới của không gian trống. Thuật toán của chúng, được gọi là bao phủ cây bao trùm (STC), chia nhỏ khu vực làm việc thành các ô rời rạc và sau đó di chuyển theo một cây bao trùm của biểu đồ do các ô gây ra, trong khi bao phủ chính xác mọi điểm một lần như hình \ref{fig:STC}. Họ đang phát triển ba phiên bản của thuật toán STC. Phiên bản đầu tiên là ngoại tuyến, trong đó robot có kiến thức trước về môi trường của nó. Phiên bản thứ hai của STC là trực tuyến, trong đó robot sử dụng các cảm biến của chính nó để phát hiện các chướng ngại vật và xây dựng một cây bao trùm của môi trường trong khi bao phủ khu vực làm việc. Phiên bản thứ ba của STC giống như cũng lấy ý tưởng từ thuật toán ACO. Trong phiên bản này cũng vậy, robot không biết gì về môi trường, nhưng nó có thể để lại các dấu hiệu giống như pheromone trong quá trình bao phủ. Một giả định mà công việc này đưa ra là không gian trống chia tách không được hẹp hơn so với hai lần khoảng cách cảm biến robot. 
-
-%\begin{figure}[h!]
-    %\centering
-    %\includegraphics[width=1\textwidth]{chapter1/image/STC.png}
-   % \caption{Thuật toán STC}
-    %\label{fig:STC}
-%\end{figure}
-
-
-%Một số phương pháp bao phủ đa robot lấy cảm hứng từ sinh học đã được phát triển dựa trên các hành vi tồn tại trong tự nhiên. Trong \cite{Sahraei2012AMC}, các tác giả đã trình bày một ví dụ trong đó các robot tránh đi vào ranh giới của nhau bằng cách sử dụng hành vi của kiến. Các robot trong công việc này di chuyển trong môi trường 2D trong một chuyển động tròn, nơi chúng gửi pheromone trên khu vực của biên giới mỗi con. Bắt chước hành vi loài kiến để giảm giao điểm của biên giới. Đó là, nếu một pheromone được phát hiện bởi một robot, nó sẽ thay đổi hướng chuyển động của nó và do đó tránh được một biên giới robot khác. Kết quả là, phương pháp này tạo điều kiện lan truyền các robot trong môi trường dần dần như hình \ref{fig:ACO}
-
-%\begin{figure}[h!]
-    %\centering
-   % \includegraphics[width=1\textwidth]{chapter1/image/ACO.png}
-   % \caption{Đàn kiến di chuyển bao phủ khu vực}
-   % \label{fig:ACO}
-%\end{figure}
-
-
-%Trong \cite{Zelinsky2007PlanningPO}, các tác giả đã trình bày phương pháp dựa trên việc chia lưới để lập kế hoạch lộ trình bao phủ như hình \ref{fig:GB} . Họ sử dụng biểu diễn lưới và áp dụng lập kế hoạch đường bao phủ hoàn chỉnh thuật toán vào lưới. Phương thức yêu cầu một ô bắt đầu và một mục tiêu tế bào. Một phương pháp lan truyền sóng đã được  áp dụng. Nghĩa là, thuật toán đầu tiên chỉ định 0 cho mục tiêu và sau đó là 1 cho tất cả các ô xung quanh của nó. Sau đó, tất cả các ô chưa được đánh dấu lân cận được đánh dấu 1 được gắn nhãn bằng 2. Quá trình lặp lại tăng dần cho đến khi ô bắt đầu chạm đến mặt sóng. Sau khi tính toán chuyển đổi khoảng cách, một đường bao phủ có thể được tìm thấy bằng cách bắt đầu trên ô bắt đầu và chọn vùng lân cận ô có nhãn cao nhất không được truy cập. Nếu hai hoặc nhiều ô lân cận có cùng một giá trị gán nhãn, thì một trong số chúng sẽ được chọn ngẫu nhiên. 
-% \begin{figure*}[!t]
-% \centering
-%     \begin{subfigure}[b]{0.47\textwidth}
-%     \centering
-%     \includegraphics[width=\textwidth]{chapter1/image/grid-base.png}
-%     \caption{}
-%     \label{fig:g}
-%     \end{subfigure}
-%     \begin{subfigure}[b]{0.52\textwidth}
-%     \centering
-%     \includegraphics[width=\textwidth]{chapter1/image/grid-base1.png}
-%     \caption{}
-%     \label{fig:o}
-%     \end{subfigure}
-%     \caption{Thuật toán dựa vào lưới (grid-based)}
-%     \label{fig:GB}
-% \end{figure*}
-%\begin{figure}[h!]
-   % \centering
-   % \includegraphics[width=1\textwidth]{chapter1/image/grid-base2.png}
-   % \caption{Thuật toán dựa vào lưới (grid-based)}
-   % \label{fig:GB}
-%\end{figure}
-
-%Một ưu điểm của khu vực khảo sát không yêu cầu bất kỳ sự phân tách nào và các robot thường phối hợp di chuyển bay theo đội hình \cite {vincent2004framework, chen2015path, yang2018v, afghah2019wildfire} chẳng hạn như đội hình chữ V. Đội hình chữ V được lấy cảm hứng từ đàn ngỗng trời. Nó có ưu điểm là khắc phục được sự hình thành dòng trong việc giảm tác động của khí động học và có thể thay đổi kết cấu linh hoạt hơn. Trong \cite {chen2015path}, một đội hình robot hình chữ V được tổ chức theo mô hình Leader - Follower. Các vị trí ảo được thiết lập dựa trên trạng thái của leader. Trường tiềm năng nhân tạo và các phương pháp điều khiển PID được sử dụng để điều khiển các followers đi theo các điểm ảo nhằm duy trì đội hình robot bằng một con đường duy nhất. 
-%\begin{figure}[h!]
-    %\centering
-    %\includegraphics[width=1\textwidth]{chapter1/image/LFLF.png}
-   % \caption{Đội hình chữ V}
-   % \label{fig:LFLF}
-%\end{figure}
-%Trong \cite {afghah2019wildfire}, một mô hình hình thành liên minh đi theo leader cho các bầy Robot đã được đề xuất trong các vấn đề giám sát cháy rừng. Mô hình này tập hợp các robot thành các nhóm liên minh để hợp tác bao phủ một khu vực giám sát được chỉ định.
-
-
-
-%Theo hiểu biết của bản thân, hầu hết các nghiên cứu về chiến lược bao phủ chủ yếu được thực hiện với một Robot đơn lẻ hoặc nhiều Robot với phương pháp phân hủy trong khi các nghiên cứu về điều khiển đội hình chỉ tập trung vào việc duy trì và thay đổi đội hình. Do đó, đồ án này trình bày chiến lược bao phủ đa Robot sử dụng đội hình chữ V cho các ứng dụng tuần tra và giám sát. Các Robot được phân cấp theo mô hình ``Leader - Follower'', trong đó Leader được điều hướng bởi một đường bao phủ được xác định bởi công cụ lập kế hoạch đường đi tối ưu (CPP) và đồng thời tạo ra cấu trúc hình chữ V ảo thay vì dùng mCPP. Một điều khiển hành vi được sử dụng để điều khiển các followers có thể đi theo cấu trúc ảo để hình thành và duy trì đội hình chữ V.

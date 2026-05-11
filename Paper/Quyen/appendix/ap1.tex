@@ -1,0 +1,319 @@
+\section{Mục tiêu của firmware node}
+Firmware node có nhiệm vụ biến mạch phần cứng thành một thiết bị IoT hoàn chỉnh. Chương trình phải đọc cảm biến, xử lý dữ liệu, truyền LoRa, nhận lệnh, điều khiển actuator và phản hồi trạng thái. Vì node sử dụng Arduino Pro Mini, thiết kế firmware cần đơn giản, tiết kiệm bộ nhớ và tránh các thao tác gây treo vòng lặp chính.
+
+Các mục tiêu cụ thể gồm:
+\begin{itemize}
+    \item Khởi tạo ổn định tất cả ngoại vi sau khi cấp nguồn.
+    \item Đọc các cảm biến TDS, pH, ánh sáng, nhiệt độ, độ ẩm và CO2 theo chu kỳ.
+    \item Lọc dữ liệu analog để giảm nhiễu tức thời.
+    \item Đóng gói dữ liệu theo định dạng thống nhất.
+    \item Gửi dữ liệu qua LoRa đến gateway.
+    \item Nhận gói lệnh từ gateway và điều khiển RL1, RL2, điều hòa.
+    \item Gửi ACK để gateway và app cập nhật trạng thái.
+\end{itemize}
+
+\section{Cấu trúc chương trình node}
+Firmware được chia thành các module logic. Cách chia module giúp mã nguồn dễ đọc và dễ sửa khi thay đổi phần cứng. Trong triển khai đơn giản trên Arduino, các module có thể nằm trong cùng một file nhưng vẫn được tách bằng nhóm hàm.
+
+\begin{longtable}{|p{3.5cm}|p{5cm}|p{4.6cm}|}
+\hline
+\textbf{Module} & \textbf{Hàm chính} & \textbf{Vai trò} \\
+\hline
+Khởi tạo & \texttt{setupPins()}, \texttt{setupSensors()}, \texttt{setupLoRa()} & Cấu hình GPIO, cảm biến và module truyền thông. \\
+\hline
+Cảm biến & \texttt{readTds()}, \texttt{readPh()}, \texttt{readEnvironment()} & Thu thập và quy đổi giá trị đo. \\
+\hline
+LoRa & \texttt{sendTelemetry()}, \texttt{receiveCommand()} & Gửi dữ liệu và nhận lệnh. \\
+\hline
+Actuator & \texttt{setRelay()}, \texttt{sendIrCommand()} & Điều khiển relay và điều hòa. \\
+\hline
+Trạng thái & \texttt{updateState()}, \texttt{buildPayload()} & Lưu trạng thái node và tạo gói tin. \\
+\hline
+\end{longtable}
+
+\section{Trình tự khởi động}
+Khi node được cấp nguồn, firmware phải đưa các actuator về trạng thái an toàn trước khi khởi tạo những phần khác. Nếu relay bị kích ngoài ý muốn trong giai đoạn khởi động, quạt hoặc đèn có thể bật không kiểm soát. Vì vậy các chân relay cần được cấu hình output và ghi mức OFF ngay trong những dòng đầu của hàm \texttt{setup()}.
+
+\begin{lstlisting}[language=C,caption={Trình tự khởi động đề xuất cho node}]
+void setup() {
+    setupPins();
+    setRelay(PIN_RELAY_1, false);
+    setRelay(PIN_RELAY_2, false);
+
+    Serial.begin(9600);
+    setupSensors();
+    setupLoRa();
+
+    state.relay1 = false;
+    state.relay2 = false;
+    state.acPower = false;
+    state.acSetpoint = 26;
+
+    sendBootMessage();
+}
+\end{lstlisting}
+
+Sau khi khởi động, node gửi một bản tin boot về gateway. Bản tin này giúp gateway biết node vừa reset hoặc vừa được cấp nguồn. Nếu node reset bất thường nhiều lần, gateway có thể ghi log để phục vụ chẩn đoán lỗi nguồn hoặc lỗi firmware.
+
+\section{Vòng lặp chính}
+Vòng lặp chính cần cân bằng giữa đọc cảm biến và phản hồi lệnh. Nếu chỉ đọc cảm biến rồi delay dài, node sẽ phản hồi chậm khi người dùng điều khiển trên app. Nếu lắng nghe LoRa liên tục mà không đọc cảm biến đúng chu kỳ, dữ liệu telemetry sẽ thiếu ổn định. Một giải pháp là sử dụng bộ đếm thời gian dựa trên \texttt{millis()} thay vì \texttt{delay()} dài.
+
+\begin{lstlisting}[language=C,caption={Vòng lặp chính không chặn}]
+unsigned long lastSensorRead = 0;
+unsigned long lastTelemetrySend = 0;
+
+void loop() {
+    unsigned long now = millis();
+
+    if (now - lastSensorRead >= SENSOR_INTERVAL_MS) {
+        readAllSensors();
+        lastSensorRead = now;
+    }
+
+    if (now - lastTelemetrySend >= TELEMETRY_INTERVAL_MS) {
+        sendTelemetry();
+        lastTelemetrySend = now;
+    }
+
+    if (receiveCommand()) {
+        handleCommand(currentCommand);
+    }
+}
+\end{lstlisting}
+
+Với cách này, node có thể vừa gửi dữ liệu định kỳ vừa phản hồi lệnh nhanh. Thời gian đọc cảm biến vẫn cần được kiểm soát, đặc biệt với những cảm biến có thời gian đáp ứng chậm như CO2. Nếu cảm biến CO2 dùng UART và cần thời gian khởi động dài, firmware nên đánh dấu trạng thái warming-up thay vì gửi giá trị chưa ổn định.
+
+\section{Định dạng dữ liệu telemetry}
+Gói telemetry cần đủ thông tin nhưng không quá dài. Một gói đề xuất:
+
+\begin{lstlisting}[caption={Định dạng gói telemetry}]
+DATA,<nodeId>,<temperature>,<humidity>,<co2>,<lux>,<tds>,<ph>,<rl1>,<rl2>,<ac>,<checksum>
+\end{lstlisting}
+
+Ví dụ:
+\begin{lstlisting}
+DATA,1,30.9,65.0,2655.0,0.66,698.86,7.10,0,0,0,5A
+\end{lstlisting}
+
+\begin{longtable}{|p{2.8cm}|p{3cm}|p{7.1cm}|}
+\hline
+\textbf{Trường} & \textbf{Kiểu} & \textbf{Mô tả} \\
+\hline
+\texttt{DATA} & Chuỗi & Loại gói tin. \\
+\hline
+\texttt{nodeId} & Số nguyên & Mã định danh của node. \\
+\hline
+\texttt{temperature} & Số thực & Nhiệt độ đo được, đơn vị $^\circ$C. \\
+\hline
+\texttt{humidity} & Số thực & Độ ẩm tương đối, đơn vị \%. \\
+\hline
+\texttt{co2} & Số thực & Nồng độ CO2, đơn vị ppm. \\
+\hline
+\texttt{lux} & Số thực & Cường độ ánh sáng, đơn vị lux. \\
+\hline
+\texttt{tds} & Số thực & Tổng chất rắn hòa tan, đơn vị ppm. \\
+\hline
+\texttt{ph} & Số thực & Chỉ số pH. \\
+\hline
+\texttt{rl1}, \texttt{rl2}, \texttt{ac} & 0/1 & Trạng thái thiết bị. \\
+\hline
+\texttt{checksum} & Hex & Mã kiểm tra lỗi đơn giản. \\
+\hline
+\end{longtable}
+
+\section{Định dạng gói điều khiển}
+Gói điều khiển từ gateway xuống node có dạng:
+\begin{lstlisting}
+CMD,<nodeId>,<device>,<action>,<checksum>
+\end{lstlisting}
+
+Ví dụ:
+\begin{lstlisting}
+CMD,1,RL1,ON,2F
+CMD,1,RL2,OFF,31
+CMD,1,AC,TEMP_UP,7B
+CMD,1,AC,TEMP_DOWN,7C
+\end{lstlisting}
+
+Node cần kiểm tra \texttt{nodeId}. Nếu lệnh không dành cho node hiện tại, node bỏ qua. Nếu \texttt{device} không thuộc danh sách hỗ trợ, node phản hồi lỗi. Nếu checksum sai, node không thực thi để tránh hành vi ngoài ý muốn.
+
+\section{Gói phản hồi ACK và ERR}
+Sau khi thực thi lệnh, node gửi ACK:
+\begin{lstlisting}
+ACK,1,RL1,ON
+\end{lstlisting}
+
+Nếu lệnh lỗi, node gửi ERR:
+\begin{lstlisting}
+ERR,1,BAD_CHECKSUM
+ERR,1,UNKNOWN_DEVICE
+ERR,1,UNKNOWN_ACTION
+\end{lstlisting}
+
+Gateway sử dụng ACK để cập nhật trạng thái lên ThingsBoard. Nếu không nhận ACK sau một khoảng thời gian, gateway có thể gửi lại lệnh hoặc báo lỗi trên app. Điều này giúp người dùng biết lệnh có được thực hiện hay không.
+
+\section{Tính checksum}
+Checksum đơn giản có thể tính bằng XOR tất cả ký tự trước dấu checksum. Phương pháp này không mạnh như CRC nhưng đủ để phát hiện nhiều lỗi truyền cơ bản trong gói tin ngắn.
+
+\begin{lstlisting}[language=C,caption={Ví dụ tính checksum XOR}]
+uint8_t calcChecksum(const char *payload) {
+    uint8_t cs = 0;
+    for (int i = 0; payload[i] != '\0'; i++) {
+        cs ^= payload[i];
+    }
+    return cs;
+}
+\end{lstlisting}
+
+Khi đóng gói, firmware chuyển checksum sang dạng hex hai ký tự. Khi nhận, node hoặc gateway tính lại checksum và so sánh với trường cuối cùng. Nếu không khớp, gói tin bị loại bỏ.
+
+\section{Hiệu chuẩn pH}
+Cảm biến pH cần hiệu chuẩn vì điện áp đầu ra phụ thuộc vào module đo, đầu dò và nhiệt độ. Quy trình hiệu chuẩn hai điểm:
+\begin{enumerate}
+    \item Rửa đầu dò bằng nước sạch và lau nhẹ.
+    \item Đặt đầu dò vào dung dịch chuẩn pH 7, chờ giá trị ổn định.
+    \item Ghi lại điện áp $V_7$.
+    \item Rửa đầu dò và đặt vào dung dịch chuẩn pH 4 hoặc pH 10.
+    \item Ghi lại điện áp $V_4$ hoặc $V_{10}$.
+    \item Tính hệ số tuyến tính $a$ và $b$.
+\end{enumerate}
+
+Nếu dùng hai điểm pH 7 và pH 4:
+\[
+a = \frac{7 - 4}{V_7 - V_4}
+\]
+\[
+b = 7 - a \times V_7
+\]
+Sau đó:
+\[
+pH = a \times V_{pH} + b
+\]
+
+\section{Hiệu chuẩn TDS}
+TDS cũng cần hiệu chuẩn bằng dung dịch chuẩn. Quy trình:
+\begin{enumerate}
+    \item Chuẩn bị dung dịch TDS có giá trị đã biết.
+    \item Đặt đầu dò vào dung dịch, chờ ổn định.
+    \item Ghi điện áp đầu ra.
+    \item Điều chỉnh hệ số chuyển đổi trong firmware.
+    \item Kiểm tra lại với ít nhất một mẫu khác nếu có.
+\end{enumerate}
+
+TDS chịu ảnh hưởng bởi nhiệt độ. Nếu cần chính xác hơn, firmware có thể bù nhiệt độ:
+\[
+TDS_{comp} = \frac{TDS}{1 + \alpha (T - 25)}
+\]
+Trong đó $\alpha$ là hệ số bù nhiệt độ và $T$ là nhiệt độ dung dịch.
+
+\section{Xử lý dữ liệu CO2}
+Cảm biến CO2 thường cần thời gian khởi động để giá trị ổn định. Firmware nên bỏ qua một số mẫu đầu sau khi cấp nguồn. Nếu cảm biến hỗ trợ trạng thái sẵn sàng, node chỉ gửi giá trị CO2 khi trạng thái hợp lệ. Nếu không, node có thể đặt cờ \texttt{co2Valid}.
+
+\begin{lstlisting}[language=C,caption={Kiểm tra dữ liệu CO2 trước khi gửi}]
+if (co2SensorReady()) {
+    state.co2 = readCo2();
+    state.co2Valid = true;
+} else {
+    state.co2Valid = false;
+}
+\end{lstlisting}
+
+Gateway có thể dùng cờ hợp lệ để quyết định có cập nhật telemetry hay không. Điều này tránh trường hợp dashboard hiển thị giá trị 0 ppm hoặc giá trị sai trong giai đoạn cảm biến chưa ổn định.
+
+\section{Điều khiển IR cho điều hòa}
+Điều khiển điều hòa bằng IR cần lưu mã lệnh của từng chức năng. Mỗi hãng điều hòa có bộ mã khác nhau. Node cần có bảng mã tương ứng với thiết bị thực tế. Trong phiên bản cơ bản, các lệnh cần hỗ trợ gồm bật/tắt, tăng nhiệt độ và giảm nhiệt độ.
+
+\begin{lstlisting}[language=C,caption={Khung hàm phát lệnh IR}]
+void sendIrCommand(String action) {
+    if (action == "POWER") {
+        irsend.sendRaw(IR_POWER, IR_POWER_LEN, 38);
+    } else if (action == "TEMP_UP") {
+        irsend.sendRaw(IR_TEMP_UP, IR_TEMP_UP_LEN, 38);
+        state.acSetpoint++;
+    } else if (action == "TEMP_DOWN") {
+        irsend.sendRaw(IR_TEMP_DOWN, IR_TEMP_DOWN_LEN, 38);
+        state.acSetpoint--;
+    }
+}
+\end{lstlisting}
+
+Vì IR là điều khiển một chiều, trạng thái điều hòa trong hệ thống là trạng thái dự đoán. Khi người dùng dùng remote gốc, trạng thái dự đoán có thể sai. Để khắc phục, có thể bổ sung cảm biến nhiệt độ phản hồi hoặc cơ chế đồng bộ lại bằng thao tác trên app.
+
+\section{Firmware gateway}
+Gateway ESP32 cần thực hiện ba nhóm nhiệm vụ: nhận LoRa, gửi ThingsBoard và xử lý lệnh xuống node. Gateway có tài nguyên mạnh hơn Arduino Pro Mini nên có thể đảm nhiệm logic phức tạp hơn như lưu đệm dữ liệu, reconnect Wi-Fi và quản lý timeout.
+
+\begin{lstlisting}[language=C,caption={Luồng xử lý chính của gateway}]
+void loop() {
+    maintainWifi();
+    maintainThingsBoard();
+
+    if (loraPacketAvailable()) {
+        String packet = readLoraPacket();
+        if (validateTelemetry(packet)) {
+            JsonDocument doc = convertToJson(packet);
+            sendToThingsBoard(doc);
+        }
+    }
+
+    if (thingsBoardRpcAvailable()) {
+        Command cmd = readRpcCommand();
+        sendCommandToNode(cmd);
+    }
+}
+\end{lstlisting}
+
+\section{Quản lý reconnect}
+Kết nối Wi-Fi có thể mất tạm thời. Gateway cần reconnect tự động và không được treo chương trình khi mất mạng. Khi mất ThingsBoard, gateway vẫn nên tiếp tục nhận LoRa và lưu dữ liệu quan trọng.
+
+\begin{longtable}{|p{3.5cm}|p{4.2cm}|p{5.3cm}|}
+\hline
+\textbf{Sự cố} & \textbf{Cách phát hiện} & \textbf{Xử lý đề xuất} \\
+\hline
+Mất Wi-Fi & \texttt{WiFi.status()} khác connected & Thử reconnect theo chu kỳ, không chặn vòng lặp. \\
+\hline
+Mất ThingsBoard & MQTT/HTTP lỗi hoặc timeout & Tạo lại kết nối, lưu đệm telemetry. \\
+\hline
+Mất LoRa node & Không nhận gói trong thời gian timeout & Đánh dấu node offline trên ThingsBoard. \\
+\hline
+Lệnh không ACK & Không nhận ACK sau timeout & Gửi lại số lần giới hạn và báo lỗi app. \\
+\hline
+\end{longtable}
+
+\section{Quy ước log}
+Log giúp debug nhanh trong giai đoạn phát triển. Node và gateway nên thống nhất các mức log:
+\begin{itemize}
+    \item \texttt{INFO}: hoạt động bình thường như boot, gửi telemetry.
+    \item \texttt{WARN}: dữ liệu cảm biến bất thường, mất ACK lần đầu.
+    \item \texttt{ERROR}: lỗi khởi tạo LoRa, lỗi kết nối ThingsBoard kéo dài.
+\end{itemize}
+
+\begin{lstlisting}[caption={Ví dụ log gateway}]
+[INFO] WiFi connected
+[INFO] ThingsBoard connected
+[INFO] RX LoRa: DATA,1,30.9,65.0,2655.0,0.66,698.86,7.10,0,0,0
+[WARN] Node 1 CO2 high: 2655 ppm
+[ERROR] RPC command timeout: RL1 ON
+\end{lstlisting}
+
+\section{Bảng cấu hình đề xuất}
+Các tham số cấu hình nên được gom ở đầu chương trình hoặc lưu trong file cấu hình nếu dùng ESP32.
+
+\begin{longtable}{|p{4cm}|p{3cm}|p{6cm}|}
+\hline
+\textbf{Tham số} & \textbf{Giá trị đề xuất} & \textbf{Ý nghĩa} \\
+\hline
+\texttt{SENSOR\_INTERVAL\_MS} & 2000 & Chu kỳ đọc cảm biến. \\
+\hline
+\texttt{TELEMETRY\_INTERVAL\_MS} & 10000 & Chu kỳ gửi telemetry. \\
+\hline
+\texttt{COMMAND\_TIMEOUT\_MS} & 3000 & Thời gian chờ ACK. \\
+\hline
+\texttt{MAX\_RETRY} & 3 & Số lần gửi lại lệnh. \\
+\hline
+\texttt{CO2\_HIGH} & 1000 ppm & Ngưỡng cảnh báo CO2 cao. \\
+\hline
+\texttt{TEMP\_HIGH} & 30 $^\circ$C & Ngưỡng nhiệt độ cao. \\
+\hline
+\texttt{LIGHT\_LOW} & 100 lux & Ngưỡng thiếu sáng tham khảo. \\
+\hline
+\end{longtable}

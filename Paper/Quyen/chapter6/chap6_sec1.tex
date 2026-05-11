@@ -1,35 +1,15 @@
 \textbf{Những công việc đã thực hiện trong khóa luận}
 
-Khóa luận đã thiết kế và triển khai thành công giải pháp định tuyến dựa trên thuật toán Gradient cho giao thức BLE Mesh trên vi điều khiển nRF54L15. Giải pháp được hiện thực hóa thông qua việc phát triển Gradient Server Model - một Vendor Model hoạt động song song với các SIG Model chuẩn của BLE Mesh. Khóa luận đã hoàn thành các mục tiêu đề ra, đạt được các kết quả cụ thể sau đây:
+Khóa luận đã nghiên cứu và phát triển hệ thống kiểm soát chất lượng không khí trong căn hộ chung cư sử dụng cây trầu bà và IoT. Trên cơ sở tham khảo hướng tiếp cận kết hợp IAQ, cây trồng/thủy canh, bộ lọc thực vật và IoT, đề tài xây dựng một nguyên mẫu phù hợp với bối cảnh căn hộ: chi phí hợp lý, dễ lắp đặt, có khả năng giám sát theo thời gian thực và hỗ trợ điều khiển thiết bị. Hệ thống được xây dựng theo mô hình IoT hoàn chỉnh, bao gồm node cảm biến Arduino Pro Mini, truyền thông LoRa, gateway ESP32, nền tảng ThingsBoard và ứng dụng Flutter.
 
+Các kết quả chính đã đạt được gồm:
 \begin{itemize}
-    \item \textbf{Về lý thuyết:}
-    
-    Đã nghiên cứu và tìm hiểu kiến trúc phân lớp của giao thức BLE Mesh, bao gồm các lớp Bearer, Network, Lower Transport, Upper Transport, Access và Model. Đã phân tích cơ chế managed flooding mặc định của BLE Mesh và nhận diện các hạn chế về hiệu suất khi áp dụng cho ứng dụng thu thập dữ liệu cảm biến. Đã nghiên cứu thuật toán định tuyến Gradient và đánh giá tính phù hợp khi triển khai trên nền tảng BLE Mesh với các ràng buộc về tài nguyên vi điều khiển.
-    
-    \item \textbf{Về thiết kế và triển khai:}
-    
-    Đã thiết kế kiến trúc Gradient Server Model với các thành phần: States (Gradient Value, Forwarding Table), Message Handlers (GRADIENT\_STATUS handler, DATA handler), và các cấu trúc dữ liệu hỗ trợ (Periodic Timer, Message Buffer). Đã định nghĩa cấu trúc gói tin GRADIENT\_STATUS và DATA với format tối giản phù hợp với giới hạn payload của BLE Mesh. Đã triển khai thuật toán thiết lập gradient từ sink node lan truyền ra toàn mạng, và cơ chế chuyển tiếp dữ liệu theo hướng gradient giảm dần. Toàn bộ giải pháp được phát triển trên nền tảng nRF Connect SDK và Zephyr RTOS.
-    
-    \item \textbf{Về thực nghiệm:}
-    
-    Đã thực hiện các thí nghiệm đánh giá giải pháp trên hai loại topology mạng: dạng cây và dạng lưới. Kết quả cho thấy thuật toán thiết lập gradient hội tụ chính xác, tất cả các node cập nhật đúng giá trị gradient phản ánh khoảng cách hop đến sink. Tỷ lệ truyền gói tin DATA thành công đạt 100\% trong cả hai topology, chứng minh tính hiệu quả của cơ chế định tuyến gradient-based so với managed flooding. Đã kiểm chứng khả năng tự thích ứng của thuật toán khi cấu trúc mạng thay đổi động: node di chuyển, node mới tham gia, và node rời khỏi mạng. Thuật toán tự động cập nhật gradient và bảng định tuyến để duy trì khả năng truyền dữ liệu mà không cần can thiệp thủ công.
+    \item Thiết kế node cảm biến đọc được các thông số TDS, pH, nhiệt độ, độ ẩm, CO2 và ánh sáng.
+    \item Xây dựng cơ chế truyền dữ liệu không dây giữa node và gateway bằng hai module LoRa.
+    \item Phát triển gateway ESP32 để nhận dữ liệu LoRa, xử lý gói tin và gửi dữ liệu lên ThingsBoard.
+    \item Thiết kế mô hình dữ liệu trên ThingsBoard phục vụ hiển thị, cảnh báo và điều khiển.
+    \item Xây dựng ứng dụng Flutter để người dùng theo dõi thông số môi trường và điều khiển thiết bị.
+    \item Triển khai điều khiển relay bật/tắt quạt, relay bật/tắt đèn và điều khiển điều hòa bằng IR tại node.
 \end{itemize}
 
-\textbf{Hướng phát triển tương lai}
-
-Dựa trên các kết quả đạt được và hạn chế được nhận diện trong quá trình thực nghiệm, khóa luận đề xuất các hướng phát triển sau:
-
-\begin{itemize}
-    \item \textit{Tối ưu hóa tiêu thụ năng lượng:} Nghiên cứu cơ chế adaptive broadcast interval cho GRADIENT\_STATUS, giảm tần suất broadcast khi mạng ổn định và tăng khi phát hiện thay đổi. Tích hợp với Low Power Node (LPN) của BLE Mesh để hỗ trợ các thiết bị chạy pin.
-    
-    \item \textit{Mở rộng quy mô mạng:} Đánh giá hiệu suất thuật toán trên các mạng quy mô lớn với hàng trăm node. Nghiên cứu cơ chế phân cấp gradient hoặc clustering để giảm overhead trong mạng lớn hoặc kết hợp thêm một cơ chế định tuyến Reactive giúp các node trong mạng có thể tìm đường để giao tiếp với nhau.
-    
-    \item \textit{Cải thiện độ tin cậy:} Bổ sung cơ chế acknowledgment và retransmission cho gói tin DATA quan trọng. Nghiên cứu multi-path routing sử dụng nhiều neighbor có gradient thấp để tăng độ tin cậy.
-    
-    \item \textit{Triển khai thực tế:} Phát triển ứng dụng thu thập dữ liệu cảm biến hoàn chỉnh (nhiệt độ, độ ẩm, chất lượng không khí) sử dụng Gradient Server Model. Đánh giá hiệu suất trong môi trường thực tế với nhiều nguồn nhiễu RF.
-    
-    \item \textit{Tích hợp với hệ thống IoT:} Phát triển gateway kết nối mạng BLE Mesh với các nền tảng cloud IoT. Xây dựng giao diện giám sát và quản lý mạng từ xa.
-\end{itemize}
-
-Kết quả khóa luận khẳng định rằng thuật toán định tuyến Gradient là giải pháp khả thi và hiệu quả cho các ứng dụng thu thập dữ liệu cảm biến trên nền tảng BLE Mesh. Việc triển khai dưới dạng Vendor Model đảm bảo tính tương thích với hệ sinh thái BLE Mesh hiện có, mở ra tiềm năng ứng dụng rộng rãi trong các lĩnh vực smart home, smart building, giám sát môi trường, và IoT công nghiệp.
+Kết quả cho thấy hệ thống có khả năng giám sát môi trường trong nhà, hỗ trợ chăm sóc cây trầu bà và thực hiện điều khiển thiết bị từ xa. Kiến trúc node - gateway - cloud - app phù hợp với điều kiện căn hộ chung cư và có khả năng mở rộng khi bổ sung thêm node cảm biến. Tuy nhiên, để khẳng định hiệu quả cải thiện IAQ ở mức định lượng, hệ thống cần được kiểm thử dài hạn hơn với cảm biến được hiệu chuẩn, nhiều điều kiện thông gió khác nhau và các thông số bổ sung như VOC hoặc bụi mịn.

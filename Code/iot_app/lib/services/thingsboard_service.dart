@@ -1,7 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
+class ThingsboardRealtimeUpdate {
+  final Map<String, dynamic> telemetry;
+  final Map<String, dynamic> attributes;
+
+  const ThingsboardRealtimeUpdate({
+    this.telemetry = const {},
+    this.attributes = const {},
+  });
+}
 
 class ThingsboardService {
   static const String token = "UnZmpfOxDol8TvmVHceR";
@@ -53,6 +64,90 @@ class ThingsboardService {
     );
 
     return jsonDecode(res.body);
+  }
+
+  static Stream<ThingsboardRealtimeUpdate> subscribeDeviceData({
+    required String jwt,
+    required String deviceId,
+  }) async* {
+    final uri = Uri.parse(
+      "$baseUrl/api/ws/plugins/telemetry?token=$jwt",
+    ).replace(scheme: baseUrl.startsWith("https") ? "wss" : "ws");
+
+    final socket = await WebSocket.connect(uri.toString());
+
+    socket.add(jsonEncode({
+      "tsSubCmds": [
+        {
+          "entityType": "DEVICE",
+          "entityId": deviceId,
+          "scope": "LATEST_TELEMETRY",
+          "cmdId": 1,
+        }
+      ],
+      "historyCmds": [],
+      "attrSubCmds": [
+        {
+          "entityType": "DEVICE",
+          "entityId": deviceId,
+          "scope": "SHARED_SCOPE",
+          "cmdId": 2,
+        }
+      ],
+    }));
+
+    try {
+      await for (final message in socket) {
+        if (message is! String) continue;
+
+        final decoded = jsonDecode(message);
+        if (decoded is! Map<String, dynamic>) continue;
+
+        final rawData = decoded["data"];
+        if (rawData is! Map<String, dynamic>) continue;
+
+        final values = _extractRealtimeValues(rawData);
+        final subscriptionId = decoded["subscriptionId"];
+
+        if (subscriptionId == 2) {
+          yield ThingsboardRealtimeUpdate(attributes: values);
+        } else {
+          yield ThingsboardRealtimeUpdate(telemetry: values);
+        }
+      }
+    } finally {
+      await socket.close();
+    }
+  }
+
+  static Map<String, dynamic> _extractRealtimeValues(
+    Map<String, dynamic> rawData,
+  ) {
+    return rawData.map(
+      (key, value) => MapEntry(key, _extractRealtimeValue(value)),
+    );
+  }
+
+  static dynamic _extractRealtimeValue(dynamic value) {
+    if (value is List && value.isNotEmpty) {
+      final first = value.first;
+
+      if (first is List && first.length > 1) {
+        return first[1];
+      }
+
+      if (first is Map && first.containsKey("value")) {
+        return first["value"];
+      }
+
+      return first;
+    }
+
+    if (value is Map && value.containsKey("value")) {
+      return value["value"];
+    }
+
+    return value;
   }
 
   static Future<void> sendSharedAttributes({

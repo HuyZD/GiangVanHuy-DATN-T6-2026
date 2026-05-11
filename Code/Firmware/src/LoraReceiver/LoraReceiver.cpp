@@ -1,5 +1,7 @@
 #include "LoRaReceiver.h"
 
+static LoRaRelayCallback relayCallback = nullptr;
+
 void LoRa_Receiver_setup()
 {
 
@@ -16,6 +18,13 @@ void LoRa_Receiver_setup()
 
   // Use the same spreading factor as the sender
   LoRa.setSpreadingFactor(12);
+
+  LoRa.receive();
+}
+
+void LoRa_Receiver_setRelayCallback(LoRaRelayCallback callback)
+{
+  relayCallback = callback;
 }
 
 void LoRa_Receiver()
@@ -25,11 +34,18 @@ void LoRa_Receiver()
 
   if (packetSize)
   {
-    // Received a packet
-    // Read packet
+    String payload = "";
     while (LoRa.available())
     {
-      LoRa.read();
+      payload += (char)LoRa.read();
+    }
+
+    Serial.print("LoRa received: ");
+    Serial.println(payload);
+
+    if (relayCallback != nullptr)
+    {
+      relayCallback(payload);
     }
   }
 }

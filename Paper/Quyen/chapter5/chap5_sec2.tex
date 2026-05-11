@@ -1,60 +1,69 @@
-\section{Cấu trúc gói tin}
+\section{Thiết kế node cảm biến}
+Node cảm biến được xây dựng xung quanh Arduino Pro Mini. Các cảm biến TDS và pH được sử dụng để theo dõi chất lượng nước hoặc dung dịch chăm sóc cây. Cảm biến nhiệt độ, độ ẩm và CO2 phục vụ đánh giá chất lượng không khí trong căn hộ. Cảm biến ánh sáng giúp xác định điều kiện chiếu sáng cho cây và không gian sinh hoạt.
 
-Gradient Server Model định nghĩa hai loại gói tin chính để thực hiện chức năng định tuyến: GRADIENT\_STATUS dùng để trao đổi thông tin gradient giữa các node, và DATA dùng để chuyển tiếp dữ liệu ứng dụng về sink node. Các gói tin này được thiết kế tối giản để phù hợp với giới hạn payload của BLE Mesh, đồng thời chứa đủ thông tin cần thiết cho việc định tuyến.
+\subsection{Khối đọc cảm biến}
+Chương trình trên node thực hiện chu kỳ đọc dữ liệu theo các bước: khởi tạo cảm biến, lấy mẫu nhiều lần, lọc nhiễu đơn giản bằng trung bình cộng, quy đổi ra đơn vị đo và lưu vào cấu trúc dữ liệu. Với cảm biến analog, giá trị ADC được chuyển đổi theo hệ số hiệu chuẩn. Với cảm biến digital, node đọc dữ liệu theo giao thức của module và kiểm tra lỗi trước khi sử dụng.
 
-\subsection{Định nghĩa Opcode}
+\subsection{Khối điều khiển}
+Node điều khiển hai relay để bật/tắt quạt và đèn. Relay được điều khiển qua chân GPIO, có trạng thái mặc định an toàn khi node khởi động. Bộ phát IR được dùng để gửi mã tăng hoặc giảm nhiệt độ điều hòa. Khi nhận lệnh IR từ gateway, node phát chuỗi mã tương ứng và gửi phản hồi trạng thái để gateway cập nhật lên ThingsBoard.
 
-Trong BLE Mesh, mỗi loại message được định danh bằng một opcode. Đối với Vendor Model như Gradient Server Model, opcode có độ dài 3 bytes, bao gồm 1 byte định danh vendor opcode (0xC0-0xFF) và 2 bytes Company ID. Gradient Server Model sử dụng Company ID của Nordic Semiconductor (0x0059) và định nghĩa các opcode như sau:
+\subsection{Định dạng gói tin node gửi lên gateway}
+Gói tin uplink được thiết kế ngắn gọn để phù hợp với LoRa:
+\begin{center}
+\texttt{NODE\_ID,T,H,CO2,LUX,TDS,PH,FAN,LIGHT}
+\end{center}
+Trong đó \texttt{T} là nhiệt độ, \texttt{H} là độ ẩm, \texttt{CO2} là nồng độ CO2, \texttt{LUX} là ánh sáng, \texttt{TDS} là tổng chất rắn hòa tan, \texttt{PH} là chỉ số pH, \texttt{FAN} và \texttt{LIGHT} là trạng thái relay.
 
-\begin{table}[h!]
-\centering
-\caption{Định nghĩa Opcode cho Gradient Server Model}
-\label{tab:gradient_opcodes}
-\begin{tabular}{|l|l|p{8cm}|}
-\hline
-\textbf{Opcode} & \textbf{Tên} & \textbf{Mô tả} \\
-\hline
-0x0A & GRADIENT\_STATUS & Gói tin broadcast chứa thông tin gradient của node gửi. Được sử dụng để thiết lập và duy trì giá trị gradient trong mạng. \\
-\hline
-0x0B & DATA & Gói tin unicast chứa dữ liệu thu thập từ cảm biến, được chuyển tiếp theo hướng gradient giảm dần về sink node. \\
-\hline
-\end{tabular}
-\end{table}
+\subsection{Thuật toán đọc cảm biến}
+Để giảm nhiễu, node không sử dụng trực tiếp một mẫu ADC đơn lẻ. Với các kênh analog, node lấy nhiều mẫu liên tiếp, loại bỏ một số mẫu bất thường nếu cần và tính trung bình. Với cảm biến digital, node kiểm tra mã lỗi hoặc điều kiện timeout trước khi cập nhật giá trị. Nếu một cảm biến lỗi trong một chu kỳ, node có thể giữ giá trị gần nhất và đánh dấu trạng thái lỗi để gateway không hiểu nhầm là dữ liệu mới hợp lệ.
 
-Việc sử dụng vendor opcode (thay vì SIG opcode) cho phép Gradient Server Model hoạt động độc lập với các SIG Model chuẩn, tránh xung đột opcode và đảm bảo tính tương thích với các thiết bị BLE Mesh từ nhiều nhà sản xuất khác nhau.
+\begin{lstlisting}[language=C,caption={Mã giả đọc và lọc cảm biến analog}]
+float readAnalogAverage(uint8_t pin) {
+    long sum = 0;
+    for (int i = 0; i < 20; i++) {
+        sum += analogRead(pin);
+        delay(5);
+    }
+    float adc = sum / 20.0;
+    return adc * 5.0 / 1023.0;
+}
+\end{lstlisting}
 
-\subsection{Gói tin GRADIENT\_STATUS}
+Sau khi có điện áp đo, firmware quy đổi thành giá trị vật lý. Các hệ số quy đổi cần được lưu trong cấu hình để thuận tiện hiệu chuẩn. Đối với pH, có thể dùng hai điểm chuẩn pH 4 và pH 7 hoặc pH 7 và pH 10. Đối với TDS, cần dùng dung dịch chuẩn và bù nhiệt độ nếu yêu cầu độ chính xác cao.
 
-Gói tin GRADIENT\_STATUS được sử dụng để broadcast thông tin gradient của một node đến tất cả các node lân cận trong phạm vi phủ sóng. Đây là gói tin cốt lõi trong cơ chế thiết lập và duy trì gradient, được gửi định kỳ bởi mỗi node và khi có sự thay đổi gradient.
+\subsection{Quản lý trạng thái node}
+Node không chỉ gửi dữ liệu cảm biến mà còn gửi trạng thái thiết bị. Các trạng thái gồm RL1, RL2 và điều hòa. Việc gửi kèm trạng thái giúp app hiển thị đúng sau khi người dùng điều khiển hoặc sau khi node khởi động lại. Nếu app chỉ lưu trạng thái cục bộ, khi mất kết nối hoặc reset node, giao diện có thể không phản ánh đúng trạng thái thực tế.
 
-\subsubsection{Cấu trúc gói tin}
+\begin{lstlisting}[language=C,caption={Cấu trúc dữ liệu trạng thái node}]
+struct NodeState {
+    float temperature;
+    float humidity;
+    float co2;
+    float lux;
+    float tds;
+    float ph;
+    bool relay1;
+    bool relay2;
+    bool acPower;
+    int acSetpoint;
+};
+\end{lstlisting}
 
-Gói tin GRADIENT\_STATUS được đóng gói trong BLE Mesh Network PDU với cấu trúc như sau:
+\subsection{Xử lý lệnh điều khiển tại node}
+Node xử lý lệnh theo nguyên tắc kiểm tra trước khi thực thi. Bản tin phải đúng loại \texttt{CMD}, đúng mã node và đúng tên thiết bị. Nếu lệnh không hợp lệ, node bỏ qua và không thay đổi trạng thái. Với relay, node đổi mức GPIO. Với điều hòa, node gọi hàm phát mã IR tương ứng.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.75\textwidth]{chapter3/image/Gradient_Status.png}
-    \caption{Cấu trúc gói tin GRADIENT\_STATUS}
-    \label{fig:gradient_status_packet}
-\end{figure}
+\begin{lstlisting}[language=C,caption={Mã giả xử lý lệnh actuator}]
+void handleCommand(Command cmd) {
+    if (cmd.nodeId != NODE_ID) return;
 
-Cấu trúc gói tin GRADIENT\_STATUS bao gồm hai phần chính: Network Header và Application Payload. Network Header có kích thước 9 bytes theo chuẩn BLE Mesh, chứa các trường thông tin cần thiết cho việc định tuyến và bảo mật ở lớp Network. Cụ thể, byte đầu tiên chứa IV Index (1 bit) và Network ID (7 bits) dùng để xác định khóa giải mã gói tin. Byte thứ hai chứa Control flag (1 bit) phân biệt giữa control message và access message, cùng với Time To Live (7 bits) quy định số hop tối đa mà gói tin có thể đi qua - giá trị mặc định là 10 cho broadcast. Ba bytes tiếp theo là Sequence Number, tăng dần sau mỗi gói tin để chống replay attack và đảm bảo tính duy nhất của message. Hai bytes SRC chứa địa chỉ unicast của node gửi gói tin, trong khi hai bytes DST chứa địa chỉ đích - thường là group address 0xFFFF cho trường hợp broadcast đến tất cả node trong mạng.
+    if (cmd.device == "RL1") {
+        setRelay(PIN_RELAY_1, cmd.action == "ON");
+    } else if (cmd.device == "RL2") {
+        setRelay(PIN_RELAY_2, cmd.action == "ON");
+    } else if (cmd.device == "AC") {
+        sendIrCommand(cmd.action);
+    }
 
-Phần Application Payload của GRADIENT\_STATUS rất gọn nhẹ, chỉ bao gồm 3 bytes Opcode (0x0A) để định danh loại gói tin, và 1 byte Gradient Value chứa giá trị gradient của node gửi. Giá trị gradient nằm trong khoảng 0 đến 255, trong đó 0 biểu thị sink node và 255 biểu thị node chưa có kết nối hợp lệ đến sink. Thiết kế payload tối giản này giúp giảm thiểu overhead truyền thông và phù hợp với giới hạn kích thước của BLE advertising packet.
-
-\subsection{Gói tin DATA}
-
-Gói tin DATA được sử dụng để truyền dữ liệu ứng dụng (sensor data, control commands, ...) từ các node trong mạng về sink node. Khác với GRADIENT\_STATUS được broadcast, gói tin DATA sử dụng unicast addressing để chuyển tiếp qua từng hop theo hướng gradient giảm dần.
-
-\subsubsection{Cấu trúc gói tin}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.75\textwidth]{chapter3/image/Data.png}
-    \caption{Cấu trúc gói tin DATA}
-    \label{fig:data_packet}
-\end{figure}
-
-Cấu trúc gói tin DATA tương tự như GRADIENT\_STATUS, bao gồm Network Header, vàApplication Payload. Network Header có kích thước 9 bytes theo chuẩn BLE Mesh, chứa đầy đủ các trường IVI, NID, CTL, TTL, SEQ, SRC và DST để đảm bảo việc định tuyến và bảo mật ở lớp Network. Điểm khác biệt quan trọng là trường DST trong gói tin DATA chứa địa chỉ unicast của next-hop thay vì group address, vì gói tin được chuyển tiếp hop-by-hop theo hướng gradient giảm dần.
-
-Phần Application Payload của gói tin DATA bao gồm ba thành phần chính. Đầu tiên là 3 bytes Opcode (0x0B) để định danh loại gói tin DATA. Sau đó là Payload chứa dữ liệu thu thập từ cảm biến thực tế. Kích thước Payload tối đa là 6 bytes cho unsegmented message; với các ứng dụng cần truyền lượng dữ liệu lớn hơn, BLE Mesh hỗ trợ segmented message cho phép payload lên đến 384 bytes thông qua cơ chế phân mảnh và tái hợp ở lớp Lower Transport.
+    sendAck(cmd.device, cmd.action);
+}
+\end{lstlisting}

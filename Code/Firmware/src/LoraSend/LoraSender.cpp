@@ -19,6 +19,8 @@ void LoRa_Sender_setup()
 
   // Specify transmission power (can be 5-23 dBm)
   LoRa.setTxPower(20);
+
+  LoRa.receive();
 }
 
 void LoRa_Sender(float temperature, float humidity, float tdsValue, double lightValue, float co2Value, float phValue, bool relay1State, bool relay2State)
@@ -53,8 +55,7 @@ void LoRa_Sender(float temperature, float humidity, float tdsValue, double light
   LoRa.print(relay2State);
 
   LoRa.endPacket();
+  LoRa.receive();
 
   counter++;
-
-  delay(5000); // Wait 5 seconds before sending the next message
 }

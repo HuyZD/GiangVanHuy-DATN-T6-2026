@@ -1,34 +1,16 @@
 \babel@toc {vietnamese}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Kiến trúc mạng cảm biến không dây}}{11}{figure.caption.7}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Thành phần của một node cảm biến}}{12}{figure.caption.8}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Mạng ad-hoc}}{13}{figure.caption.9}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Minh họa cơ chế chọn Multipoint Relay (MPR) trong OLSR}}{16}{figure.caption.10}%
-\contentsline {figure}{\numberline {2.5}{\ignorespaces So sánh Pure Flooding và MPR-based Flooding trong OLSR}}{17}{figure.caption.11}%
-\contentsline {figure}{\numberline {2.6}{\ignorespaces So sánh cơ chế phân vùng của ZRP và SHARP}}{20}{figure.caption.12}%
-\contentsline {figure}{\numberline {2.7}{\ignorespaces Mô hình định tuyến phân cụm trong mạng cảm biến không dây}}{21}{figure.caption.13}%
-\contentsline {figure}{\numberline {2.8}{\ignorespaces Cấu trúc vòng hoạt động của giao thức LEACH}}{22}{figure.caption.14}%
-\contentsline {figure}{\numberline {2.9}{\ignorespaces Minh họa nguyên lý định tuyến Gradient với giá trị độ cao (height)}}{26}{figure.caption.16}%
-\contentsline {figure}{\numberline {2.10}{\ignorespaces Quá trình thiết lập Gradient trong mạng}}{27}{figure.caption.17}%
-\contentsline {figure}{\numberline {2.11}{\ignorespaces Khả năng phục hồi của thuật toán Gradient khi có node hỏng}}{29}{figure.caption.18}%
-\contentsline {figure}{\numberline {2.12}{\ignorespaces Vi điều khiển nRF54L15}}{35}{figure.caption.24}%
-\contentsline {figure}{\numberline {2.13}{\ignorespaces Kiến trúc phân lớp của BLE Mesh và BLE \cite {nordic_mesh_architecture}}}{44}{figure.caption.38}%
-\contentsline {figure}{\numberline {2.14}{\ignorespaces Kiến trúc phân lớp của BLE Mesh \cite {bluetooth_mesh_profile}}}{45}{figure.caption.39}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Vị trí của Gradient Server Model trong kiến trúc BLE Mesh}}{50}{figure.caption.44}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Cấu trúc nội bộ của Gradient Server Model}}{50}{figure.caption.45}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Cấu trúc gói tin GRADIENT\_STATUS}}{53}{figure.caption.50}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Cấu trúc gói tin DATA}}{54}{figure.caption.52}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc phần cứng tổng thể của node}}{13}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Luồng cấp nguồn chính của node}}{16}{figure.caption.9}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Chu kỳ hoạt động cơ bản của node}}{20}{figure.caption.10}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Nguyên lý điều khiển relay của node}}{25}{figure.caption.11}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Mạch nRF54L15-EZDK được sử dụng trong thí nghiệm}}{58}{figure.caption.56}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Topology mạng thí nghiệm dạng cây}}{59}{figure.caption.60}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Bảng định tuyến tại node các node trong mạng}}{60}{figure.caption.61}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Topology mạng thí nghiệm dạng lưới}}{61}{figure.caption.64}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Bảng định tuyến tại node các node trong mạng dạng lưới}}{62}{figure.caption.65}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Topology mạng thí nghiệm trước (bên trái) và sau (bên phải) khi thay đổi vị trí node 0x0013 và 0x0002}}{64}{figure.caption.67}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Bảng định tuyến của node 0x000C trước (bên trên) và sau (bên dưới) khi thay đổi vị trí node 0x0013 và 0x0002}}{64}{figure.caption.68}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Cấu trúc mạng trước (bên trái) và sau (bên phải) khi node 0x0011 rời khỏi mạng}}{65}{figure.caption.69}%
-\contentsline {figure}{\numberline {4.9}{\ignorespaces Bảng định tuyến của node 0x000C trước (bên trên) và sau (bên dưới) khi node 0x0011 rời khỏi mạng}}{65}{figure.caption.70}%
-\contentsline {figure}{\numberline {4.10}{\ignorespaces Cấu trúc mạng khi có sự tham gia của node mới 0x001D}}{66}{figure.caption.71}%
-\contentsline {figure}{\numberline {4.11}{\ignorespaces Bảng định tuyến của node 0x000C khi node 0x001D tham gia mạng}}{66}{figure.caption.72}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Luồng dữ liệu hai chiều của hệ thống}}{28}{figure.caption.12}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Minh họa màn hình đăng nhập của ứng dụng}}{35}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa màn hình Sensor hiển thị dữ liệu node}}{36}{figure.caption.14}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Minh họa màn hình Actuator điều khiển relay và điều hòa}}{36}{figure.caption.15}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

@@ -1,35 +1,4 @@
-\section{Phạm vi nghiên cứu}
+\section{Đối tượng và phạm vi nghiên cứu}
+Đối tượng nghiên cứu của khóa luận là hệ thống giám sát và điều khiển môi trường trong nhà sử dụng cảm biến, truyền thông không dây, nền tảng IoT và ứng dụng di động. Hệ thống được định hướng cho căn hộ chung cư, nơi số lượng node không quá lớn nhưng yêu cầu độ ổn định, dễ lắp đặt và dễ sử dụng. Cây trầu bà được xem là một thành phần hỗ trợ cải thiện vi khí hậu và giảm một phần chất ô nhiễm trong điều kiện phù hợp, còn hệ thống IoT giữ vai trò đo lường, điều khiển và cung cấp dữ liệu cho người dùng.
 
-Để đảm bảo tính khả thi và tập trung vào các mục tiêu chính, khóa luận giới hạn phạm vi nghiên cứu trong các nội dung sau:
-
-\begin{itemize}
-    \item Phạm vi về phần cứng
-    \begin{itemize}
-        \item Sử dụng mạch custom được thiết kế riêng với vi xử lý là nRF54L15 của Nordic Semiconductor.
-        \item Số lượng node cảm biến trong thí nghiệm dao động từ 10 đến 20 node.
-    \end{itemize}
-
-    \item Phạm vi về giao thức truyền thông
-    \begin{itemize}
-        \item Sử dụng giao thức Bluetooth Low Energy Mesh (BLE Mesh) làm nền tảng truyền thông không dây.
-        \item Thuật toán định tuyến Gradient được xây dựng và tích hợp trên nền tảng BLE Mesh.
-        \item Cơ chế bảo mật sử dụng mặc định của BLE Mesh, không phát triển thêm các giải pháp bảo mật mở rộng.
-    \end{itemize}
-
-    \item Phạm vi về môi trường triển khai
-    \begin{itemize}
-        \item Thí nghiệm được thực hiện trong môi trường trong nhà (indoor).
-        \item Mạng có cấu trúc động (dynamic topology), các node có thể thay đổi vị trí hoặc trạng thái hoạt động trong quá trình vận hành.
-    \end{itemize}
-
-    \item Giới hạn nghiên cứu
-    \begin{itemize}
-        \item Khóa luận tập trung vào nghiên cứu và đánh giá hiệu năng của thuật toán định tuyến Gradient, không đi sâu vào các vấn đề về xử lý dữ liệu cảm biến hay ứng dụng cụ thể.
-        \item Dữ liệu được sử dụng trong thí nghiệm là dữ liệu giả lập (dummy data) nhằm mục đích đánh giá hiệu năng định tuyến.
-        \item Không xem xét các kịch bản có nhiễu điện từ mạnh hoặc môi trường có nhiều vật cản phức tạp.
-        \item Không nghiên cứu các cơ chế bảo mật nâng cao ngoài các tính năng mặc định của BLE Mesh.
-    \end{itemize}
-\end{itemize}
-
-
-
+Phạm vi nghiên cứu tập trung vào một node cảm biến và một gateway. Node được đặt gần khu vực trồng trầu bà hoặc khu vực sinh hoạt cần giám sát. Các thông số đo gồm TDS, pH, nhiệt độ, độ ẩm, CO2 và ánh sáng. Phần điều khiển gồm quạt, đèn qua relay và điều hòa thông qua phát lệnh hồng ngoại. Khóa luận không đi sâu vào mô hình sinh học chi tiết của cơ chế hấp thụ VOC, không đánh giá định lượng tốc độ hấp thụ từng chất ô nhiễm và không thay thế các thiết bị đo IAQ chuyên dụng. Thay vào đó, đề tài tập trung vào xây dựng nguyên mẫu hệ thống có khả năng thu thập dữ liệu, cảnh báo và điều khiển thiết bị trong điều kiện căn hộ thực tế.

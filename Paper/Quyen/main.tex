@@ -6,9 +6,8 @@
 \usepackage[table,xcdraw]{xcolor}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 
-\title{Demo Document}
-\author{PQH}
-
+\title{Khóa luận tốt nghiệp}
+\author{La Nhật Minh}
 
 \definecolor{gray75}{gray}{0.75}
 \newcommand{\hsp}{\hspace{6pt}}
@@ -16,11 +15,11 @@
 
 \usepackage[left=3cm,right=2cm,top=2.5cm,bottom=3cm]{geometry}
 \setlength{\parindent}{1cm}
-\usepackage{indentfirst}    
+\usepackage{indentfirst}
 \setlength{\parskip}{6pt}
 \usepackage{sectsty}
 \chapterfont{\centering}
-\renewcommand{\baselinestretch}{1.3} %format distance between lines
+\renewcommand{\baselinestretch}{1.3}
 \usepackage{xcolor}
 \usepackage[unicode]{hyperref}
 \hypersetup{
@@ -29,22 +28,18 @@ linkbordercolor = {white}
 }
 \usepackage{graphicx}
 \usepackage{lmodern}
-\usepackage[font=large,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage[font=large,labelfont=bf]{caption}
 
-% abbreviation
 \usepackage{nomencl}
 \makenomenclature
 \renewcommand{\nomname}{Bảng ký hiệu và chữ viết tắt}
-%% This code creates the groups
-% -----------------------------------------
+
 \usepackage{etoolbox}
 \renewcommand\nomgroup[1]{%
   \item[\bfseries
   \ifstrequal{#1}{T}{Chữ viết tắt}{%
   \ifstrequal{#1}{K}{Ký hiệu}}%
 ]}
-% ------
-
 
 \usepackage{subcaption}
 \usepackage{bm}
@@ -56,18 +51,15 @@ linkbordercolor = {white}
 \usepackage{pdfpages}
 \usepackage{xspace}
 \usepackage{multirow}
-% \usepackage{subfiles}
-
+\usepackage{array}
+\usepackage{listings}
 \usepackage{algpseudocode}
 \usepackage{algorithm2e}
-
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
-
-\usetikzlibrary{calc}
+\usetikzlibrary{calc,positioning}
 \usepackage{frontespizio}
-% \usepackage[perpage]{footmisc}
 \usepackage{perpage}
 \MakePerPage{footnote}
 \usepackage{longtable}
@@ -82,6 +74,12 @@ linkbordercolor = {white}
 \titleformat*{\section}{\normalfont \Large}
 \titleformat*{\subsection}{\normalfont \large}
 
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    columns=fullflexible
+}
 
 \begin{document}
 
@@ -94,7 +92,6 @@ linkbordercolor = {white}
 \include{overview/authorship}
 \include{overview/approval}
 \include{overview/contents}
-% \include{overview/update}
 \include{overview/abbreviation}
 
 \pagenumbering{arabic}
@@ -109,28 +106,27 @@ linkbordercolor = {white}
 \input{chapter1/chap1_sec6}
 \input{chapter1/chap1_sec7}
 
-
-\chapter{Cơ sở lý thuyết}
+\chapter{CƠ SỞ LÝ THUYẾT}
 \input{chapter3/chap3_sec1}
 \input{chapter3/chap3_sec2}
 \input{chapter3/chap3_sec3}
 \input{chapter3/chap3_sec4}
 \input{chapter3/chap3_sec5}
 
-% \chapter{GIẢI THUẬT LẬP ĐƯỜNG ĐI BAO PHỦ}
-% \input{chapter4/chap4_sec1}
-% \input{chapter4/chap4_sec2}
-% \input{chapter4/chap4_sec3}
-% \input{chapter4/chap4_sec4}
-% \input{chapter4/chap4_sec5}
+\chapter{THIẾT KẾ PHẦN CỨNG NODE}
+\input{chapter4/chap4_sec1}
+\input{chapter4/chap4_sec2}
+\input{chapter4/chap4_sec3}
+\input{chapter4/chap4_sec4}
+\input{chapter4/chap4_sec5}
 
-\chapter{Giải pháp định tuyến sử dụng thuật toán Gradient trên vi xử lý nRF54L15}
+\chapter{THIẾT KẾ PHẦN MỀM VÀ TRIỂN KHAI HỆ THỐNG}
 \input{chapter5/chap5_sec1}
 \input{chapter5/chap5_sec2}
 \input{chapter5/chap5_sec3}
 \input{chapter5/chap5_sec4}
 
-\chapter{Kết quả và thảo luận}
+\chapter{KẾT QUẢ VÀ THẢO LUẬN}
 \input{chapter2/chap2_sec1}
 \input{chapter2/chap2_sec2}
 \input{chapter2/chap2_sec3}
@@ -142,9 +138,68 @@ linkbordercolor = {white}
 \input{chapter6/chap6_sec1}
 \input{chapter6/chap6_sec2}
 
-% \printbibliography
-\bibliographystyle{vietnumeric}
-\bibliography{reference}
+\appendix
+\chapter{PHỤ LỤC THIẾT KẾ FIRMWARE VÀ GÓI TIN}
+\input{appendix/ap1}
+
+\chapter{PHỤ LỤC KIỂM THỬ VÀ HƯỚNG DẪN VẬN HÀNH}
+\input{appendix/ap2}
+
+\begin{thebibliography}{9}
+\bibitem{arduino}
+Arduino Documentation, \textit{Arduino Pro Mini}.
+\url{https://docs.arduino.cc/retired/boards/arduino-pro-mini/}
+
+\bibitem{esp32}
+Espressif Systems, \textit{ESP32 Technical Reference Manual}.
+\url{https://www.espressif.com/en/support/documents/technical-documents}
+
+\bibitem{thingsboard}
+ThingsBoard Documentation, \textit{IoT platform documentation}.
+\url{https://thingsboard.io/docs/}
+
+\bibitem{flutter}
+Flutter Documentation, \textit{Build apps for any screen}.
+\url{https://docs.flutter.dev/}
+
+\bibitem{lora}
+LoRa Alliance, \textit{LoRaWAN for developers}.
+\url{https://lora-alliance.org/}
+
+\bibitem{who_air_pollution}
+World Health Organization, \textit{Air pollution and health}, 2020.
+
+\bibitem{epa_iaq}
+United States Environmental Protection Agency, \textit{Indoor Air Quality Basics}, 2021.
+
+\bibitem{nasa_clean_air}
+NASA, \textit{NASA Clean Air Study: Plants for Indoor Air Quality}, 1989.
+
+\bibitem{wang_smart_agriculture}
+X. Wang et al., ``IoT Applications in Smart Agriculture,'' \textit{Journal of Agricultural Technology}, vol. 17, no. 3, pp. 45--58, 2021.
+
+\bibitem{bose_iot_hydroponics}
+R. Bose et al., ``IoT in Hydroponics,'' \textit{Journal of Smart Farming}, vol. 5, no. 2, pp. 123--135, 2020.
+
+\bibitem{liu_realtime_iaq}
+J. Liu et al., ``Real-Time Monitoring of Indoor Air,'' \textit{Environmental Sensors Journal}, vol. 12, no. 4, pp. 200--210, 2019.
+
+\bibitem{singh_iot_air_quality}
+A. Singh et al., ``IoT in Air Quality Management,'' \textit{IoT and Environment Journal}, vol. 8, no. 1, pp. 50--60, 2022.
+
+\bibitem{hydroponics_manual}
+Hydroponics Association, \textit{Hydroponic Systems Manual}, 2023.
+
+\bibitem{pothos_wisconsin}
+S. Mahr, \textit{Pothos, Epipremnum aureum}, University of Wisconsin-Madison Extension, revised 2025.
+
+\bibitem{singh_hydroponics_ph_ec}
+H. Singh and D. Bruce, \textit{Electrical Conductivity and pH Guide for Hydroponics}, Oklahoma Cooperative Extension Service, HLA-6722, 2016.
+
+\bibitem{montaluisa_pothos_biofilter}
+M. S. Montaluisa-Mantilla, J. Gonçalves, P. A. García-Encina, R. Lebrero, M. Rico, and R. Muñoz, ``Harnessing the potential of Epipremnum aureum (Pothos) for indoor air purification in botanical filters,'' \textit{Building and Environment}, vol. 275, 112813, 2025.
+
+\bibitem{hydroponic_iaq_survey}
+A. Karle, P. Naik, R. Gawali, S. Deshmukh, and D. Suroshi, ``Indoor Air Quality Management Using Hydroponic Systems: A Survey Paper,'' \textit{International Journal for Research in Applied Science \& Engineering Technology}, vol. 13, no. VI, pp. 518--524, 2025.
+\end{thebibliography}
 \end{document}
-\addcontentsline{toc}{chapter}{TÓM TẮT}
-\fontsize{13}{15}\selectfont

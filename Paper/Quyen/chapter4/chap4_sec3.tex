@@ -1,45 +1,72 @@
-\subsection{Tính toán đường đi tốt nhất cho từng cặp đối cực}
-Sau khi tìm thấy tất cả các cặp đối cực, đường dẫn sẽ được tạo cho từng cặp với khoảng cách tương đối là $d_x$ giữa các đường đi, $d_x = n \ell\cos{(\frac{\psi}{2})}$. 
-Đối với một cặp đối cực, các đường đi được thiết kế song song với một cạnh của đa giác đi qua một trong các đỉnh của cặp đối đỉnh, còn được gọi là đường cơ sở, Đỉnh trên đường cơ sở được gọi là đỉnh bắt đầu và đỉnh còn lại được gọi là đỉnh kết thúc. Mỗi cặp đối cực có hai đường cơ sở tương ứng với hai hướng cho các đường đi như trong Hình.\Ref {fig:SW1}.
+\section{Khối vi điều khiển Arduino Pro Mini}
+Arduino Pro Mini là trung tâm xử lý của node. Trên sơ đồ, Arduino Pro Mini được đặt ở khối vi điều khiển và kết nối ra các header để thuận tiện đấu dây, nạp chương trình và kiểm thử. Bo mạch này có kích thước nhỏ, dễ lập trình trong môi trường Arduino IDE hoặc PlatformIO, phù hợp với các ứng dụng cảm biến đơn giản.
 
-Để xây dựng đường đi bao phủ gồm các đoạn back and forth, các điểm tham chiếu vào một đường dẫn  bằng cách cho các đường đi kể trên giao nhau với đa giác Q. Thuật toán yêu cầu đầu vào là đa giác Q, đỉnh ban đầu B, một đỉnh liền kề có tên $B_{mate}$, và đỉnh đối với đỉnh B được đặt tên là A và khoảng cách giữa các đường đi là $d_x$ đã được định nghĩa bên trên.Đầu tiên, một đường đi L sẽ được tạo, song song với cạnh $( B,B_{mate}$) và phải dịch chuyển vuông góc về phía A (hướng quét) bằng cách bù, $\Delta_{init} = \dfrac{dx}{2}$
+\subsection{Vai trò của vi điều khiển}
+Arduino Pro Mini thực hiện các nhiệm vụ sau:
+\begin{itemize}
+    \item Khởi tạo cảm biến và ngoại vi.
+    \item Đọc giá trị cảm biến theo chu kỳ.
+    \item Lọc nhiễu và quy đổi dữ liệu sang đơn vị sử dụng.
+    \item Đóng gói dữ liệu để gửi qua LoRa.
+    \item Nhận lệnh điều khiển từ gateway.
+    \item Điều khiển relay và bộ phát hồng ngoại.
+    \item Gửi phản hồi trạng thái sau khi thực hiện lệnh.
+\end{itemize}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.7\textwidth]{chapter4/image/anh5.png}
-        \caption{Xây dựng đường đi }
-        \label{fig:anh5}
-    \end{figure}
+Do tài nguyên hạn chế, chương trình trên Arduino cần được tổ chức theo vòng lặp trạng thái rõ ràng. Các thao tác đọc cảm biến, truyền LoRa và điều khiển thiết bị không nên chặn hệ thống quá lâu. Nếu sử dụng delay quá nhiều, node có thể phản hồi lệnh chậm hoặc bỏ lỡ gói tin từ gateway.
 
-Số lượng đường đi là tối thiểu nếu RCPP chọn các đường đi song song với đường cơ sở với khoảng cách tối thiểu đến đỉnh kết thúc. RCPP với các tiêu chí như vậy để chọn hướng đường đi được gọi là RCPP tối ưu, được ký hiệu là \emph{Op-RCPP}. Các đường đi song song với đường cơ sở khác được gọi là RCPP không tối ưu, được ký hiệu là \emph{nonOP-RCPP}. Như minh hoạ trong Hình. \ref{fig:SW1}, đỉnh bắt đầu là $C$ và cặp đối cực là $(A,C)$. Hai đường cơ sở đi qua đỉnh $C$ là $CD$ và $CB$ với khoảng cách tương đối là $h_1$ và $h_2$ tương ứng với đỉnh kết thúc $A$. Để đạt được số lượng đường đi ít nhất, khoảng cách tương đối giữa đỉnh kết thúc và đường cơ sở phải nhỏ nhất. Trong ví dụ này, vì $h_1<h_2$, đường đi có số đường nhỏ nhất được đặt song song với $CD$.
+\subsection{Bố trí header}
+Sơ đồ khối vi điều khiển có các header P1, P2 và P4 đưa các chân quan trọng ra ngoài. Việc sử dụng header giúp mạch linh hoạt hơn trong quá trình phát triển. Khi cần thay đổi loại cảm biến hoặc kiểm tra tín hiệu, người dùng có thể đo trực tiếp trên header mà không phải can thiệp vào mạch in.
 
-\subsection{Chọn một đường đi tối ưu từ tất cả các đường đi của các cặp đối cực}
-Biểu thị $pair$ là một tập hợp các cặp đối cực của đa giác. Giả sử rằng mỗi cặp đối mã $(i,j)\in pairs$ có một đường đi tốt nhất với độ dài của nó được ký hiệu là $pth_{ij}$. Gọi $ pth_{ij}^e$ là độ dài của đường đi bao gồm khoảng cách giữa điểm sao $P_s$ và đỉnh $i$, đỉnh $j$ và điểm kết thúc $P_e$. Đường dẫn tối ưu có độ dài $pth_{op}$ được chọn thỏa mãn điều kiện sau:
+\begin{longtable}{|p{3cm}|p{4.2cm}|p{5.5cm}|}
+\hline
+\textbf{Header} & \textbf{Nhóm chân} & \textbf{Chức năng} \\
+\hline
+P1 & \texttt{RAW}, \texttt{GND}, \texttt{RST}, \texttt{VCC}, \texttt{DIO0}, \texttt{SCK}, \texttt{MISO}, \texttt{MOSI}, \texttt{NSS} & Cấp nguồn, reset và giao tiếp SPI với LoRa. \\
+\hline
+P2 & \texttt{UITXo}, \texttt{UIRXo}, \texttt{GND}, \texttt{Po}, \texttt{A}, \texttt{TX}, \texttt{RL1}, \texttt{RL2} & Giao tiếp UART, tín hiệu cảm biến analog, IR và relay. \\
+\hline
+P4 & \texttt{SCL}, \texttt{SDA}, \texttt{GND}, \texttt{A6}, \texttt{A7} & Kết nối I2C và analog mở rộng. \\
+\hline
+\end{longtable}
 
-    \begin{equation}
-        pth_{op}=pth_{op}=\min_{(i,j)\in pairs}\{pth_{ij}^{e}\text{\}}
-        \label{eq:optimalpath}
-    \end{equation}
+\subsection{Quản lý chân vào ra}
+Việc quản lý chân cần được cố định trong firmware bằng các hằng số rõ ràng. Ví dụ, chân \texttt{RL1} điều khiển relay 1, \texttt{RL2} điều khiển relay 2, \texttt{TX} điều khiển phát IR, \texttt{Po} đọc pH và \texttt{A} đọc cảm biến ánh sáng. Với cách đặt tên này, khi đọc mã nguồn có thể đối chiếu trực tiếp với sơ đồ nguyên lý.
 
-Thuật toán sẽ thực hiện so sánh tổng quãng đường mà robot đi để bao phủ hết toàn bộ khu vực yêu cầu
-trong tệp $pair$. Sau đó sẽ trả về quãng đường đi ngắn nhất thỏa toàn bộ điều kiện của bài toán. Có thể tóm tắt lại thông qua thuật toán \ref{alg:3}
+\begin{lstlisting}[language=C,caption={Ví dụ định nghĩa chân trên node Arduino}]
+#define PIN_RELAY_1   7
+#define PIN_RELAY_2   8
+#define PIN_IR_TX     5
+#define PIN_PH        A1
+#define PIN_LIGHT     A0
+#define PIN_TDS       A2
+#define PIN_LORA_NSS  10
+#define PIN_LORA_RST  9
+#define PIN_LORA_DIO0 2
+\end{lstlisting}
 
-\begin{algorithm}
-\caption{Chọn ra đường dẫn tối ưu}
-\label{alg:3}
-\SetAlgoLined
-\KwIn{$V$,\:$p_s$,\:$p_e$}
-\KwOut{$fullPath$}
-A = findAllAntipodalPairs(V) \;
-c = inf\;
-\ForEach{ (i,j) $\in$ A}{
-    $p = bestPath(V,i,j)\;$
-    \If{Cost($p_s,p,p_e$) $<$ Cost($p_e,p,p_s$)}{
-    $\tau$ = $\{p_s,p,p_e\}$ \;
-    }
-    \If{Cost($\tau$) < c}{
-        $c$ = Cost($\tau$) \;
-        fullPath = $\tau$ \;
-     }
-}
-\end{algorithm}
+Trong hệ thống thực tế, các chân phải được kiểm tra lại theo mạch in cuối cùng. Nếu sơ đồ nguyên lý, layout PCB và firmware không thống nhất, hệ thống có thể hoạt động sai dù từng khối riêng lẻ không lỗi. Vì vậy, bảng ánh xạ chân là một tài liệu bắt buộc đi kèm phần cứng.
+
+\subsection{Chu kỳ hoạt động của node}
+Chu kỳ hoạt động cơ bản của node gồm bốn pha. Pha thứ nhất là đọc cảm biến. Pha thứ hai là xử lý và đóng gói dữ liệu. Pha thứ ba là gửi dữ liệu qua LoRa. Pha thứ tư là lắng nghe lệnh điều khiển từ gateway trong một khoảng thời gian ngắn. Chu kỳ này lặp lại liên tục.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[node distance=1.3cm, every node/.style={font=\small}]
+        \node[draw, rounded corners, minimum width=3.2cm, minimum height=0.9cm] (s1) {Đọc cảm biến};
+        \node[draw, rounded corners, right=of s1, minimum width=3.2cm, minimum height=0.9cm] (s2) {Lọc và quy đổi};
+        \node[draw, rounded corners, right=of s2, minimum width=3.2cm, minimum height=0.9cm] (s3) {Gửi LoRa};
+        \node[draw, rounded corners, below=of s2, minimum width=3.2cm, minimum height=0.9cm] (s4) {Nhận lệnh};
+        \draw[->, thick] (s1) -- (s2);
+        \draw[->, thick] (s2) -- (s3);
+        \draw[->, thick] (s3) |- (s4);
+        \draw[->, thick] (s4) -| (s1);
+    \end{tikzpicture}
+    \caption{Chu kỳ hoạt động cơ bản của node}
+    \label{fig:node_cycle}
+\end{figure}
+
+\subsection{Quy tắc an toàn khi khởi động}
+Khi node vừa cấp nguồn, trạng thái relay cần được đặt về mức an toàn. Nếu relay điều khiển quạt hoặc đèn, hệ thống nên mặc định tắt thiết bị cho đến khi nhận được cấu hình hoặc lệnh hợp lệ. Với IR điều hòa, node không phát lệnh khi khởi động để tránh thay đổi trạng thái điều hòa ngoài ý muốn.
+
+Trình tự khởi động đề xuất gồm: cấu hình chân output, đặt relay về OFF, khởi tạo Serial để debug, khởi tạo cảm biến, khởi tạo LoRa, gửi gói trạng thái đầu tiên và bắt đầu vòng lặp chính. Nếu LoRa không khởi tạo thành công, node vẫn có thể đọc cảm biến và báo lỗi qua Serial hoặc LED trạng thái.

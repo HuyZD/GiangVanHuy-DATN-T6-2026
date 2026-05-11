@@ -1,51 +1,80 @@
-\section{Chiến lược bao phủ quét sạch của đội hình Robot hình chữ V}
-Chiến lược bao phủ quét của đội hình Robot chữ V được mô tả trong thuật toán \ref{alg:Covestrategy}. Mỗi Robot trong bầy đóng một trong hai vai trò sau:
-\begin{itemize}
-     \item Leader (dòng 2-19): Đầu tiên, Robot leader chịu trách nhiệm tìm ra một đường bao phủ tối ưu theo mô hình gấp khúc bằng cách sử dụng thuật toán RCPP như được mô tả trong phần \ref{subsec:Oppath}. Khi đường đi được xác định, Robot dẫn đầu bay dọc theo đường đi qua các mục tiêu tạm thời bằng cách sử dụng điều khiển dựa trên hành vi cho đến khi đạt được mục tiêu cuối cùng. Tại mỗi bước thời gian, leader tạo cấu trúc hình chữ V ảo theo các tham số $\psi$, $\varphi$ và $\ell$ như được mô tả trong phần \ref{subsec:VTG}. Và sau đó, nó chỉ định các mục tiêu ảo cho các Robot theo sau theo quy tắc khoảng cách ngắn nhất. Điều khiển dựa trên hành vi cho phép Robot leader di chuyển đến mục tiêu của mình trong khi duy trì đội hình với các Robot theo sau bằng cách tự động điều chỉnh vận tốc của nó theo lỗi vị trí của những Robot follower.
-     \item Follower (dòng 20-26): Robot theo sau có trách nhiệm bám theo mục tiêu ảo được chỉ định bằng cách sử dụng điều khiển dựa trên hành vi để duy trì đội hình chữ V trong khi tránh va chạm với chướng ngại vật và các Robot khác
-\end{itemize}
+\section{Khối cảm biến và khối actuator}
+Khối cảm biến và khối actuator là hai phần trực tiếp tương tác với môi trường căn hộ. Khối cảm biến cung cấp dữ liệu cho hệ thống đánh giá chất lượng không khí và điều kiện chăm sóc cây. Khối actuator thực hiện các lệnh điều khiển nhằm cải thiện môi trường hoặc hỗ trợ người dùng.
 
-Quá trình khảo sát đội hình Robot hình chữ V được coi là `` hoàn thành '' khi Robot dẫn đầu đạt được mục tiêu cuối cùng trên lộ trình bao phủ.
+\subsection{Khối cảm biến}
+Sơ đồ khối cảm biến có các đầu nối cho nhiều loại tín hiệu. Cảm biến pH kết nối qua đầu \texttt{Po}; cảm biến ánh sáng có tín hiệu \texttt{A}; cảm biến TDS dùng ngõ analog riêng; các cảm biến nhiệt độ, độ ẩm hoặc CO2 có thể kết nối qua I2C, UART hoặc chân digital tùy module. Ngoài ra, sơ đồ còn có các điện trở kéo lên cho I2C, giúp đường \texttt{SCL} và \texttt{SDA} hoạt động ổn định.
 
+Việc đo pH và TDS liên quan trực tiếp đến trạng thái nước hoặc dung dịch dinh dưỡng cho cây. Dữ liệu này không phải là thông số chất lượng không khí, nhưng giúp hệ thống đánh giá điều kiện cây trồng. Khi cây được chăm sóc ổn định, cây có khả năng duy trì trạng thái sinh trưởng tốt hơn và hỗ trợ môi trường trong nhà ở mức bền vững hơn.
 
-\begin{algorithm}[!t]
-\Switch{Robot}
-{
-    \Case{Leader}
-    {
-        \If {(Không tồn tại đường)}
-        {
-            Tìm đường đi bao phủ tối ưu\\
-        }
-        \Else
-        {
-            Với \textbf{node hiện tại} and \textbf{node kết thúc} trên đường\\
-            \If{(\textbf{node hiện tại} $\neq$ \textbf{node kết thúc})}
-            {
-             Tạo ra Mục tiêu ảo $\psi$, $\varphi$, $\ell$\\
-             Gắn Mục tiêu ảo cho followers \\
-             Chuyển sang \textbf{node hiện tại} bằng Điều khiển hành vi\\
-             \textbf{node hiện tại}=\textbf{node tiếp theo}\\
-            }
-            \Else
-            {
-                Phát tín hiệu ``Done'' đến followers\\
-                Kết thúc quy trình khảo sát \\
-            }
-        }
-    }
-    
-    \Case{Followers}
-    {
-        Nhận mục tiêu ảo từ leader\\
-        Theo dõi mục tiêu ảo để duy trì đội hình hình chữ V bằng điều khiển dựa trên hành vi\\ 
-        \If{(Nhận tín hiệu ``Done``)}
-        {
-             Kết thúc quy trình khảo sát\\
-        }
-    }
-}
-\caption{Chiến lược bao phủ quét tối ưu của đội hình robot hình chữ V}
-\label{alg:Covestrategy} 
-\end{algorithm}
+\begin{longtable}{|p{3.2cm}|p{3.2cm}|p{6.5cm}|}
+\hline
+\textbf{Cảm biến} & \textbf{Tín hiệu} & \textbf{Vai trò} \\
+\hline
+TDS & Analog & Theo dõi tổng chất rắn hòa tan trong nước hoặc dung dịch chăm sóc cây. \\
+\hline
+pH & Analog \texttt{Po} & Đánh giá độ axit/kiềm của dung dịch, hỗ trợ chăm sóc cây. \\
+\hline
+Ánh sáng & Analog \texttt{A} hoặc digital & Xác định điều kiện chiếu sáng cho cây và không gian sinh hoạt. \\
+\hline
+Nhiệt độ & I2C/digital & Đánh giá tiện nghi nhiệt và điều kiện môi trường. \\
+\hline
+Độ ẩm & I2C/digital & Theo dõi độ ẩm không khí, hỗ trợ cảnh báo khô hoặc ẩm cao. \\
+\hline
+CO2 & UART/I2C/analog tùy module & Đánh giá thông gió và mật độ người trong phòng. \\
+\hline
+\end{longtable}
 
+\subsection{Lọc và hiệu chuẩn cảm biến}
+Các cảm biến analog dễ bị dao động do nhiễu nguồn, dây dài hoặc sai số ADC. Vì vậy firmware cần lấy mẫu nhiều lần và tính trung bình. Với pH và TDS, hiệu chuẩn là bắt buộc nếu muốn dữ liệu có ý nghĩa thực tế. pH cần hiệu chuẩn bằng dung dịch chuẩn, còn TDS cần hiệu chuẩn bằng dung dịch có nồng độ đã biết.
+
+Ví dụ, giá trị pH có thể được tính từ điện áp đầu ra của mạch đo theo phương trình tuyến tính:
+\[
+pH = a \times V_{pH} + b
+\]
+Trong đó $a$ và $b$ được xác định từ quá trình hiệu chuẩn. Tương tự, TDS có thể được tính từ điện áp sau khi bù nhiệt độ nếu cảm biến hỗ trợ. Trong khóa luận, phần hiệu chuẩn được trình bày như một bước cần thực hiện khi đưa hệ thống vào sử dụng thực tế.
+
+\subsection{Khối relay}
+Khối actuator trong sơ đồ có ba relay. Mỗi relay được điều khiển thông qua transistor, có điện trở base/gate và diode dập xung cuộn dây. Cách thiết kế này giúp Arduino không phải cấp dòng trực tiếp cho relay. Khi chân điều khiển ở mức kích hoạt, transistor dẫn, cuộn relay có dòng và tiếp điểm chuyển trạng thái.
+
+Relay có thể điều khiển quạt, đèn hoặc tải ngoài. Trong ứng dụng hiện tại, RL1 và RL2 được hiển thị trên app ở tab Actuator, trạng thái ban đầu là OFF. Người dùng có thể bật/tắt relay từ ứng dụng Flutter. Node nhận lệnh qua LoRa, điều khiển relay tương ứng và gửi ACK về gateway.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[node distance=1.4cm, every node/.style={font=\small}]
+        \node[draw, minimum width=2.4cm, minimum height=0.9cm] (pin) {Chân RLx};
+        \node[draw, right=of pin, minimum width=2.4cm, minimum height=0.9cm] (tran) {Transistor};
+        \node[draw, right=of tran, minimum width=2.4cm, minimum height=0.9cm] (relay) {Cuộn relay};
+        \node[draw, right=of relay, minimum width=2.4cm, minimum height=0.9cm] (load) {Quạt/đèn};
+        \draw[->, thick] (pin) -- (tran);
+        \draw[->, thick] (tran) -- (relay);
+        \draw[->, thick] (relay) -- (load);
+        \node[below=0.4cm of relay] {Diode dập xung bảo vệ transistor};
+    \end{tikzpicture}
+    \caption{Nguyên lý điều khiển relay của node}
+    \label{fig:relay_control}
+\end{figure}
+
+\subsection{Khối phát hồng ngoại}
+Khối IR gồm các LED hồng ngoại và transistor điều khiển. Arduino tạo chuỗi xung điều chế tương ứng với mã điều khiển điều hòa. Transistor giúp cấp dòng đủ lớn cho LED IR để tăng khoảng cách phát. Trên app, thiết bị điều hòa được hiển thị như một actuator riêng. Các lệnh chính gồm bật/tắt, tăng nhiệt độ và giảm nhiệt độ.
+
+Điều khiển IR có một hạn chế quan trọng: node không biết chắc điều hòa đã nhận được lệnh hay chưa, trừ khi có cảm biến phản hồi hoặc camera/IR receiver kiểm tra. Vì vậy hệ thống lưu trạng thái dự đoán dựa trên lệnh đã gửi. Nếu người dùng dùng remote gốc của điều hòa, trạng thái trên app có thể lệch với thực tế. Đây là điểm cần nêu rõ trong phần thảo luận.
+
+\subsection{Mô hình trạng thái thiết bị}
+Để quản lý actuator, node lưu trạng thái cục bộ cho từng thiết bị. Mỗi relay có hai trạng thái \texttt{ON} và \texttt{OFF}. Điều hòa có thể có trạng thái \texttt{OFF}, \texttt{ON}, nhiệt độ đặt và chế độ điều khiển. Trong phiên bản cơ bản, app hiển thị điều hòa ở mức ON/OFF và cho phép tăng/giảm nhiệt độ.
+
+\begin{longtable}{|p{3cm}|p{4cm}|p{6cm}|}
+\hline
+\textbf{Thiết bị} & \textbf{Lệnh hỗ trợ} & \textbf{Phản hồi từ node} \\
+\hline
+RL1 & \texttt{ON}, \texttt{OFF} & Trạng thái relay sau khi điều khiển. \\
+\hline
+RL2 & \texttt{ON}, \texttt{OFF} & Trạng thái relay sau khi điều khiển. \\
+\hline
+Điều hòa & \texttt{ON}, \texttt{OFF}, \texttt{TEMP\_UP}, \texttt{TEMP\_DOWN} & Trạng thái dự đoán và lệnh IR đã phát. \\
+\hline
+\end{longtable}
+
+\subsection{Kiểm thử khối cảm biến và actuator}
+Kiểm thử cảm biến cần thực hiện theo từng cảm biến riêng lẻ trước khi tích hợp. Với cảm biến ánh sáng, có thể che cảm biến hoặc chiếu đèn để quan sát giá trị thay đổi. Với nhiệt độ và độ ẩm, có thể so sánh với thiết bị đo tham chiếu. Với CO2, cần kiểm tra phản ứng khi phòng kín hoặc khi thổi khí gần cảm biến, nhưng vẫn phải chú ý an toàn và giới hạn của module. Với pH và TDS, cần dùng dung dịch chuẩn để đánh giá.
+
+Kiểm thử actuator cần bắt đầu khi chưa đấu tải AC nguy hiểm. Trước hết đo tín hiệu điều khiển ở chân Arduino, sau đó kiểm tra transistor và relay bằng tải DC nhỏ hoặc đồng hồ đo thông mạch. Khi relay hoạt động đúng mới đấu tải thực tế. Với IR, có thể dùng camera điện thoại để quan sát LED hồng ngoại nhấp nháy khi phát lệnh, sau đó thử với điều hòa thật.

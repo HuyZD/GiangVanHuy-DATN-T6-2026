@@ -1,0 +1,403 @@
+\section{Mục tiêu kiểm thử}
+Kiểm thử nhằm xác nhận hệ thống hoạt động đúng theo yêu cầu thiết kế. Do hệ thống gồm phần cứng, firmware, gateway, nền tảng ThingsBoard và app Flutter, kiểm thử cần thực hiện theo từng lớp. Nếu chỉ kiểm thử toàn hệ thống ở cuối, việc xác định nguyên nhân lỗi sẽ khó khăn hơn.
+
+Các mục tiêu kiểm thử gồm:
+\begin{itemize}
+    \item Xác nhận các rail nguồn ổn định.
+    \item Xác nhận Arduino Pro Mini đọc đúng cảm biến.
+    \item Xác nhận LoRa truyền dữ liệu giữa node và gateway.
+    \item Xác nhận ESP32 gửi telemetry lên ThingsBoard.
+    \item Xác nhận app Flutter hiển thị đúng dữ liệu.
+    \item Xác nhận lệnh điều khiển từ app đến relay và IR.
+    \item Xác nhận hệ thống xử lý được mất kết nối tạm thời.
+\end{itemize}
+
+\section{Kiểm thử khối nguồn}
+Kiểm thử nguồn cần thực hiện trước khi cắm các module nhạy như LoRa hoặc cảm biến pH. Dùng đồng hồ đo điện áp tại các rail 24V, 5V và 3.3V. Sau đó kiểm tra lại khi relay đóng để phát hiện sụt áp.
+
+\begin{longtable}{|p{3.2cm}|p{3.8cm}|p{3.5cm}|p{3cm}|}
+\hline
+\textbf{Mã test} & \textbf{Điều kiện} & \textbf{Giá trị kỳ vọng} & \textbf{Kết luận} \\
+\hline
+PWR-01 & Cấp nguồn đầu vào, chưa gắn tải & 5V và 3.3V ổn định & Đạt nếu sai số nhỏ. \\
+\hline
+PWR-02 & Relay RL1 hút & 5V không sụt gây reset & Đạt nếu Arduino không reset. \\
+\hline
+PWR-03 & LoRa phát liên tục & 3.3V ổn định & Đạt nếu LoRa không mất kết nối. \\
+\hline
+PWR-04 & Relay và LoRa hoạt động đồng thời & Không reset node & Đạt nếu telemetry vẫn gửi đều. \\
+\hline
+\end{longtable}
+
+\section{Kiểm thử cảm biến}
+Mỗi cảm biến được kiểm tra riêng trước khi kiểm thử tích hợp. Giá trị đo không nhất thiết phải chính xác tuyệt đối trong giai đoạn đầu, nhưng phải thay đổi hợp lý khi điều kiện môi trường thay đổi.
+
+\begin{longtable}{|p{2.8cm}|p{4.2cm}|p{5.8cm}|}
+\hline
+\textbf{Cảm biến} & \textbf{Cách thử} & \textbf{Kỳ vọng} \\
+\hline
+Nhiệt độ & Đặt gần nguồn nhiệt nhẹ hoặc thay đổi điều hòa & Giá trị tăng/giảm theo môi trường. \\
+\hline
+Độ ẩm & So sánh với thiết bị đo tham chiếu & Sai số nằm trong mức chấp nhận của module. \\
+\hline
+CO2 & Đặt trong phòng kín và phòng thông thoáng & Giá trị tăng khi phòng kín, giảm khi thông gió. \\
+\hline
+Ánh sáng & Che cảm biến và chiếu đèn & Giá trị lux giảm/tăng rõ ràng. \\
+\hline
+TDS & Đo nước sạch và dung dịch có khoáng & Dung dịch khoáng có TDS cao hơn. \\
+\hline
+pH & Đo dung dịch chuẩn hoặc mẫu khác nhau & Giá trị thay đổi theo tính axit/kiềm. \\
+\hline
+\end{longtable}
+
+\section{Kiểm thử LoRa}
+Kiểm thử LoRa gồm truyền gói test, truyền telemetry thật và truyền lệnh điều khiển. Ban đầu đặt node và gateway gần nhau để loại trừ vấn đề khoảng cách. Sau đó tăng khoảng cách và đặt vật cản để mô phỏng căn hộ.
+
+\begin{longtable}{|p{2.8cm}|p{4.7cm}|p{5.3cm}|}
+\hline
+\textbf{Mã test} & \textbf{Kịch bản} & \textbf{Tiêu chí đạt} \\
+\hline
+LORA-01 & Gửi gói \texttt{HELLO} từ node đến gateway & Gateway nhận đúng nội dung. \\
+\hline
+LORA-02 & Gửi telemetry 100 lần ở khoảng cách gần & Tỷ lệ nhận cao, không sai định dạng. \\
+\hline
+LORA-03 & Gửi telemetry qua một lớp tường & Gateway vẫn nhận ổn định. \\
+\hline
+LORA-04 & Gateway gửi lệnh RL1 ON xuống node & Node bật relay và gửi ACK. \\
+\hline
+LORA-05 & Gửi lệnh sai checksum & Node bỏ qua lệnh. \\
+\hline
+\end{longtable}
+
+\section{Kiểm thử ThingsBoard}
+Sau khi gateway nhận telemetry, bước tiếp theo là gửi dữ liệu lên ThingsBoard. Kiểm thử cần xác nhận đúng token thiết bị, đúng endpoint và đúng tên telemetry.
+
+\begin{longtable}{|p{3cm}|p{4.5cm}|p{5.5cm}|}
+\hline
+\textbf{Mã test} & \textbf{Kịch bản} & \textbf{Kỳ vọng} \\
+\hline
+TB-01 & Gateway gửi JSON telemetry mẫu & ThingsBoard hiển thị dữ liệu mới. \\
+\hline
+TB-02 & Gửi đủ sáu thông số cảm biến & Dashboard cập nhật tất cả widget. \\
+\hline
+TB-03 & CO2 vượt ngưỡng & Rule chain tạo cảnh báo. \\
+\hline
+TB-04 & App gửi RPC bật RL1 & Gateway nhận được lệnh RPC. \\
+\hline
+TB-05 & Gateway mất mạng tạm thời & Không treo chương trình, reconnect sau đó. \\
+\hline
+\end{longtable}
+
+\section{Kiểm thử app Flutter}
+App Flutter được kiểm thử theo các màn hình trong ảnh: đăng nhập, Sensor và Actuator. Màn hình đăng nhập kiểm tra xác thực. Màn hình Sensor kiểm tra hiển thị telemetry. Màn hình Actuator kiểm tra gửi lệnh.
+
+\begin{longtable}{|p{3cm}|p{4.5cm}|p{5.5cm}|}
+\hline
+\textbf{Mã test} & \textbf{Kịch bản} & \textbf{Tiêu chí đạt} \\
+\hline
+APP-01 & Nhập email/password đúng & Vào được màn hình Node. \\
+\hline
+APP-02 & Nhập sai mật khẩu & App báo lỗi, không vào hệ thống. \\
+\hline
+APP-03 & Mở tab Sensor & Hiển thị TDS, pH, AS, CO2, nhiệt độ, độ ẩm. \\
+\hline
+APP-04 & Mở tab Actuator & Hiển thị RL1, RL2 và điều hòa. \\
+\hline
+APP-05 & Bật Manual và nhấn RL1 & Lệnh được gửi đến ThingsBoard. \\
+\hline
+APP-06 & Node phản hồi ACK & Trạng thái trên app cập nhật. \\
+\hline
+\end{longtable}
+
+\section{Kiểm thử actuator}
+Actuator cần được kiểm thử thận trọng vì liên quan đến thiết bị điện. Trong giai đoạn đầu, chỉ dùng tải giả hoặc đo thông mạch relay. Khi mạch điều khiển ổn định mới đấu quạt, đèn hoặc điều hòa thật.
+
+\begin{longtable}{|p{3cm}|p{4.5cm}|p{5.5cm}|}
+\hline
+\textbf{Mã test} & \textbf{Kịch bản} & \textbf{Kỳ vọng} \\
+\hline
+ACT-01 & Gửi lệnh RL1 ON & Relay 1 hút, app hiển thị ON. \\
+\hline
+ACT-02 & Gửi lệnh RL1 OFF & Relay 1 nhả, app hiển thị OFF. \\
+\hline
+ACT-03 & Gửi lệnh RL2 ON/OFF & Relay 2 thay đổi đúng. \\
+\hline
+ACT-04 & Gửi lệnh AC TEMP\_UP & LED IR phát mã tăng nhiệt độ. \\
+\hline
+ACT-05 & Gửi lệnh AC TEMP\_DOWN & LED IR phát mã giảm nhiệt độ. \\
+\hline
+ACT-06 & Gửi lệnh không hợp lệ & Node không thay đổi actuator. \\
+\hline
+\end{longtable}
+
+\section{Kịch bản vận hành trong căn hộ}
+Kịch bản vận hành mô phỏng một ngày sử dụng hệ thống:
+\begin{enumerate}
+    \item Buổi sáng, người dùng mở app kiểm tra ánh sáng và độ ẩm.
+    \item Nếu ánh sáng thấp, người dùng bật đèn qua RL2 hoặc hệ thống tự bật khi ở chế độ Auto.
+    \item Khi phòng có người trong thời gian dài, CO2 tăng. App hiển thị cảnh báo.
+    \item Người dùng bật quạt qua RL1 để tăng thông gió.
+    \item Khi nhiệt độ tăng cao, người dùng dùng lệnh IR để giảm nhiệt độ điều hòa.
+    \item Cuối ngày, người dùng kiểm tra TDS và pH để quyết định thay nước hoặc bổ sung dung dịch chăm sóc cây.
+\end{enumerate}
+
+\section{Phân tích dữ liệu mẫu từ ảnh app}
+Ảnh tab Sensor cho thấy:
+\begin{itemize}
+    \item TDS = 698.86 ppm.
+    \item pH = 7.1.
+    \item Ánh sáng = 0.66 lux.
+    \item CO2 = 2655 ppm.
+    \item Nhiệt độ = 30.9 $^\circ$C.
+    \item Độ ẩm = 65.0\%.
+\end{itemize}
+
+Từ các giá trị này có thể đưa ra nhận xét: CO2 cao cho thấy phòng cần thông gió; ánh sáng rất thấp nên cây có thể thiếu sáng; nhiệt độ 30.9 $^\circ$C khá cao nên cần điều hòa hoặc quạt; độ ẩm 65\% vẫn ở mức có thể chấp nhận nhưng cần theo dõi nếu kéo dài; pH 7.1 gần trung tính; TDS 698.86 ppm cần so sánh với loại cây cụ thể để đánh giá phù hợp hay không.
+
+\section{Bảng ngưỡng cảnh báo đề xuất}
+Các ngưỡng dưới đây chỉ là tham khảo ban đầu và cần điều chỉnh theo loại cây, thói quen sử dụng căn hộ và cảm biến thực tế.
+
+\begin{longtable}{|p{3.2cm}|p{3cm}|p{6.5cm}|}
+\hline
+\textbf{Thông số} & \textbf{Ngưỡng cảnh báo} & \textbf{Hành động đề xuất} \\
+\hline
+CO2 & $>1000$ ppm & Bật quạt, mở cửa hoặc tăng thông gió. \\
+\hline
+CO2 & $>2000$ ppm & Cảnh báo mức cao, ưu tiên thông gió ngay. \\
+\hline
+Nhiệt độ & $>30^\circ$C & Bật quạt hoặc giảm nhiệt độ điều hòa. \\
+\hline
+Độ ẩm & $<40\%$ & Cảnh báo khô, cân nhắc tăng ẩm. \\
+\hline
+Độ ẩm & $>75\%$ & Cảnh báo ẩm cao, tăng thông gió. \\
+\hline
+Ánh sáng & $<100$ lux & Bật đèn bổ sung cho cây nếu cần. \\
+\hline
+pH & ngoài khoảng 5.5--7.5 & Kiểm tra dung dịch chăm sóc cây. \\
+\hline
+TDS & tùy loại cây & Điều chỉnh dung dịch dinh dưỡng. \\
+\hline
+\end{longtable}
+
+\section{Hướng dẫn vận hành}
+Quy trình vận hành cơ bản:
+\begin{enumerate}
+    \item Cấp nguồn cho gateway ESP32 và kiểm tra gateway kết nối Wi-Fi.
+    \item Cấp nguồn cho node Arduino Pro Mini.
+    \item Chờ node gửi bản tin boot và telemetry đầu tiên.
+    \item Mở app Flutter và đăng nhập.
+    \item Kiểm tra tab Sensor để xác nhận dữ liệu cập nhật.
+    \item Chuyển sang tab Actuator để kiểm thử RL1, RL2 và điều hòa nếu cần.
+    \item Theo dõi dashboard ThingsBoard để kiểm tra lịch sử dữ liệu.
+\end{enumerate}
+
+\section{Bảo trì hệ thống}
+Hệ thống cần được bảo trì định kỳ để bảo đảm dữ liệu đáng tin cậy. Đầu dò pH cần được vệ sinh và bảo quản đúng cách. Cảm biến TDS cần được rửa sau khi đo dung dịch có nồng độ cao. Cảm biến CO2 cần tránh bụi và hơi nước. Module LoRa và gateway cần được đặt ở vị trí ít bị che chắn kim loại.
+
+\begin{longtable}{|p{4cm}|p{4cm}|p{5cm}|}
+\hline
+\textbf{Thành phần} & \textbf{Chu kỳ đề xuất} & \textbf{Công việc} \\
+\hline
+Đầu dò pH & 2--4 tuần & Vệ sinh, hiệu chuẩn lại bằng dung dịch chuẩn. \\
+\hline
+Cảm biến TDS & 1 tháng & Kiểm tra với dung dịch chuẩn hoặc mẫu tham chiếu. \\
+\hline
+Cảm biến CO2 & 3--6 tháng & Kiểm tra sai lệch và vệ sinh khu vực cảm biến. \\
+\hline
+Relay & Khi thay tải & Kiểm tra tiếp điểm, tải định mức và dây đấu. \\
+\hline
+Gateway & Khi đổi Wi-Fi & Cập nhật SSID, mật khẩu và token ThingsBoard. \\
+\hline
+App & Khi đổi API/token & Kiểm tra đăng nhập và quyền điều khiển. \\
+\hline
+\end{longtable}
+
+\section{Danh sách lỗi thường gặp}
+\begin{longtable}{|p{4cm}|p{4.5cm}|p{4.8cm}|}
+\hline
+\textbf{Hiện tượng} & \textbf{Nguyên nhân có thể} & \textbf{Cách xử lý} \\
+\hline
+App không có dữ liệu & Gateway mất Wi-Fi, sai token, node chưa gửi LoRa & Kiểm tra gateway, ThingsBoard và log LoRa. \\
+\hline
+CO2 luôn bằng 0 & Cảm biến chưa khởi động, sai giao tiếp, lỗi nguồn & Kiểm tra thời gian warm-up và dây tín hiệu. \\
+\hline
+pH dao động mạnh & Nhiễu analog, đầu dò bẩn, chưa hiệu chuẩn & Lọc mẫu, vệ sinh đầu dò, hiệu chuẩn lại. \\
+\hline
+Relay không bật & Sai chân GPIO, transistor lỗi, thiếu nguồn relay & Đo tín hiệu chân RL và điện áp cuộn relay. \\
+\hline
+Điều hòa không nhận IR & Sai mã IR, LED đặt sai hướng, dòng LED yếu & Học lại mã IR, kiểm tra camera, tăng dòng phù hợp. \\
+\hline
+LoRa chập chờn & Anten kém, nguồn 3.3V yếu, khoảng cách/vật cản lớn & Kiểm tra anten, nguồn và vị trí đặt gateway. \\
+\hline
+\end{longtable}
+
+\section{Tiêu chí nghiệm thu}
+Hệ thống được xem là đạt yêu cầu nếu thỏa mãn các tiêu chí:
+\begin{itemize}
+    \item Node gửi đủ sáu thông số cảm biến lên ThingsBoard.
+    \item App hiển thị đúng dữ liệu mới nhất trên tab Sensor.
+    \item App điều khiển được RL1 và RL2 từ tab Actuator.
+    \item Node phát được lệnh IR cho điều hòa.
+    \item Gateway tự reconnect khi Wi-Fi mất tạm thời.
+    \item Hệ thống có cảnh báo khi CO2, nhiệt độ, ánh sáng hoặc pH vượt ngưỡng.
+\end{itemize}
+
+\section{Đề xuất cải tiến sau kiểm thử}
+Sau quá trình kiểm thử, các cải tiến có giá trị gồm thêm vỏ bảo vệ cho node, bổ sung đầu nối chống cắm ngược, thêm cầu chì hoặc bảo vệ quá dòng cho tải relay, bổ sung lưu đệm dữ liệu trên gateway, hoàn thiện thông báo đẩy trên app và xây dựng chức năng cấu hình ngưỡng trực tiếp từ Flutter.
+
+Đối với điều khiển điều hòa, nên bổ sung thư viện hỗ trợ nhiều mã IR và giao diện chọn hãng điều hòa. Đối với cảm biến cây trồng, nên lưu cấu hình theo từng loại cây, ví dụ cây ưa sáng, cây chịu bóng, cây thủy sinh hoặc cây trồng đất. Khi đó hệ thống không chỉ hiển thị giá trị đo mà còn đưa ra khuyến nghị phù hợp với cây cụ thể.
+
+\section{Mẫu nhật ký kiểm thử}
+Nhật ký kiểm thử giúp lưu lại điều kiện đo, phiên bản firmware, vị trí đặt node và kết quả quan sát. Nếu hệ thống có lỗi sau khi thay đổi phần cứng hoặc phần mềm, nhật ký giúp truy vết nhanh hơn. Mỗi lần kiểm thử nên ghi rõ ngày giờ, người thực hiện, phiên bản firmware node, phiên bản firmware gateway và phiên bản app.
+
+\begin{longtable}{|p{2.7cm}|p{3.5cm}|p{3.2cm}|p{4.2cm}|}
+\hline
+\textbf{Thời điểm} & \textbf{Cấu hình} & \textbf{Kết quả} & \textbf{Ghi chú} \\
+\hline
+Ngày 1 - sáng & Node gần gateway, không vật cản & Telemetry ổn định & Dùng để kiểm tra baseline. \\
+\hline
+Ngày 1 - chiều & Node cách gateway một phòng & Telemetry ổn định & Tỷ lệ nhận gói cần ghi bằng log. \\
+\hline
+Ngày 2 - sáng & Bật/tắt RL1 20 lần & Relay phản hồi đúng & Kiểm tra nhiệt độ transistor. \\
+\hline
+Ngày 2 - chiều & Gửi lệnh IR đến điều hòa & Điều hòa nhận lệnh & Cần đặt LED IR đúng hướng. \\
+\hline
+Ngày 3 - tối & Phòng kín 30 phút & CO2 tăng rõ & Kiểm tra cảnh báo trên app. \\
+\hline
+\end{longtable}
+
+Khi ghi nhật ký, cần phân biệt giữa lỗi phần cứng và lỗi phần mềm. Ví dụ, nếu relay không bật nhưng chân Arduino có thay đổi mức logic, lỗi có thể nằm ở transistor, relay hoặc nguồn relay. Nếu chân Arduino không đổi mức, lỗi có thể nằm ở firmware hoặc lệnh từ gateway. Cách phân tích này giúp tiết kiệm thời gian sửa lỗi.
+
+\section{Phiếu hiệu chuẩn cảm biến pH}
+Phiếu hiệu chuẩn pH được dùng để ghi lại điện áp đọc từ cảm biến tại các dung dịch chuẩn. Dữ liệu này phục vụ tính hệ số tuyến tính trong firmware. Nếu thay đầu dò pH, thay module khuếch đại hoặc thay nguồn cấp, cần hiệu chuẩn lại.
+
+\begin{longtable}{|p{3cm}|p{3cm}|p{3cm}|p{4.2cm}|}
+\hline
+\textbf{Dung dịch chuẩn} & \textbf{Điện áp đo} & \textbf{Giá trị ADC} & \textbf{Ghi chú} \\
+\hline
+pH 4.00 &  &  & Chờ ổn định trước khi ghi. \\
+\hline
+pH 7.00 &  &  & Rửa đầu dò trước khi đo. \\
+\hline
+pH 10.00 &  &  & Dùng nếu cần hiệu chuẩn ba điểm. \\
+\hline
+Mẫu thực tế 1 &  &  & So sánh sau hiệu chuẩn. \\
+\hline
+Mẫu thực tế 2 &  &  & Kiểm tra độ lặp lại. \\
+\hline
+\end{longtable}
+
+Sau khi có dữ liệu, tính hệ số và cập nhật firmware. Cần ghi lại hệ số đã sử dụng để lần sau có thể so sánh. Nếu sau một thời gian giá trị pH lệch nhiều so với dung dịch chuẩn, đầu dò có thể bị bẩn, khô hoặc suy giảm chất lượng.
+
+\section{Phiếu hiệu chuẩn TDS}
+TDS phụ thuộc vào dung dịch chuẩn và nhiệt độ. Nếu cảm biến không bù nhiệt độ tự động, nên ghi lại nhiệt độ dung dịch khi hiệu chuẩn. Trong điều kiện làm khóa luận, có thể hiệu chuẩn ở nhiệt độ phòng và ghi rõ điều kiện đo.
+
+\begin{longtable}{|p{3cm}|p{3cm}|p{3cm}|p{4.2cm}|}
+\hline
+\textbf{Mẫu} & \textbf{TDS chuẩn} & \textbf{TDS đo} & \textbf{Ghi chú} \\
+\hline
+Nước sạch &  &  & Dùng kiểm tra giá trị thấp. \\
+\hline
+Dung dịch chuẩn 1 &  &  & Ghi nhiệt độ dung dịch. \\
+\hline
+Dung dịch chuẩn 2 &  &  & Kiểm tra tuyến tính. \\
+\hline
+Dung dịch cây đang dùng &  &  & Dữ liệu vận hành thực tế. \\
+\hline
+\end{longtable}
+
+Nếu TDS đo dao động mạnh, cần kiểm tra nguồn analog, dây tín hiệu và cách đặt đầu dò. Đầu dò TDS không nên đặt quá gần dây cấp relay hoặc nguồn switching. Khi đo, nên chờ vài giây để giá trị ổn định rồi mới lấy mẫu trung bình.
+
+\section{Bộ luật điều khiển tự động đề xuất}
+Trong chế độ Auto, hệ thống có thể điều khiển theo luật đơn giản. Luật nên có ngưỡng bật và ngưỡng tắt khác nhau để tránh relay bật/tắt liên tục quanh một giá trị. Ví dụ, bật quạt khi CO2 lớn hơn 1200 ppm và tắt khi CO2 nhỏ hơn 900 ppm.
+
+\begin{longtable}{|p{3.2cm}|p{4.2cm}|p{5.8cm}|}
+\hline
+\textbf{Luật} & \textbf{Điều kiện} & \textbf{Hành động} \\
+\hline
+Thông gió & CO2 $>1200$ ppm & Bật RL1 để chạy quạt hoặc quạt thông gió. \\
+\hline
+Tắt thông gió & CO2 $<900$ ppm & Tắt RL1 nếu không còn cần thông gió. \\
+\hline
+Bổ sung sáng & Lux $<100$ trong khung giờ ban ngày & Bật RL2 để cấp đèn cho cây. \\
+\hline
+Tắt đèn & Lux $>300$ hoặc hết khung giờ chăm cây & Tắt RL2. \\
+\hline
+Làm mát & Nhiệt độ $>30^\circ$C và Manual tắt & Gửi IR giảm nhiệt độ điều hòa. \\
+\hline
+Cảnh báo pH & pH ngoài khoảng cấu hình & Chỉ cảnh báo, không tự điều chỉnh. \\
+\hline
+\end{longtable}
+
+Các luật tự động cần có giới hạn tần suất điều khiển. Ví dụ, không gửi lệnh IR giảm nhiệt độ liên tục trong vài giây vì điều hòa cần thời gian phản ứng. Gateway có thể đặt thời gian chờ tối thiểu 5 đến 10 phút giữa hai lần điều khiển điều hòa tự động.
+
+\section{Checklist lắp đặt node trong căn hộ}
+Lắp đặt đúng vị trí ảnh hưởng lớn đến chất lượng dữ liệu. Node không nên đặt sát miệng gió điều hòa vì nhiệt độ đo sẽ lệch so với không gian chung. Cảm biến CO2 nên đặt ở độ cao gần vùng hô hấp, tránh đặt sát cửa sổ hoặc quạt thổi trực tiếp. Cảm biến ánh sáng cần hướng về vùng cây nhận sáng.
+
+\begin{longtable}{|p{4cm}|p{8.5cm}|}
+\hline
+\textbf{Hạng mục} & \textbf{Kiểm tra} \\
+\hline
+Vị trí node & Không đặt sát nguồn nhiệt, nước hoặc nơi dễ va chạm. \\
+\hline
+Vị trí CO2 & Không đặt sát cửa sổ hoặc trực tiếp trước quạt. \\
+\hline
+Vị trí ánh sáng & Đặt gần cây để phản ánh đúng ánh sáng cây nhận được. \\
+\hline
+Dây cảm biến pH/TDS & Tránh đi song song dây relay hoặc dây nguồn công suất. \\
+\hline
+Anten LoRa & Đặt thẳng, tránh bị che bởi kim loại. \\
+\hline
+Gateway ESP32 & Đặt nơi Wi-Fi ổn định và không quá xa node. \\
+\hline
+Relay & Kiểm tra tải định mức trước khi đấu thiết bị thật. \\
+\hline
+IR LED & Hướng về mắt nhận IR của điều hòa. \\
+\hline
+\end{longtable}
+
+\section{Checklist bảo mật triển khai}
+Dù hệ thống được dùng trong căn hộ, bảo mật vẫn cần được chú ý vì actuator có thể điều khiển thiết bị điện. Những điểm cần kiểm tra:
+\begin{itemize}
+    \item Không để token ThingsBoard trong tài liệu công khai.
+    \item Không dùng mật khẩu mặc định cho tài khoản app.
+    \item Bật HTTPS nếu ThingsBoard triển khai trên server riêng.
+    \item Phân quyền tài khoản xem dữ liệu và tài khoản điều khiển.
+    \item Không cho phép app gửi lệnh khi chưa đăng nhập.
+    \item Ghi log lệnh điều khiển quan trọng như bật/tắt relay.
+\end{itemize}
+
+Nếu hệ thống được mở ra Internet, cần cấu hình firewall, chứng chỉ TLS và chính sách mật khẩu mạnh. Nếu chỉ dùng trong mạng nội bộ, vẫn nên bảo vệ access token và hạn chế người dùng có quyền điều khiển actuator.
+
+\section{Mẫu biên bản nghiệm thu}
+Biên bản nghiệm thu ghi lại trạng thái cuối cùng của hệ thống sau khi hoàn thành triển khai.
+
+\begin{longtable}{|p{4cm}|p{3cm}|p{5.5cm}|}
+\hline
+\textbf{Hạng mục} & \textbf{Kết quả} & \textbf{Ghi chú} \\
+\hline
+Node đọc TDS & Đạt / Không đạt &  \\
+\hline
+Node đọc pH & Đạt / Không đạt &  \\
+\hline
+Node đọc ánh sáng & Đạt / Không đạt &  \\
+\hline
+Node đọc CO2 & Đạt / Không đạt &  \\
+\hline
+Node đọc nhiệt độ, độ ẩm & Đạt / Không đạt &  \\
+\hline
+Gateway nhận LoRa & Đạt / Không đạt &  \\
+\hline
+ThingsBoard nhận telemetry & Đạt / Không đạt &  \\
+\hline
+App hiển thị Sensor & Đạt / Không đạt &  \\
+\hline
+App điều khiển RL1/RL2 & Đạt / Không đạt &  \\
+\hline
+App điều khiển điều hòa IR & Đạt / Không đạt &  \\
+\hline
+Cảnh báo CO2/ánh sáng/pH & Đạt / Không đạt &  \\
+\hline
+\end{longtable}
+
+Khi tất cả hạng mục chính đạt yêu cầu, hệ thống có thể được xem là hoàn thành ở mức nguyên mẫu. Những hạng mục chưa đạt cần ghi rõ nguyên nhân và kế hoạch khắc phục để tránh bỏ sót trong quá trình hoàn thiện báo cáo.

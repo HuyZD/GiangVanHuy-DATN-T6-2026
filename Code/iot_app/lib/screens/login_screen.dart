@@ -87,13 +87,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 actuatorType: "relay",
               ),
               Device(
-                id: "RL3",
-                name: "RL3",
-                type: "actuator",
-                value: "0",
-                actuatorType: "relay",
-              ),
-              Device(
                 id: "AC",
                 name: "Điều hòa",
                 type: "actuator",

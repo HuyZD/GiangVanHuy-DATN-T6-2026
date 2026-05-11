@@ -1,0 +1,26 @@
+
+\begin{thenomenclature} 
+\nomgroup{K}
+  \item [{$C_{CO2}$}]\begingroup Nồng độ CO2\nomeqref {0}\nompageref{1}
+  \item [{$E$}]\begingroup Cường độ ánh sáng\nomeqref {0}\nompageref{1}
+  \item [{$H$}]\begingroup Độ ẩm tương đối của không khí\nomeqref {0}\nompageref{1}
+  \item [{$Q$}]\begingroup Chỉ số chất lượng môi trường tổng hợp\nomeqref {0}\nompageref{1}
+  \item [{$T$}]\begingroup Nhiệt độ không khí trong phòng\nomeqref {0}\nompageref{1}
+  \item [{$V_{pH}$}]\begingroup Điện áp đầu ra của cảm biến pH\nomeqref {0}\nompageref{1}
+  \item [{$V_{TDS}$}]\begingroup Điện áp đầu ra của cảm biến TDS\nomeqref {0}\nompageref{1}
+\nomgroup{T}
+  \item [{ADC}]\begingroup Analog-to-Digital Converter - Bộ chuyển đổi tương tự sang số\nomeqref {0}\nompageref{1}
+  \item [{API}]\begingroup Application Programming Interface - Giao diện lập trình ứng dụng\nomeqref {0}\nompageref{1}
+  \item [{CO2}]\begingroup Carbon dioxide - Khí cacbon dioxit\nomeqref {0}\nompageref{1}
+  \item [{GPIO}]\begingroup General Purpose Input/Output - Chân vào/ra đa dụng\nomeqref {0}\nompageref{1}
+  \item [{HTTP}]\begingroup HyperText Transfer Protocol - Giao thức truyền siêu văn bản\nomeqref {0}\nompageref{1}
+  \item [{IAQ}]\begingroup Indoor Air Quality - Chất lượng không khí trong nhà\nomeqref {0}\nompageref{1}
+  \item [{IoT}]\begingroup Internet of Things - Internet vạn vật\nomeqref {0}\nompageref{1}
+  \item [{IR}]\begingroup Infrared - Hồng ngoại\nomeqref {0}\nompageref{1}
+  \item [{LoRa}]\begingroup Long Range - Công nghệ truyền thông không dây tầm xa, công suất thấp\nomeqref {0}\nompageref{1}
+  \item [{MQTT}]\begingroup Message Queuing Telemetry Transport - Giao thức truyền bản tin nhẹ cho IoT\nomeqref {0}\nompageref{1}
+  \item [{pH}]\begingroup Potential of Hydrogen - Chỉ số axit/kiềm của dung dịch\nomeqref {0}\nompageref{1}
+  \item [{PWM}]\begingroup Pulse Width Modulation - Điều chế độ rộng xung\nomeqref {0}\nompageref{1}
+  \item [{TDS}]\begingroup Total Dissolved Solids - Tổng chất rắn hòa tan\nomeqref {0}\nompageref{1}
+
+\end{thenomenclature}
