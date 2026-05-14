@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 // #include "./IR_Receiver/IR_Receiver.h"
-// #include "./IR_Sender/IR_Sender.h"
+#include "./IR_Sender/IR_Sender.h"
 #include "./PH_Sensor/PH_sensor.h"
 #include "./SCD40/SCD40.h"
 #include "./TDSSensor/TDSSensor.h"
@@ -11,6 +11,8 @@
 #include "./Relay/Relay.h"
 #include "./LoraReceiver/LoraReceiver.h"
 #include "./LoraSend/LoraSender.h"
+#include "./PriorityTask/PriorityTask.h"
+#include "./IR_Receiver/IR_Receiver.h"
 #define PowEn3 A3 // 5V
 #define PowEn1 A2 // 3.3V
 #define PowEn2 7 // 12V
@@ -19,6 +21,11 @@ float temperature1, humidity, tdsValue, co2Value, phValue;
 double lightValue;
 bool relay1State = true, relay2State = true;
 char mod[12] = "auto"; // "auto" or "manual"
+bool sensorTaskRunning = false;
+bool pendingSensorSend = false;
+bool pendingAirConditionerSend = false;
+bool airConditionerState = false;
+float pendingAirConditionerTemp = 0.0;
 
 struct AutoConfig
 {
@@ -35,6 +42,7 @@ struct AutoConfig
   float tdsMax = 800.0;
   float phMin = 5.8;
   float phMax = 6.5;
+  float airConditionerTemp = 24.0;
 };
 
 AutoConfig autoConfig;
@@ -47,15 +55,25 @@ bool handleLoRaRelayCommand(const char *command);
 bool handleLoRaConfigCommand(const char *command);
 bool updateModeConfig(const char *json);
 bool updateFloatConfig(const char *json, const char *key, float &value);
+bool updateAirConditionerTempConfig(const char *json);
 const char *findJsonValue(const char *json, const char *key);
+void serviceLoRaPriority();
+void servicePendingAirConditioner();
+void auto_control();
 
 void readSensors()
 {
+  PriorityTask_run();
   phValue = PH_Sensor_read();
+  PriorityTask_run();
   co2Value = SCD40_read();
+  PriorityTask_run();
   tdsValue = TDS_Sensor_read();
+  PriorityTask_run();
   lightValue = TSL2561_read();
+  PriorityTask_run();
   RS485_Sensor_read(temperature1, humidity);
+  PriorityTask_run();
 }
 
 void handleLoRaCommand(const char *rawCommand)
@@ -65,6 +83,13 @@ void handleLoRaCommand(const char *rawCommand)
 
   if (commandStartsWith(rawCommand, "sensor"))
   {
+    if (sensorTaskRunning)
+    {
+      pendingSensorSend = true;
+      Serial.println(F("Sensor request deferred"));
+      return;
+    }
+
     sensor_actuator_send();
     return;
   }
@@ -201,6 +226,7 @@ bool handleLoRaConfigCommand(const char *command)
   changed |= updateFloatConfig(json, "tds_max", autoConfig.tdsMax);
   changed |= updateFloatConfig(json, "ph_min", autoConfig.phMin);
   changed |= updateFloatConfig(json, "ph_max", autoConfig.phMax);
+  changed |= updateAirConditionerTempConfig(json);
   strncpy(mod, autoConfig.mode, sizeof(mod));
   mod[sizeof(mod) - 1] = '\0';
 
@@ -253,6 +279,28 @@ bool updateFloatConfig(const char *json, const char *key, float &value)
   return true;
 }
 
+bool updateAirConditionerTempConfig(const char *json)
+{
+  const char *valueStart = findJsonValue(json, "airConditionerTemp");
+  if (valueStart == nullptr)
+  {
+    valueStart = findJsonValue(json, "air_conditioner_temp");
+  }
+
+  if (valueStart == nullptr)
+  {
+    return false;
+  }
+
+  autoConfig.airConditionerTemp = atof(valueStart);
+  Serial.print(F("Updated airConditionerTemp: "));
+  Serial.println(autoConfig.airConditionerTemp);
+  pendingAirConditionerTemp = autoConfig.airConditionerTemp;
+  pendingAirConditionerSend = true;
+  airConditionerState = true;
+  return true;
+}
+
 const char *findJsonValue(const char *json, const char *key)
 {
   char pattern[24];
@@ -288,7 +336,7 @@ void setup()
   delay(2000);
   while (!Serial);
 
-  // IR_receiver_setup();
+  IR_receiver_setup();
   pinMode(PowEn1, OUTPUT);
   pinMode(PowEn2, OUTPUT);
   pinMode(PowEn3, OUTPUT);
@@ -304,26 +352,146 @@ void setup()
   relay_setup();
   LoRa_Receiver_setup();
   LoRa_Receiver_setCommandCallback(handleLoRaCommand);
+  PriorityTask_setServiceCallback(serviceLoRaPriority);
   LoRa_Sender_setup();
 }
+
+void serviceLoRaPriority()
+{
+  LoRa_Receiver();
+}
+
 void sensor_actuator_send()
 {
+  if (sensorTaskRunning)
+  {
+    pendingSensorSend = true;
+    return;
+  }
+
+  sensorTaskRunning = true;
   readSensors();
+  PriorityTask_run();
+  auto_control();
+  PriorityTask_run();
   LoRa_Sender(temperature1, humidity, tdsValue, lightValue, co2Value, phValue, relay1State, relay2State);
+  sensorTaskRunning = false;
+
+  if (pendingSensorSend)
+  {
+    pendingSensorSend = false;
+    sensor_actuator_send();
+  }
 }
 void auto_control()
 {
+  if (strcmp(mod, "auto") != 0)
+  {
+    return;
+  }
 
+  if (temperature1 > autoConfig.tempMax && !airConditionerState)
+  {
+    airConditionerState = true;
+    pendingAirConditionerTemp = autoConfig.airConditionerTemp;
+    pendingAirConditionerSend = true;
+    Serial.println(F("AUTO: temperature above max, air conditioner ON"));
+  }
+  else if (temperature1 < autoConfig.tempSafe && airConditionerState)
+  {
+    airConditionerState = false;
+    pendingAirConditionerTemp = -1.0;
+    pendingAirConditionerSend = true;
+    Serial.println(F("AUTO: temperature below safe, air conditioner OFF"));
+  }
 
+  if (co2Value > autoConfig.co2Max)
+  {
+    if (!relay1State)
+    {
+      relay1State = true;
+      relay1_on();
+      Serial.println(F("AUTO: CO2 above max, RELAY1 ON"));
+    }
+
+    if (!relay2State)
+    {
+      relay2State = true;
+      relay2_on();
+      Serial.println(F("AUTO: CO2 above max, RELAY2 ON"));
+    }
+
+    return;
+  }
+
+  if (lightValue > autoConfig.lightMax && relay1State)
+  {
+    relay1State = false;
+    relay1_off();
+    Serial.println(F("AUTO: light above max, RELAY1 OFF"));
+  }
+  else if (lightValue < autoConfig.lightMin && !relay1State)
+  {
+    relay1State = true;
+    relay1_on();
+    Serial.println(F("AUTO: light below min, RELAY1 ON"));
+  }
+
+  if (humidity < autoConfig.humiditySafe && relay2State)
+  {
+    relay2State = false;
+    relay2_off();
+    Serial.println(F("AUTO: humidity below safe, RELAY2 OFF"));
+  }
+  else if (humidity > autoConfig.humidityMax && !relay2State)
+  {
+    relay2State = true;
+    relay2_on();
+    Serial.println(F("AUTO: humidity above max, RELAY2 ON"));
+  }
+
+  if (co2Value < autoConfig.co2Safe &&
+      temperature1 <= autoConfig.tempMax &&
+      humidity <= autoConfig.humidityMax)
+  {
+    if (relay1State)
+    {
+      relay1State = false;
+      relay1_off();
+      Serial.println(F("AUTO: CO2 below safe, RELAY1 OFF"));
+    }
+
+    if (relay2State)
+    {
+      relay2State = false;
+      relay2_off();
+      Serial.println(F("AUTO: CO2 below safe, RELAY2 OFF"));
+    }
+  }
 }
 void manual_control()
 {
 
 }
+
+void servicePendingAirConditioner()
+{
+  if (!pendingAirConditionerSend)
+  {
+    return;
+  }
+
+  pendingAirConditionerSend = false;
+  Serial.print(F("Sending air conditioner command: "));
+  Serial.println(pendingAirConditionerTemp);
+  AirConditioner_sendTemperature(pendingAirConditionerTemp);
+}
+
 void loop()
 {
   // read IR signal from remote control and print to serial monitor
   // IR_receiver();
 
   LoRa_Receiver();
+  servicePendingAirConditioner();
 }

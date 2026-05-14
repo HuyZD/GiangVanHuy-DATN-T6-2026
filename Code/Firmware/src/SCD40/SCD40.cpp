@@ -15,7 +15,8 @@ float SCD40_read()
 {
   // Serial.println("SCD40 Read");
   bool dataReady = false;
-  uint16_t co2;
+  uint16_t co2 = 0;
+  static float lastCo2Value = 0.0;
   float temp, humidity;
   if (scd4x.getDataReadyStatus(dataReady) == 0 && dataReady)
   {
@@ -24,9 +25,11 @@ float SCD40_read()
     {
       // Serial.print("CO2 [ppm]: ");
       // Serial.println(co2);
+      lastCo2Value = (float)co2;
     }
   }
 
   // delay(5000); // 0.2Hz sampling
-  return (float)co2;
+  return lastCo2Value;
 }
+

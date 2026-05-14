@@ -18,21 +18,7 @@ Vì node sử dụng Arduino Pro Mini nên tài nguyên xử lý, số chân và
 
 \begin{figure}[h!]
     \centering
-    \begin{tikzpicture}[node distance=1.8cm, every node/.style={font=\small}]
-        \node[draw, rounded corners, minimum width=3.1cm, minimum height=1cm, fill=green!10] (sensor) {Khối cảm biến};
-        \node[draw, rounded corners, right=of sensor, minimum width=3.1cm, minimum height=1cm, fill=green!10] (mcu) {Arduino Pro Mini};
-        \node[draw, rounded corners, right=of mcu, minimum width=3.1cm, minimum height=1cm, fill=green!10] (lora) {LoRa RA-02};
-        \node[draw, rounded corners, below=of mcu, minimum width=3.1cm, minimum height=1cm, fill=yellow!15] (act) {Relay và IR};
-        \node[draw, rounded corners, above=of mcu, minimum width=3.1cm, minimum height=1cm, fill=blue!10] (power) {Khối nguồn};
-        \node[draw, rounded corners, right=of lora, minimum width=3.1cm, minimum height=1cm, fill=orange!15] (gw) {Gateway ESP32};
-        \draw[->, thick] (sensor) -- (mcu);
-        \draw[->, thick] (mcu) -- (lora);
-        \draw[<->, thick] (lora) -- (gw);
-        \draw[->, thick] (mcu) -- (act);
-        \draw[->, thick] (power) -- (mcu);
-        \draw[->, thick] (power) -- (sensor);
-        \draw[->, thick] (power) -- (act);
-    \end{tikzpicture}
+    \includegraphics[width=\textwidth]{chapter4/image/node.png}
     \caption{Kiến trúc phần cứng tổng thể của node}
     \label{fig:node_hardware_overview}
 \end{figure}

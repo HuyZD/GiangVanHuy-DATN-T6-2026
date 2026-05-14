@@ -1,13 +1,13 @@
 \section{Mục tiêu của đề tài}
-Mục tiêu tổng quát của khóa luận là thiết kế và phát triển một hệ thống IoT có khả năng giám sát chất lượng không khí trong căn hộ, theo dõi điều kiện chăm sóc cây trầu bà và điều khiển một số thiết bị hỗ trợ cải thiện môi trường sống. Định hướng của đề tài là chứng minh tính khả thi của mô hình kết hợp IAQ, trầu bà/thủy canh quy mô nhỏ và điều khiển thiết bị theo thời gian thực.
+Mục tiêu cốt lõi của khóa luận là thiết kế, chế tạo và đánh giá một hệ thống Internet vạn vật (IoT) đa nhiệm, tích hợp khả năng đo lường động học vi khí hậu trong không gian căn hộ, quản trị điều kiện sinh trưởng của thực vật thủy canh (lan ý), đồng thời thiết lập cơ chế điều khiển chủ động đối với các thiết bị viền nhằm tối ưu hóa môi trường sống. Cần minh định rằng, giá trị lõi của nghiên cứu không nằm ở nỗ lực chứng minh hệ thực vật có khả năng thay thế hoàn toàn các giải pháp cơ điện lọc khí chuyên dụng. Thay vào đó, đề tài tập trung lượng giá tính khả thi và độ tin cậy của một kiến trúc tích hợp đa phương diện: bao gồm việc số hóa các chỉ số IAQ, quản lý tự động hệ sinh thái thủy canh vi mô và thiết lập vòng lặp điều khiển phản hồi theo thời gian thực.
 
-Các mục tiêu cụ thể gồm:
+Để hiện thực hóa định hướng này, các mục tiêu cụ thể được xác định như sau:
 \begin{itemize}
-    \item Thiết kế node cảm biến sử dụng Arduino Pro Mini để đọc TDS, pH, nhiệt độ, độ ẩm, CO2 và ánh sáng.
-    \item Xây dựng kênh truyền LoRa giữa node cảm biến và gateway ESP32.
-    \item Phát triển gateway ESP32 để nhận dữ liệu LoRa, kiểm tra gói tin và gửi telemetry lên ThingsBoard.
-    \item Thiết kế ứng dụng Flutter kết nối ThingsBoard để hiển thị dữ liệu, trạng thái cảnh báo, lịch sử thông số và cấu hình ngưỡng vận hành.
-    \item Xây dựng chức năng điều khiển relay bật/tắt quạt, đèn và điều khiển tăng giảm nhiệt độ điều hòa qua IR tại node.
-    \item Đề xuất các luật điều khiển dựa trên ngưỡng CO2, ánh sáng, nhiệt độ, độ ẩm, TDS và pH nhằm hỗ trợ cải thiện IAQ và duy trì điều kiện phù hợp cho trầu bà.
-    \item Đánh giá khả năng hoạt động của hệ thống trong kịch bản căn hộ chung cư.
+    \item Thiết kế và chế tạo các cụm node cảm biến ngoại vi dựa trên nền tảng vi xử lý Arduino Pro Mini, đảm nhiệm việc trích xuất liên tục các tham số hóa sinh và vi khí hậu bao gồm: độ dẫn điện TDS, nồng độ ion pH, nhiệt độ môi trường, độ ẩm tương đối, phân áp nồng độ CO2 và cường độ bức xạ quang học.
+    \item Thiết lập giao thức truyền thông tầm xa, công suất thấp (LoRa) nhằm bảo đảm tính toàn vẹn và độ tin cậy của kênh truyền dữ liệu từ các node biên đến gateway trung tâm, vượt qua các giới hạn suy hao của hạ tầng mạng cục bộ.
+    \item Xây dựng hệ thống gateway ứng dụng vi điều khiển ESP32 với chức năng giải mã gói tin LoRa, xác thực tính hợp lệ của dữ liệu và định tuyến chuỗi thời gian telemetry lên kiến trúc đám mây ThingsBoard.
+    \item Phát triển hệ sinh thái phần mềm giao diện người dùng trên nền tảng di động Flutter, tích hợp với API của ThingsBoard nhằm cung cấp khả năng trực quan hóa dữ liệu biểu đồ, giám sát trạng thái cảnh báo, truy xuất lược sử thông số và linh hoạt cấu hình các ngưỡng vận hành biên.
+    \item Tích hợp khả năng điều khiển thiết bị chấp hành ngay tại node biên, cho phép thao tác đóng/cắt module relay (điều khiển quạt thông gió, hệ thống chiếu sáng) và điều chế mã hồng ngoại (điều khiển bù trừ nhiệt độ thông qua hệ thống điều hòa).
+    \item Xây dựng và đề xuất tập luật điều khiển logic dựa trên biên độ dao động của các tham số đầu vào (nồng độ CO2, mức độ chiếu sáng, gradient nhiệt - ẩm, cũng như các chỉ số dung dịch TDS và pH), qua đó song hành cải thiện các chỉ tiêu IAQ và duy trì môi trường sống lý tưởng cho hệ thực vật.
+    \item Khảo nghiệm, hiệu chỉnh và đánh giá năng lực vận hành của nguyên mẫu hệ thống thông qua các kịch bản thực chứng trong môi trường căn hộ chung cư tiêu chuẩn.
 \end{itemize}

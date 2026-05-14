@@ -8,6 +8,7 @@ class Node {
 
   bool autoMode;
   Map<String, num> thresholds;
+  int airConditionerTemperature;
 
   static const Map<String, num> defaultThresholds = {
     "light_min": 1000,
@@ -29,7 +30,8 @@ class Node {
     required this.name,
     required this.sensors,
     required this.actuators,
-    this.autoMode = false,
+    this.autoMode = true,
+    this.airConditionerTemperature = 20,
     Map<String, num>? thresholds,
   }) : thresholds = {
          ...defaultThresholds,
@@ -43,12 +45,14 @@ class Node {
       "sensors": sensors.map((device) => device.toJson()).toList(),
       "actuators": actuators.map((device) => device.toJson()).toList(),
       "autoMode": autoMode,
+      "airConditionerTemperature": airConditionerTemperature,
       "thresholds": thresholds,
     };
   }
 
   factory Node.fromJson(Map<String, dynamic> json) {
     final rawThresholds = json["thresholds"] as Map?;
+    final rawTemperature = json["airConditionerTemperature"];
 
     return Node(
       id: json["id"] ?? "",
@@ -59,7 +63,10 @@ class Node {
       actuators: (json["actuators"] as List? ?? [])
           .map((device) => Device.fromJson(Map<String, dynamic>.from(device)))
           .toList(),
-      autoMode: json["autoMode"] ?? false,
+      autoMode: json["autoMode"] ?? true,
+      airConditionerTemperature: rawTemperature is num
+          ? rawTemperature.round()
+          : int.tryParse(rawTemperature.toString()) ?? 20,
       thresholds: rawThresholds?.map(
         (key, value) => MapEntry(
           key.toString(),

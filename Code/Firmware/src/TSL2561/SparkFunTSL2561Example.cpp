@@ -47,6 +47,7 @@ Updated to Arduino 1.6.4 5/2015
 // (Wire is a standard library included with Arduino):
 
 #include "SparkFunTSL2561Example.h"
+#include "../PriorityTask/PriorityTask.h"
 
 // Create an SFE_TSL2561 object, here called "light":
 
@@ -139,7 +140,7 @@ double TSL2561_read()
 
   // ms = 1000;
   // light.manualStart();
-  delay(ms);
+  PriorityTask_delay(ms);
   // light.manualStop();
 
   // Once integration is complete, we'll retrieve the data.

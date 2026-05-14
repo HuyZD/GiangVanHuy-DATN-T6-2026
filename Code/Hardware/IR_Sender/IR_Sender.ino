@@ -426,8 +426,8 @@ const	uint16_t rawData30[RAW_DATA_LEN] PROGMEM ={
 	446, 1702, 422, 654, 422, 650, 446, 630, 
 	418, 1730, 418, 1726, 422, 1730, 418, 1000};
 
-void loop() {
-	uint16_t buffer[RAW_DATA_LEN];
+void loop() {uint16_t buffer[RAW_DATA_LEN];
+	
   if (Serial.available()){
     char command = Serial.read();
    if (command == 'a') {

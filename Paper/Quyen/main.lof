@@ -2,15 +2,16 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc phần cứng tổng thể của node}}{13}{figure.caption.8}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Luồng cấp nguồn chính của node}}{16}{figure.caption.9}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Chu kỳ hoạt động cơ bản của node}}{20}{figure.caption.10}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Nguyên lý điều khiển relay của node}}{25}{figure.caption.11}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc phần cứng tổng thể của node}}{16}{figure.caption.8}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Luồng cấp nguồn chính của node}}{19}{figure.caption.9}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Chu kỳ hoạt động cơ bản của node}}{23}{figure.caption.10}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Nguyên lý điều khiển relay của node}}{28}{figure.caption.11}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Luồng dữ liệu hai chiều của hệ thống}}{28}{figure.caption.12}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Minh họa màn hình đăng nhập của ứng dụng}}{35}{figure.caption.13}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa màn hình Sensor hiển thị dữ liệu node}}{36}{figure.caption.14}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Minh họa màn hình Actuator điều khiển relay và điều hòa}}{36}{figure.caption.15}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc tổng thể của hệ thống}}{31}{figure.caption.12}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Luồng dữ liệu hai chiều của hệ thống}}{32}{figure.caption.13}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa màn hình đăng nhập của ứng dụng}}{39}{figure.caption.14}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Minh họa màn hình Sensor hiển thị dữ liệu node}}{40}{figure.caption.15}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Minh họa màn hình Actuator điều khiển relay và điều hòa}}{40}{figure.caption.16}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

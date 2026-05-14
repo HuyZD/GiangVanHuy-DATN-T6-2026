@@ -5,7 +5,7 @@
  *  sketch.
  */
 #include "IR_Receiver.h"
-IRrecvPCI myReceiver(4); // pin number for the receiver
+IRrecvPCI myReceiver(2); // pin number for the receiver
 
 void IR_receiver_setup()
 {
@@ -17,16 +17,18 @@ void IR_receiver_setup()
 
 void IR_receiver()
 {
-  Serial.println(F("IR Receiver"));
+ // Serial.println(F("IR Receiver"));
   // Continue looping until you get a complete signal received
   if (myReceiver.getResults())
   {
+    const bufIndex_t rawLength = recvGlobal.recvLength;
+
     Serial.println(F("Do a cut-and-paste of the following lines into the "));
     Serial.println(F("designated location in rawSend.ino"));
     Serial.print(F("\n#define RAW_DATA_LEN "));
-    Serial.println(recvGlobal.recvLength, DEC);
+    Serial.println(rawLength, DEC);
     Serial.print(F("uint16_t rawData[RAW_DATA_LEN]={\n\t"));
-    for (bufIndex_t i = 1; i < recvGlobal.recvLength; i++)
+    for (bufIndex_t i = 1; i < rawLength; i++)
     {
       Serial.print(recvGlobal.recvBuffer[i], DEC);
       Serial.print(F(", "));
@@ -34,6 +36,9 @@ void IR_receiver()
         Serial.print(F("\n\t"));
     }
     Serial.println(F("1000};")); // Add arbitrary trailing space
+    myReceiver.disableIRIn();
+    delay(200);
     myReceiver.enableIRIn();     // Restart receiver
+    Serial.println(F("Ready to receive IR signals"));
   }
 }

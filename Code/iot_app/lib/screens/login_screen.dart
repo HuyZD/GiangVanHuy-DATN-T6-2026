@@ -74,21 +74,21 @@ class _LoginScreenState extends State<LoginScreen> {
             actuators: [
               Device(
                 id: "RL1",
-                name: "RL1",
+                name: "light",
                 type: "actuator",
                 value: "0",
                 actuatorType: "relay",
               ),
               Device(
                 id: "RL2",
-                name: "RL2",
+                name: "Fan",
                 type: "actuator",
                 value: "0",
                 actuatorType: "relay",
               ),
               Device(
                 id: "AC",
-                name: "Điều hòa",
+                name: "Aircondition",
                 type: "actuator",
                 value: "0",
                 actuatorType: "ac",

@@ -1,4 +1,5 @@
 #include "PH_sensor.h"
+#include "../PriorityTask/PriorityTask.h"
 
 void PH_Sensor_setup()
 {
@@ -18,6 +19,6 @@ float PH_Sensor_read()
   // Serial.print("  Voltage: ");
   // Serial.print(voltage, 3);
 
-  delay(1000);
+  PriorityTask_delay(1000);
   return phValue;
 }

@@ -6,14 +6,32 @@
  *   
  */
 
-#include <IRLibSendBase.h>    //We need the base code
-#include <IRLib_HashRaw.h>    //Only use raw sender
+#include "IR_Sender.h"
 
-IRsendRaw mySender;
+class IRsendRawProgmem : public IRsendRaw
+{
+public:
+	void sendProgmem(const uint16_t rawData[], uint8_t len, uint8_t khz)
+	{
+		enableIROut(khz);
+		for (uint8_t i = 0; i < len; i++)
+		{
+			const uint16_t duration = pgm_read_word(&rawData[i]);
+			if (i & 1)
+			{
+				space(duration);
+			}
+			else
+			{
+				mark(duration);
+			}
+		}
+		space(0);
+	}
+};
 
+IRsendRawProgmem mySender;
 
-
-#define RAW_DATA_LEN 200
 const uint16_t rawData17[RAW_DATA_LEN] PROGMEM ={
 	4322, 4450, 450, 1698, 450, 646, 430, 1694, 
 	454, 1698, 450, 622, 450, 622, 454, 1694, 
@@ -42,31 +60,31 @@ const uint16_t rawData17[RAW_DATA_LEN] PROGMEM ={
 	446, 1702, 422, 1726, 422, 1726, 422, 1000};
 
 const uint16_t rawDataOff[RAW_DATA_LEN] PROGMEM ={
-	4310, 4470, 454, 1694, 478, 598, 454, 1694, 
-	478, 1670, 450, 622, 478, 598, 478, 1670, 
-	478, 594, 482, 594, 478, 1670, 478, 594, 
-	454, 622, 454, 1694, 478, 1670, 454, 622, 
-	478, 1666, 482, 594, 454, 1694, 454, 1694, 
-	482, 1666, 454, 1694, 454, 622, 474, 1674, 
-	478, 1670, 450, 1698, 474, 598, 454, 622, 
-	454, 622, 450, 622, 450, 1698, 478, 598, 
-	474, 598, 454, 1694, 478, 1670, 478, 1670, 
-	450, 626, 474, 598, 478, 598, 450, 622, 
-	478, 598, 474, 598, 454, 622, 474, 598, 
-	450, 1698, 454, 1698, 474, 1674, 474, 1674, 
-	470, 1678, 474, 5262, 4322, 4454, 474, 1698, 
-	426, 646, 450, 1698, 450, 1698, 450, 626, 
-	446, 606, 446, 1722, 450, 626, 446, 626, 
-	450, 1698, 446, 630, 446, 626, 450, 1698, 
-	450, 1698, 450, 622, 450, 1702, 422, 650, 
-	422, 1726, 446, 1702, 446, 1702, 422, 1726, 
-	446, 630, 422, 1726, 422, 1726, 446, 1702, 
-	446, 630, 442, 630, 446, 630, 442, 630, 
-	446, 1702, 446, 626, 446, 630, 446, 1702, 
-	442, 1706, 446, 1702, 442, 634, 442, 630, 
-	446, 626, 422, 654, 422, 654, 442, 630, 
-	446, 630, 442, 630, 442, 1706, 446, 1702, 
-	434, 1714, 446, 1702, 446, 1702, 422, 1000};
+		4344, 4452, 468, 1656, 496, 600, 476, 1672, 
+        472, 1676, 476, 600, 472, 576, 496, 1676, 
+        476, 596, 472, 604, 472, 1676, 472, 604, 
+        472, 600, 476, 1672, 472, 1676, 472, 604, 
+        472, 1672, 476, 580, 516, 1652, 472, 1676, 
+        472, 1676, 472, 1676, 472, 576, 500, 1676, 
+        468, 1680, 468, 1656, 496, 580, 492, 604, 
+        472, 600, 472, 572, 504, 1676, 472, 580, 
+        496, 576, 496, 1656, 492, 1628, 520, 1676, 
+        472, 600, 476, 600, 472, 576, 524, 576, 
+        472, 600, 472, 604, 472, 576, 496, 604, 
+        472, 1676, 472, 1676, 472, 1676, 472, 1680, 
+        468, 1680, 468, 5288, 4348, 4404, 496, 1652, 
+        468, 628, 472, 1652, 472, 1676, 472, 604, 
+        468, 628, 448, 1676, 468, 604, 472, 580, 
+        496, 1676, 472, 600, 472, 604, 472, 1672, 
+        500, 1652, 472, 604, 468, 1676, 472, 604, 
+        472, 1648, 500, 1676, 472, 1680, 468, 1672, 
+        472, 608, 468, 1676, 496, 1652, 472, 1676, 
+        472, 604, 468, 604, 472, 604, 520, 552, 
+        472, 1676, 472, 600, 472, 604, 472, 1676, 
+        468, 1680, 472, 1676, 472, 600, 472, 604, 
+        472, 596, 476, 604, 468, 604, 468, 580, 
+        500, 600, 472, 628, 444, 1680, 468, 1704, 
+        448, 1672, 476, 1672, 500, 1652, 468, 1000};
 
 const uint16_t rawData18[RAW_DATA_LEN] PROGMEM ={
 	4306, 4474, 450, 1694, 478, 598, 450, 1698, 
@@ -418,6 +436,83 @@ const	uint16_t rawData30[RAW_DATA_LEN] PROGMEM ={
 	422, 654, 422, 650, 422, 654, 418, 654, 
 	446, 1702, 422, 654, 422, 650, 446, 630, 
 	418, 1730, 418, 1726, 422, 1730, 418, 1000};
+
+void sendRawAirConditionerData(const uint16_t rawData[])
+{
+	mySender.sendProgmem(rawData, RAW_DATA_LEN, 40);
+}
+
+void AirConditioner_sendTemperature(float temperature)
+{
+	uint16_t buffer[RAW_DATA_LEN];
+	if (temperature < 0)
+	{
+		sendRawAirConditionerData(rawDataOff);
+		Serial.println(F("Air conditioner OFF"));
+		return;
+	}
+
+	const int temperatureValue = static_cast<int>(temperature);
+	if (temperature != temperatureValue)
+	{
+		Serial.print(F("Invalid air conditioner temperature: "));
+		Serial.println(temperature);
+		return;
+	}
+
+	switch (temperatureValue)
+	{
+	case 17:
+		sendRawAirConditionerData(rawData17);
+		break;
+	case 18:
+		sendRawAirConditionerData(rawData18);
+		break;
+	case 19:
+		sendRawAirConditionerData(rawData19);
+		break;
+	case 20:
+		sendRawAirConditionerData(rawData20);
+		break;
+	case 21:
+		sendRawAirConditionerData(rawData21);
+		break;
+	case 22:
+		sendRawAirConditionerData(rawData22);
+		break;
+	case 23:
+		sendRawAirConditionerData(rawData23);
+		break;
+	case 24:
+		sendRawAirConditionerData(rawData24);
+		break;
+	case 25:
+		sendRawAirConditionerData(rawData25);
+		break;
+	case 26:
+		sendRawAirConditionerData(rawData26);
+		break;
+	case 27:
+		sendRawAirConditionerData(rawData27);
+		break;
+	case 28:
+		sendRawAirConditionerData(rawData28);
+		break;
+	case 29:
+		sendRawAirConditionerData(rawData29);
+		break;
+	case 30:
+		sendRawAirConditionerData(rawData30);
+		break;
+	default:
+		Serial.print(F("Invalid air conditioner temperature: "));
+		Serial.println(temperature);
+		return;
+	}
+
+	Serial.print(F("Air conditioner temperature sent: "));
+	Serial.println(temperatureValue);
+}
 
 void IR_Sender() {
 	

@@ -1,6 +1,6 @@
 \textbf{Những công việc đã thực hiện trong khóa luận}
 
-Khóa luận đã nghiên cứu và phát triển hệ thống kiểm soát chất lượng không khí trong căn hộ chung cư sử dụng cây trầu bà và IoT. Trên cơ sở tham khảo hướng tiếp cận kết hợp IAQ, cây trồng/thủy canh, bộ lọc thực vật và IoT, đề tài xây dựng một nguyên mẫu phù hợp với bối cảnh căn hộ: chi phí hợp lý, dễ lắp đặt, có khả năng giám sát theo thời gian thực và hỗ trợ điều khiển thiết bị. Hệ thống được xây dựng theo mô hình IoT hoàn chỉnh, bao gồm node cảm biến Arduino Pro Mini, truyền thông LoRa, gateway ESP32, nền tảng ThingsBoard và ứng dụng Flutter.
+Khóa luận đã nghiên cứu và phát triển một nguyên mẫu hệ thống kiểm soát chất lượng không khí trong căn hộ chung cư có tích hợp cây lan ý và công nghệ IoT. Trên cơ sở tham khảo các hướng tiếp cận về IAQ, cây trồng/thủy canh và hệ thống giám sát thông minh, đề tài xây dựng mô hình phù hợp với bối cảnh căn hộ: quy mô nhỏ, chi phí hợp lý, dễ lắp đặt, có khả năng theo dõi dữ liệu theo thời gian thực và hỗ trợ điều khiển thiết bị. Hệ thống được tổ chức theo kiến trúc IoT gồm node cảm biến Arduino Pro Mini, liên kết LoRa, gateway ESP32, nền tảng ThingsBoard và ứng dụng Flutter.
 
 Các kết quả chính đã đạt được gồm:
 \begin{itemize}
@@ -12,4 +12,4 @@ Các kết quả chính đã đạt được gồm:
     \item Triển khai điều khiển relay bật/tắt quạt, relay bật/tắt đèn và điều khiển điều hòa bằng IR tại node.
 \end{itemize}
 
-Kết quả cho thấy hệ thống có khả năng giám sát môi trường trong nhà, hỗ trợ chăm sóc cây trầu bà và thực hiện điều khiển thiết bị từ xa. Kiến trúc node - gateway - cloud - app phù hợp với điều kiện căn hộ chung cư và có khả năng mở rộng khi bổ sung thêm node cảm biến. Tuy nhiên, để khẳng định hiệu quả cải thiện IAQ ở mức định lượng, hệ thống cần được kiểm thử dài hạn hơn với cảm biến được hiệu chuẩn, nhiều điều kiện thông gió khác nhau và các thông số bổ sung như VOC hoặc bụi mịn.
+Kết quả triển khai cho thấy hệ thống có thể giám sát môi trường trong nhà, hỗ trợ chăm sóc cây lan ý và thực hiện điều khiển thiết bị từ xa. Kiến trúc node - gateway - cloud - app phù hợp với điều kiện căn hộ chung cư và có thể mở rộng khi bổ sung thêm node cảm biến. Tuy nhiên, để đánh giá hiệu quả cải thiện IAQ ở mức định lượng, hệ thống cần được kiểm thử trong thời gian dài hơn, với cảm biến được hiệu chuẩn, nhiều điều kiện thông gió khác nhau và các thông số bổ sung như VOC hoặc bụi mịn.

@@ -1,7 +1,38 @@
 #include "LoRaReceiver.h"
 
+#if defined(ARDUINO_ARCH_AVR)
+#include <avr/interrupt.h>
+#endif
+
 static const uint8_t LORA_RX_BUFFER_SIZE = 240;
 static LoRaCommandCallback commandCallback = nullptr;
+static volatile bool loraPacketInterruptPending = false;
+
+#if defined(ARDUINO_ARCH_AVR) && defined(PCINT1_vect)
+ISR(PCINT1_vect)
+{
+  if (digitalRead(DIO0) == HIGH)
+  {
+    loraPacketInterruptPending = true;
+  }
+}
+#endif
+
+static void setupLoRaPacketInterrupt()
+{
+  pinMode(DIO0, INPUT);
+
+#if defined(digitalPinToPCICR) && defined(digitalPinToPCICRbit) && defined(digitalPinToPCMSK) && defined(digitalPinToPCMSKbit)
+  volatile uint8_t *pcicr = digitalPinToPCICR(DIO0);
+  volatile uint8_t *pcmsk = digitalPinToPCMSK(DIO0);
+
+  if (pcicr != nullptr && pcmsk != nullptr)
+  {
+    *pcicr |= _BV(digitalPinToPCICRbit(DIO0));
+    *pcmsk |= _BV(digitalPinToPCMSKbit(DIO0));
+  }
+#endif
+}
 
 void LoRa_Receiver_setup()
 {
@@ -21,6 +52,7 @@ void LoRa_Receiver_setup()
   LoRa.setSpreadingFactor(12);
 
   LoRa.receive();
+  setupLoRaPacketInterrupt();
 }
 
 void LoRa_Receiver_setCommandCallback(LoRaCommandCallback callback)
@@ -30,6 +62,8 @@ void LoRa_Receiver_setCommandCallback(LoRaCommandCallback callback)
 
 void LoRa_Receiver()
 {
+  loraPacketInterruptPending = false;
+
   // Try to parse packet
   int packetSize = LoRa.parsePacket();
 

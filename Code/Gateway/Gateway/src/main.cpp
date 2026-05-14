@@ -21,8 +21,10 @@ constexpr long LORA_FREQUENCY = 433000000L;
 constexpr uint8_t LORA_SPREADING_FACTOR = 12;
 constexpr size_t LORA_PACKET_BUFFER_SIZE = 256;
 constexpr size_t LORA_MAX_PAYLOAD_SIZE = 255;
+constexpr size_t NODE_CONFIG_MAX_PAYLOAD_SIZE = 240;
+constexpr size_t CONFIG_COMMAND_PREFIX_LENGTH = sizeof("config:") - 1;
 constexpr uint32_t TELEMETRY_REQUEST_INTERVAL_MS = 20000U;
-constexpr uint32_t NODE_RESPONSE_TIMEOUT_MS = 8000U;
+constexpr uint32_t NODE_RESPONSE_TIMEOUT_MS = 20000U;
 
 constexpr uint8_t LED_PIN = 4;
 
@@ -39,8 +41,9 @@ constexpr char ATTR_TDS_MIN[] = "tds_min";
 constexpr char ATTR_TDS_MAX[] = "tds_max";
 constexpr char ATTR_PH_MIN[] = "ph_min";
 constexpr char ATTR_PH_MAX[] = "ph_max";
+constexpr char ATTR_AIR_CONDITIONER_TEMP[] = "airConditionerTemp";
 
-constexpr std::array<const char *, 13U> SHARED_CONFIG_ATTRIBUTES = {
+constexpr std::array<const char *, 14U> SHARED_CONFIG_ATTRIBUTES = {
   ATTR_AUTO_MODE,
   ATTR_LIGHT_MIN,
   ATTR_LIGHT_MAX,
@@ -53,7 +56,8 @@ constexpr std::array<const char *, 13U> SHARED_CONFIG_ATTRIBUTES = {
   ATTR_TDS_MIN,
   ATTR_TDS_MAX,
   ATTR_PH_MIN,
-  ATTR_PH_MAX
+  ATTR_PH_MAX,
+  ATTR_AIR_CONDITIONER_TEMP
 };
 
 struct AutoConfig {
@@ -70,6 +74,7 @@ struct AutoConfig {
   double tdsMax = 800.0;
   double phMin = 5.8;
   double phMax = 6.5;
+  double airConditionerTemp = 26.0;
 };
 
 unsigned long lastSendTime = 0;
@@ -113,6 +118,8 @@ bool sendRelayCommandToNode(uint8_t relayNumber, bool relayState);
 bool sendAirConditionerPowerToNode(bool enabled);
 bool sendAirConditionerTempChangeToNode(bool increase);
 void sendConfigToNode(const String &configPayload);
+bool configPayloadFitsLoRa(const String &configPayload);
+bool sendConfigChunkToNode(const String &configPayload);
 bool sendLoRaMessage(const String &message);
 bool sendLoRaMessageAndWaitAck(const String &message, uint32_t timeoutMs);
 bool waitForNodePacket(String &packet, int &packetRssi, uint32_t timeoutMs);
@@ -131,13 +138,9 @@ String buildFullConfigPayload();
 void sendDataToThingsBoard(double temperature, double humidity, double PH, double TDS, double CO2, double light, int RSSI, bool RL1, bool RL2) ;
 
 
-const std::array<RPC_Callback, 6U> callbacks = {
-  RPC_Callback{ "setLedStatus", processSetLedStatus },
+const std::array<RPC_Callback, 2U> callbacks = {
   RPC_Callback{ "setRelay1Status", processRelay1 },
-  RPC_Callback{ "setRelay2Status", processRelay2 },
-  RPC_Callback{ "setAirConditionerPower", processAirConditionerPower },
-  RPC_Callback{ "increaseAirConditionerTemp", processAirConditionerTempUp },
-  RPC_Callback{ "decreaseAirConditionerTemp", processAirConditionerTempDown }
+  RPC_Callback{ "setRelay2Status", processRelay2 }
 };
 
 void setup() {
@@ -352,8 +355,76 @@ bool sendAirConditionerTempChangeToNode(bool increase) {
 }
 
 void sendConfigToNode(const String &configPayload) {
+  if (configPayload.length() == 0) {
+    return;
+  }
+
+  if (configPayloadFitsLoRa(configPayload)) {
+    sendConfigChunkToNode(configPayload);
+    return;
+  }
+
+  if (configPayload[0] != '{' || configPayload[configPayload.length() - 1] != '}') {
+    Serial.println("Invalid config payload, not sent");
+    return;
+  }
+
+  Serial.print("Config payload too long, splitting: ");
+  Serial.println(CONFIG_COMMAND_PREFIX_LENGTH + configPayload.length());
+
+  String chunk = "{";
+  int fieldStart = 1;
+  const int payloadEnd = configPayload.length() - 1;
+
+  while (fieldStart < payloadEnd) {
+    const int commaIndex = configPayload.indexOf(',', fieldStart);
+    const int fieldEnd = (commaIndex >= 0 && commaIndex < payloadEnd) ? commaIndex : payloadEnd;
+    const String field = configPayload.substring(fieldStart, fieldEnd);
+
+    String candidate = chunk;
+    if (candidate.length() > 1) {
+      candidate += ",";
+    }
+    candidate += field;
+    candidate += "}";
+
+    if (!configPayloadFitsLoRa(candidate)) {
+      if (chunk.length() == 1) {
+        Serial.print("Config field too long, not sent: ");
+        Serial.println(field);
+        return;
+      }
+
+      chunk += "}";
+      if (!sendConfigChunkToNode(chunk)) {
+        return;
+      }
+      chunk = "{";
+      continue;
+    }
+
+    if (chunk.length() > 1) {
+      chunk += ",";
+    }
+    chunk += field;
+    fieldStart = fieldEnd + 1;
+  }
+
+  if (chunk.length() > 1) {
+    chunk += "}";
+    sendConfigChunkToNode(chunk);
+  }
+}
+
+bool configPayloadFitsLoRa(const String &configPayload) {
+  return CONFIG_COMMAND_PREFIX_LENGTH + configPayload.length() <= NODE_CONFIG_MAX_PAYLOAD_SIZE;
+}
+
+bool sendConfigChunkToNode(const String &configPayload) {
   const String command = "config:" + configPayload;
-  sendLoRaMessageAndWaitAck(command, NODE_RESPONSE_TIMEOUT_MS);
+  Serial.print("Sending config chunk length: ");
+  Serial.println(command.length());
+  return sendLoRaMessageAndWaitAck(command, NODE_RESPONSE_TIMEOUT_MS);
 }
 
 bool sendLoRaMessage(const String &message) {
@@ -593,6 +664,7 @@ bool updateAutoConfig(const Shared_Attribute_Data &data, String &changedPayload)
   changed |= updateDoubleAttribute(data, ATTR_TDS_MAX, autoConfig.tdsMax, changedPayload);
   changed |= updateDoubleAttribute(data, ATTR_PH_MIN, autoConfig.phMin, changedPayload);
   changed |= updateDoubleAttribute(data, ATTR_PH_MAX, autoConfig.phMax, changedPayload);
+  changed |= updateDoubleAttribute(data, ATTR_AIR_CONDITIONER_TEMP, autoConfig.airConditionerTemp, changedPayload);
   changedPayload += "}";
 
   if (!changed) {
@@ -666,6 +738,7 @@ String buildFullConfigPayload() {
   appendJsonField(payload, ATTR_TDS_MAX, String(autoConfig.tdsMax, 2));
   appendJsonField(payload, ATTR_PH_MIN, String(autoConfig.phMin, 2));
   appendJsonField(payload, ATTR_PH_MAX, String(autoConfig.phMax, 2));
+  appendJsonField(payload, ATTR_AIR_CONDITIONER_TEMP, String(autoConfig.airConditionerTemp, 2));
   payload += "}";
   return payload;
 }

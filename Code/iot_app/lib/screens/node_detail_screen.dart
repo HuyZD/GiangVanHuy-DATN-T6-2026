@@ -25,11 +25,16 @@ class NodeDetailScreen extends StatefulWidget {
 class _NodeDetailScreenState extends State<NodeDetailScreen>
     with SingleTickerProviderStateMixin {
   static const String airConditionerPowerKey = "airConditionerPower";
+  static const String airConditionerTemperatureKey = "airConditionerTemp";
+  static const int minAirConditionerTemperature = 16;
+  static const int maxAirConditionerTemperature = 30;
 
   late TabController _tabController;
 
   StreamSubscription<ThingsboardRealtimeUpdate>? realtimeSubscription;
   final Map<String, dynamic> sharedAttributeSnapshot = {};
+  final Set<String> activeTelegramAlerts = {};
+  bool isUpdatingMode = false;
 
   @override
   void initState() {
@@ -66,12 +71,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                 SizedBox(width: 10),
                 Switch(
                   value: widget.node.autoMode,
-                  onChanged: (value) async {
-                    setState(() {
-                      widget.node.autoMode = value;
-                    });
-                    await sendSharedAttributeUpdates({"autoMode": value});
-                  },
+                  onChanged: isUpdatingMode ? null : handleAutoModeChanged,
                 ),
               ],
             ),
@@ -111,10 +111,8 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
             return DeviceCard(device: widget.node.sensors[index]);
           },
         ),
-        if (!widget.node.autoMode) ...[
-          SizedBox(height: 16),
-          buildThresholdPanel(),
-        ],
+        SizedBox(height: 16),
+        buildThresholdPanel(),
       ],
     );
   }
@@ -198,9 +196,39 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     return jwt;
   }
 
+  Future<void> handleAutoModeChanged(bool value) async {
+    setState(() {
+      isUpdatingMode = true;
+    });
+
+    try {
+      if (!value) {
+        try {
+          await refreshRelayStateFromTelemetry();
+        } catch (error) {
+          debugPrint("Failed to refresh relay telemetry before manual: $error");
+        }
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        widget.node.autoMode = value;
+      });
+      await sendSharedAttributeUpdates({"autoMode": value});
+    } finally {
+      if (mounted) {
+        setState(() {
+          isUpdatingMode = false;
+        });
+      }
+    }
+  }
+
   List<String> get sharedAttributeKeys => [
     "autoMode",
     airConditionerPowerKey,
+    airConditionerTemperatureKey,
     ...Node.defaultThresholds.keys,
   ];
 
@@ -223,6 +251,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
       }
 
       applyAirConditionerPower(attributes[airConditionerPowerKey]);
+      applyAirConditionerTemperature(attributes[airConditionerTemperatureKey]);
 
       for (final key in Node.defaultThresholds.keys) {
         final parsedValue = parseThresholdValue(attributes[key]);
@@ -266,6 +295,9 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
       }
 
       applyAirConditionerPower(update.attributes[airConditionerPowerKey]);
+      applyAirConditionerTemperature(
+        update.attributes[airConditionerTemperatureKey],
+      );
 
       for (final key in Node.defaultThresholds.keys) {
         final parsedValue = parseThresholdValue(update.attributes[key]);
@@ -285,20 +317,233 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
         }
       }
 
-      if (widget.node.autoMode) {
-        for (var device in widget.node.actuators) {
-          final value = update.telemetry[device.id];
-          if (value != null) {
-            device.value = value.toString();
-          }
+      for (var device in widget.node.actuators) {
+        if (device.id != "RL1" && device.id != "RL2") continue;
+
+        final value = update.telemetry[device.id];
+        if (value != null) {
+          device.value = normalizeRelayValue(value) ?? value.toString();
+        }
+      }
+    });
+
+    if (update.telemetry.isNotEmpty) {
+      unawaited(checkSensorAlerts());
+    }
+  }
+
+  Future<void> refreshRelayStateFromTelemetry() async {
+    final currentJwt = await ensureJwt();
+    if (currentJwt == null) return;
+
+    final telemetry = await ThingsboardService.getTelemetry(
+      currentJwt,
+      ThingsboardService.deviceId,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      for (final device in widget.node.actuators) {
+        if (device.id != "RL1" && device.id != "RL2") continue;
+
+        final value = latestTelemetryValue(telemetry[device.id]);
+        final relayValue = normalizeRelayValue(value);
+        if (relayValue != null) {
+          device.value = relayValue;
         }
       }
     });
   }
 
+  dynamic latestTelemetryValue(dynamic telemetryValue) {
+    if (telemetryValue is List && telemetryValue.isNotEmpty) {
+      final latest = telemetryValue.first;
+      if (latest is Map && latest.containsKey("value")) {
+        return latest["value"];
+      }
+      return latest;
+    }
+
+    if (telemetryValue is Map && telemetryValue.containsKey("value")) {
+      return telemetryValue["value"];
+    }
+
+    return telemetryValue;
+  }
+
+  String? normalizeRelayValue(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value ? "1" : "0";
+    if (value is num) return value != 0 ? "1" : "0";
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      if (normalized == "1" || normalized == "true" || normalized == "on") {
+        return "1";
+      }
+      if (normalized == "0" || normalized == "false" || normalized == "off") {
+        return "0";
+      }
+    }
+    return null;
+  }
+
   num? parseThresholdValue(dynamic value) {
     if (value is num) return value;
     if (value is String) return num.tryParse(value);
+    return null;
+  }
+
+  num? sensorValue(String sensorId) {
+    for (final device in widget.node.sensors) {
+      if (device.id.toLowerCase() != sensorId.toLowerCase()) continue;
+      return num.tryParse(device.value);
+    }
+    return null;
+  }
+
+  String formatNumber(num value) {
+    if (value % 1 == 0) {
+      return value.toInt().toString();
+    }
+    return value.toStringAsFixed(2);
+  }
+
+  Future<void> checkSensorAlerts() async {
+    await checkRangeAlert(
+      sensorId: "tds",
+      sensorName: "TDS",
+      minKey: "tds_min",
+      maxKey: "tds_max",
+      unit: "ppm",
+    );
+    await checkRangeAlert(
+      sensorId: "ph",
+      sensorName: "PH",
+      minKey: "ph_min",
+      maxKey: "ph_max",
+    );
+    await checkRangeAlert(
+      sensorId: "light",
+      sensorName: "Ánh sáng",
+      minKey: "light_min",
+      maxKey: "light_max",
+      unit: "lux",
+    );
+    await checkMaxAlert(
+      sensorId: "co2",
+      sensorName: "CO2",
+      maxKey: "co2_max",
+      unit: "ppm",
+    );
+    await checkMaxAlert(
+      sensorId: "temperature",
+      sensorName: "Nhiệt độ",
+      maxKey: "temp_max",
+      unit: "°C",
+    );
+    await checkMaxAlert(
+      sensorId: "humidity",
+      sensorName: "Độ ẩm",
+      maxKey: "humidity_max",
+      unit: "%",
+    );
+  }
+
+  Future<void> checkRangeAlert({
+    required String sensorId,
+    required String sensorName,
+    required String minKey,
+    required String maxKey,
+    String unit = "",
+  }) async {
+    final value = sensorValue(sensorId);
+    final minValue = widget.node.thresholds[minKey];
+    final maxValue = widget.node.thresholds[maxKey];
+
+    if (value == null || minValue == null || maxValue == null) return;
+
+    final alertPrefix = "$sensorId:";
+    String? alertKey;
+    String? message;
+    final unitText = unit.isEmpty ? "" : " $unit";
+
+    if (value < minValue) {
+      alertKey = "$alertPrefix<";
+      message =
+          "CẢNH BÁO: $sensorName thấp hơn ngưỡng min\n"
+          "Giá trị cảm biến: ${formatNumber(value)}$unitText\n"
+          "Ngưỡng min: ${formatNumber(minValue)}$unitText";
+    } else if (value > maxValue) {
+      alertKey = "$alertPrefix>";
+      message =
+          "CẢNH BÁO: $sensorName lớn hơn ngưỡng max\n"
+          "Giá trị cảm biến: ${formatNumber(value)}$unitText\n"
+          "Ngưỡng max: ${formatNumber(maxValue)}$unitText";
+    }
+
+    if (alertKey == null || message == null) {
+      activeTelegramAlerts.removeWhere((key) => key.startsWith(alertPrefix));
+      return;
+    }
+
+    if (activeTelegramAlerts.contains(alertKey)) return;
+
+    activeTelegramAlerts
+      ..removeWhere((key) => key.startsWith(alertPrefix))
+      ..add(alertKey);
+
+    try {
+      await ThingsboardService.sendTelegramMessage(message);
+    } catch (error) {
+      activeTelegramAlerts.remove(alertKey);
+      debugPrint("Failed to send Telegram alert: $error");
+    }
+  }
+
+  Future<void> checkMaxAlert({
+    required String sensorId,
+    required String sensorName,
+    required String maxKey,
+    String unit = "",
+  }) async {
+    final value = sensorValue(sensorId);
+    final maxValue = widget.node.thresholds[maxKey];
+
+    if (value == null || maxValue == null) return;
+
+    final alertPrefix = "$sensorId:";
+    final alertKey = "$alertPrefix>";
+    final unitText = unit.isEmpty ? "" : " $unit";
+
+    if (value <= maxValue) {
+      activeTelegramAlerts.removeWhere((key) => key.startsWith(alertPrefix));
+      return;
+    }
+
+    if (activeTelegramAlerts.contains(alertKey)) return;
+
+    activeTelegramAlerts
+      ..removeWhere((key) => key.startsWith(alertPrefix))
+      ..add(alertKey);
+
+    final message =
+        "CẢNH BÁO: $sensorName lớn hơn ngưỡng max\n"
+        "Giá trị cảm biến: ${formatNumber(value)}$unitText\n"
+        "Ngưỡng max: ${formatNumber(maxValue)}$unitText";
+
+    try {
+      await ThingsboardService.sendTelegramMessage(message);
+    } catch (error) {
+      activeTelegramAlerts.remove(alertKey);
+      debugPrint("Failed to send Telegram alert: $error");
+    }
+  }
+
+  int? parseTemperatureValue(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value.round();
+    if (value is String) return int.tryParse(value);
     return null;
   }
 
@@ -337,6 +582,18 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
     }
   }
 
+  void applyAirConditionerTemperature(dynamic value) {
+    final temperature = parseTemperatureValue(value);
+    if (temperature == null || temperature < minAirConditionerTemperature) {
+      return;
+    }
+
+    widget.node.airConditionerTemperature = temperature.clamp(
+      minAirConditionerTemperature,
+      maxAirConditionerTemperature,
+    );
+  }
+
   double thresholdValue(String key) {
     return (widget.node.thresholds[key] ?? Node.defaultThresholds[key]!)
         .toDouble();
@@ -349,6 +606,7 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
       "autoMode": widget.node.autoMode,
       if (airConditioner != null)
         airConditionerPowerKey: airConditioner.value == "1" ? 1 : 0,
+      airConditionerTemperatureKey: widget.node.airConditionerTemperature,
       ...widget.node.thresholds,
     };
   }
@@ -527,24 +785,28 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                 formatValue(values.start),
                 formatValue(values.end),
               ),
-              onChanged: (newValues) {
-                setState(() {
-                  widget.node.thresholds[minKey] = fractionDigits == 0
-                      ? newValues.start.round()
-                      : double.parse(
-                          newValues.start.toStringAsFixed(fractionDigits),
-                        );
-                  widget.node.thresholds[maxKey] = fractionDigits == 0
-                      ? newValues.end.round()
-                      : double.parse(
-                          newValues.end.toStringAsFixed(fractionDigits),
-                        );
-                });
-              },
-              onChangeEnd: (_) => sendSharedAttributeUpdates({
-                minKey: widget.node.thresholds[minKey],
-                maxKey: widget.node.thresholds[maxKey],
-              }),
+              onChanged: widget.node.autoMode
+                  ? (newValues) {
+                      setState(() {
+                        widget.node.thresholds[minKey] = fractionDigits == 0
+                            ? newValues.start.round()
+                            : double.parse(
+                                newValues.start.toStringAsFixed(fractionDigits),
+                              );
+                        widget.node.thresholds[maxKey] = fractionDigits == 0
+                            ? newValues.end.round()
+                            : double.parse(
+                                newValues.end.toStringAsFixed(fractionDigits),
+                              );
+                      });
+                    }
+                  : null,
+              onChangeEnd: widget.node.autoMode
+                  ? (_) => sendSharedAttributeUpdates({
+                      minKey: widget.node.thresholds[minKey],
+                      maxKey: widget.node.thresholds[maxKey],
+                    })
+                  : null,
             ),
           ],
         ),
@@ -553,11 +815,11 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
   }
 
   void showACControlDialog(Device device) {
-    // final savedTemp = int.tryParse(device.value);
-    // int temp = savedTemp != null && savedTemp >= 16 && savedTemp <= 30
-    //     ? savedTemp
-    //     : 25;
     bool isOn = device.value != "0";
+    int temperature = widget.node.airConditionerTemperature.clamp(
+      minAirConditionerTemperature,
+      maxAirConditionerTemperature,
+    );
 
     Future<void> sendACRpc(String method, dynamic params) async {
       final currentJwt = await ensureJwt();
@@ -571,26 +833,59 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
       );
     }
 
+    Future<void> saveAirConditionerTemperature(int value) async {
+      setState(() {
+        widget.node.airConditionerTemperature = value;
+      });
+      await sendSharedAttributeUpdates({airConditionerTemperatureKey: value});
+    }
+
+    Future<void> saveAirConditionerPower(bool value) async {
+      final temperatureToSend = value ? temperature : -1;
+
+      setState(() {
+        device.value = value ? "1" : "0";
+        if (value) {
+          widget.node.airConditionerTemperature = temperature;
+        }
+      });
+
+      await sendSharedAttributeUpdates({
+        airConditionerPowerKey: value ? 1 : 0,
+        airConditionerTemperatureKey: temperatureToSend,
+      });
+      await sendACRpc("setAirConditionerPower", value ? 1 : 0);
+    }
+
     showDialog(
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (context, setStateDialog) {
           return AlertDialog(
-            title: Text("Điều khiển điều hòa"),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Điều khiển điều hòa"),
+                IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 // 🔥 ON/OFF
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("Trạng thái"),
                     Switch(
                       value: isOn,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setStateDialog(() {
                           isOn = value;
                         });
+                        await saveAirConditionerPower(value);
                       },
                     ),
                   ],
@@ -604,75 +899,60 @@ class _NodeDetailScreenState extends State<NodeDetailScreen>
                   children: [
                     IconButton(
                       icon: Icon(Icons.remove),
-                      onPressed: () async {
-                        //  var shouldSendRpc = false;
-                        //setStateDialog(() {
-                        // if (temp > 16) {
-                        //   temp--;
-                        //   shouldSendRpc = true;
-                        // }
-                        // });
-                        //  if (shouldSendRpc) {
-                        await sendACRpc("decreaseAirConditionerTemp", true);
-                        // }
-                      },
+                      onPressed:
+                          !isOn || temperature <= minAirConditionerTemperature
+                          ? null
+                          : () async {
+                              final nextTemperature = temperature - 1;
+                              setStateDialog(() {
+                                temperature = nextTemperature;
+                              });
+                              await saveAirConditionerTemperature(
+                                nextTemperature,
+                              );
+                              await sendACRpc(
+                                "decreaseAirConditionerTemp",
+                                true,
+                              );
+                            },
                     ),
 
-                    SizedBox(width: 20),
+                    SizedBox(
+                      width: 72,
+                      child: Text(
+                        "$temperature°C",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: isOn ? Colors.green.shade700 : Colors.grey,
+                        ),
+                      ),
+                    ),
 
                     IconButton(
                       icon: Icon(Icons.add),
-                      onPressed: () async {
-                        // var shouldSendRpc = false;
-                        // setStateDialog(() {
-                        //   if (temp < 30) {
-                        //     temp++;
-                        //     shouldSendRpc = true;
-                        //   }
-                        // });
-                        // if (shouldSendRpc) {
-                        await sendACRpc("increaseAirConditionerTemp", true);
-                        //}
-                      },
+                      onPressed:
+                          !isOn || temperature >= maxAirConditionerTemperature
+                          ? null
+                          : () async {
+                              final nextTemperature = temperature + 1;
+                              setStateDialog(() {
+                                temperature = nextTemperature;
+                              });
+                              await saveAirConditionerTemperature(
+                                nextTemperature,
+                              );
+                              await sendACRpc(
+                                "increaseAirConditionerTemp",
+                                true,
+                              );
+                            },
                     ),
                   ],
                 ),
-
-                SizedBox(height: 10),
-
-                Text(
-                  isOn ? "Điều hòa đang bật" : "Điều hòa đang tắt",
-                  style: TextStyle(
-                    color: isOn ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ],
             ),
-
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text("Hủy"),
-              ),
-
-              ElevatedButton(
-                onPressed: () async {
-                  setState(() {
-                    device.value = isOn ? "1" : "0";
-                  });
-                  await sendSharedAttributeUpdates({
-                    airConditionerPowerKey: isOn ? 1 : 0,
-                  });
-                  await sendACRpc("setAirConditionerPower", isOn ? 1 : 0);
-
-                  if (mounted) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text("Lưu"),
-              ),
-            ],
           );
         },
       ),

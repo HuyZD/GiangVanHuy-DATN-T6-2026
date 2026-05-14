@@ -2,6 +2,14 @@ Chương này trình bày thiết kế và triển khai hệ thống kiểm soá
 
 \section{Kiến trúc tổng thể}
 \label{sec:architecture}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{chapter5/image/kientruchethong.png}
+    \caption{Kiến trúc tổng thể của hệ thống}
+    \label{fig:system_architecture_overview}
+\end{figure}
+
 Hệ thống gồm bốn khối chính:
 \begin{itemize}
     \item \textbf{Node cảm biến và điều khiển:} sử dụng Arduino Pro Mini để đọc TDS, pH, nhiệt độ, độ ẩm, CO2, ánh sáng và điều khiển relay, IR. Node đóng vai trò điểm đo tại khu vực cây trồng hoặc không gian sinh hoạt.

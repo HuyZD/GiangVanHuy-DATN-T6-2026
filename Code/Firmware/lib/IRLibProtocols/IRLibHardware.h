@@ -94,7 +94,7 @@
 /* Arduino Duemilanove, Diecimila, LilyPad, Mini, Fio, etc */
 #else
 	//#define IR_SEND_TIMER1	9
-	#define IR_SEND_TIMER2		6
+	#define IR_SEND_TIMER2		3
 #endif //end of setting IR_SEND_TIMER based on hardware detection
 
 /* If you want to use bit-bang PWM output, you should un-comment the line below.

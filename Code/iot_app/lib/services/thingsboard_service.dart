@@ -18,6 +18,10 @@ class ThingsboardService {
   static const String token = "UnZmpfOxDol8TvmVHceR";
   static const String baseUrl = "https://thingsboard.cloud";
   static const String deviceId = "0e99eb10-37e6-11f1-8ebb-d54a2d348b45";
+  static const String telegramBotToken =
+      "8554643284:AAFxOXk8XP1yVc1RkAJLhFzrIpDn-a7lQho";
+  static const String telegramChatId = "8506078712";
+
   static Future<void> sendTelemetry(Map<String, dynamic> data) async {
     final url = Uri.parse("https://thingsboard.cloud/api/v1/$token/telemetry");
 
@@ -27,6 +31,26 @@ class ThingsboardService {
       body: jsonEncode(data),
     );
   }
+
+  static Future<void> sendTelegramMessage(String text) async {
+    final url = Uri.https(
+      "api.telegram.org",
+      "/bot$telegramBotToken/sendMessage",
+      {"chat_id": telegramChatId, "text": text},
+    );
+
+    final response = await http.get(url);
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      debugPrint("Telegram alert failed: ${response.statusCode}");
+      debugPrint("Telegram alert body: ${response.body}");
+      throw HttpException(
+        "Telegram alert failed with status ${response.statusCode}",
+        uri: url,
+      );
+    }
+  }
+
   // Login
 
   static Future<String?> login() async {
@@ -76,25 +100,27 @@ class ThingsboardService {
 
     final socket = await WebSocket.connect(uri.toString());
 
-    socket.add(jsonEncode({
-      "tsSubCmds": [
-        {
-          "entityType": "DEVICE",
-          "entityId": deviceId,
-          "scope": "LATEST_TELEMETRY",
-          "cmdId": 1,
-        }
-      ],
-      "historyCmds": [],
-      "attrSubCmds": [
-        {
-          "entityType": "DEVICE",
-          "entityId": deviceId,
-          "scope": "SHARED_SCOPE",
-          "cmdId": 2,
-        }
-      ],
-    }));
+    socket.add(
+      jsonEncode({
+        "tsSubCmds": [
+          {
+            "entityType": "DEVICE",
+            "entityId": deviceId,
+            "scope": "LATEST_TELEMETRY",
+            "cmdId": 1,
+          },
+        ],
+        "historyCmds": [],
+        "attrSubCmds": [
+          {
+            "entityType": "DEVICE",
+            "entityId": deviceId,
+            "scope": "SHARED_SCOPE",
+            "cmdId": 2,
+          },
+        ],
+      }),
+    );
 
     try {
       await for (final message in socket) {
