@@ -1,4 +1,0 @@
-\section{Kết quả truyền thông LoRa và gateway}
-Liên kết LoRa giữa node và gateway hoạt động ổn định với các gói dữ liệu có kích thước nhỏ. Gateway ESP32 nhận gói tin, tách trường dữ liệu và gửi lên ThingsBoard theo đúng cấu trúc telemetry. Khi Wi-Fi của gateway hoạt động ổn định, dữ liệu từ node xuất hiện trên dashboard ThingsBoard gần như theo thời gian thực.
-
-Trong trường hợp gateway mất kết nối Internet tạm thời, dữ liệu không thể gửi lên ThingsBoard nhưng kênh LoRa giữa node và gateway vẫn hoạt động. Điều này cho thấy hệ thống có thể tách biệt vấn đề truyền thông cục bộ và vấn đề kết nối Internet. Để tăng độ tin cậy trong phiên bản sau, gateway có thể bổ sung bộ đệm dữ liệu cục bộ và gửi bù khi Internet khôi phục.

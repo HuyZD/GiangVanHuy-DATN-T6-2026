@@ -4,9 +4,11 @@
 #include <avr/interrupt.h>
 #endif
 
-static const uint8_t LORA_RX_BUFFER_SIZE = 240;
+static const uint8_t LORA_RX_BUFFER_SIZE = 96;
+static const unsigned long LORA_RX_RECOVERY_INTERVAL_MS = 5000UL;
 static LoRaCommandCallback commandCallback = nullptr;
 static volatile bool loraPacketInterruptPending = false;
+static unsigned long lastLoRaPacketAt = 0;
 
 #if defined(ARDUINO_ARCH_AVR) && defined(PCINT1_vect)
 ISR(PCINT1_vect)
@@ -52,6 +54,7 @@ void LoRa_Receiver_setup()
   LoRa.setSpreadingFactor(12);
 
   LoRa.receive();
+  lastLoRaPacketAt = millis();
   setupLoRaPacketInterrupt();
 }
 
@@ -69,6 +72,7 @@ void LoRa_Receiver()
 
   if (packetSize)
   {
+    lastLoRaPacketAt = millis();
     static char payload[LORA_RX_BUFFER_SIZE + 1];
     uint8_t payloadLength = 0;
     bool payloadOverflow = false;
@@ -105,5 +109,12 @@ void LoRa_Receiver()
     }
 
     LoRa.receive();
+    lastLoRaPacketAt = millis();
+  }
+  else if (millis() - lastLoRaPacketAt >= LORA_RX_RECOVERY_INTERVAL_MS)
+  {
+    LoRa.idle();
+    LoRa.receive();
+    lastLoRaPacketAt = millis();
   }
 }

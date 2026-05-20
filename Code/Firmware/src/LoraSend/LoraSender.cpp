@@ -3,7 +3,7 @@
 int counter = 0;
 static const uint8_t LORA_MAX_PAYLOAD_SIZE = 255;
 
-static void printTelemetryPacket(Print &output, float temperature, float humidity, float tdsValue, double lightValue, float co2Value, float phValue, bool relay1State, bool relay2State)
+static void dprintTelemetryPacket(Print &output, float temperature, float humidity, float tdsValue, double lightValue, float co2Value, float phValue, bool relay1State, bool relay2State)
 {
   output.print(F("temperature - "));
   output.print(temperature);

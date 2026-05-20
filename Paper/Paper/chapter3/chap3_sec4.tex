@@ -1,7 +1,0 @@
-\section{Truyền thông LoRa và gateway ESP32}
-LoRa là công nghệ truyền thông không dây công suất thấp, phù hợp với các gói dữ liệu nhỏ và khoảng cách truyền xa. Trong căn hộ, LoRa giúp node cảm biến đặt tại vị trí xa router Wi-Fi vẫn có thể gửi dữ liệu ổn định về gateway. Hai module LoRa được sử dụng: một module gắn với node Arduino Pro Mini và một module gắn với gateway ESP32.
-
-ESP32 có ưu điểm tích hợp Wi-Fi, Bluetooth, hiệu năng xử lý tốt và nhiều chân giao tiếp ngoại vi. Trong hệ thống, ESP32 đóng vai trò gateway: nhận gói tin từ LoRa, kiểm tra cấu trúc dữ liệu, chuyển đổi thành telemetry và gửi lên ThingsBoard thông qua kết nối Internet. Gateway cũng nhận lệnh điều khiển từ ThingsBoard và chuyển tiếp lệnh về node qua LoRa.
-
-\subsection{Luồng truyền dữ liệu}
-Luồng uplink bắt đầu từ cảm biến tại node, đi qua Arduino Pro Mini, module LoRa, gateway ESP32 và kết thúc tại ThingsBoard. Luồng downlink bắt đầu từ ứng dụng Flutter hoặc dashboard ThingsBoard, đi qua ThingsBoard, gateway ESP32, LoRa và đến node để điều khiển relay hoặc IR.

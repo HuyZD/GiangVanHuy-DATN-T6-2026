@@ -21,10 +21,14 @@ constexpr long LORA_FREQUENCY = 433000000L;
 constexpr uint8_t LORA_SPREADING_FACTOR = 12;
 constexpr size_t LORA_PACKET_BUFFER_SIZE = 256;
 constexpr size_t LORA_MAX_PAYLOAD_SIZE = 255;
-constexpr size_t NODE_CONFIG_MAX_PAYLOAD_SIZE = 240;
+constexpr size_t NODE_CONFIG_MAX_PAYLOAD_SIZE = 80;
 constexpr size_t CONFIG_COMMAND_PREFIX_LENGTH = sizeof("config:") - 1;
 constexpr uint32_t TELEMETRY_REQUEST_INTERVAL_MS = 20000U;
-constexpr uint32_t NODE_RESPONSE_TIMEOUT_MS = 20000U;
+constexpr uint32_t NODE_RESPONSE_TIMEOUT_MS = 8000U;
+constexpr uint32_t NODE_CONFIG_ACK_TIMEOUT_MS = 5000U;
+constexpr uint32_t NODE_CONFIG_CHUNK_GAP_MS = 1500U;
+constexpr uint8_t NODE_CONFIG_SEND_RETRIES = 2U;
+constexpr uint8_t NODE_TELEMETRY_REQUEST_RETRIES = 2U;
 
 constexpr uint8_t LED_PIN = 4;
 
@@ -320,18 +324,30 @@ void requestTelemetryFromNode() {
   lastTelemetryRequestTime = millis();
   Serial.println("Requesting telemetry from node...");
 
-  if (!sendLoRaMessage("sensor:read")) {
-    return;
-  }
+  for (uint8_t attempt = 1; attempt <= NODE_TELEMETRY_REQUEST_RETRIES; attempt++) {
+    if (attempt > 1) {
+      Serial.print("Retrying telemetry request, attempt ");
+      Serial.println(attempt);
+      delay(1000);
+    }
 
-  String packet;
-  int packetRssi = 0;
-  if (!waitForNodePacket(packet, packetRssi, NODE_RESPONSE_TIMEOUT_MS)) {
+    if (!sendLoRaMessage("sensor:read")) {
+      initLoRa();
+      continue;
+    }
+
+    String packet;
+    int packetRssi = 0;
+    if (waitForNodePacket(packet, packetRssi, NODE_RESPONSE_TIMEOUT_MS)) {
+      processPacket(packet, packetRssi, true);
+      return;
+    }
+
     Serial.println("Node telemetry response timeout");
-    return;
+    initLoRa();
   }
 
-  processPacket(packet, packetRssi, true);
+  Serial.println("Node telemetry failed after retries");
 }
 
 bool sendRelayCommandToNode(uint8_t relayNumber, bool relayState) {
@@ -424,7 +440,22 @@ bool sendConfigChunkToNode(const String &configPayload) {
   const String command = "config:" + configPayload;
   Serial.print("Sending config chunk length: ");
   Serial.println(command.length());
-  return sendLoRaMessageAndWaitAck(command, NODE_RESPONSE_TIMEOUT_MS);
+
+  for (uint8_t attempt = 1; attempt <= NODE_CONFIG_SEND_RETRIES; attempt++) {
+    if (attempt > 1) {
+      Serial.print("Retrying config chunk, attempt ");
+      Serial.println(attempt);
+    }
+
+    if (sendLoRaMessageAndWaitAck(command, NODE_CONFIG_ACK_TIMEOUT_MS)) {
+      delay(NODE_CONFIG_CHUNK_GAP_MS);
+      return true;
+    }
+
+    delay(NODE_CONFIG_CHUNK_GAP_MS);
+  }
+
+  return false;
 }
 
 bool sendLoRaMessage(const String &message) {
@@ -451,22 +482,28 @@ bool sendLoRaMessageAndWaitAck(const String &message, uint32_t timeoutMs) {
     return false;
   }
 
+  const unsigned long startedAt = millis();
   String packet;
   int packetRssi = 0;
-  if (!waitForNodePacket(packet, packetRssi, timeoutMs)) {
-    Serial.print("Node ACK timeout for: ");
-    Serial.println(message);
-    return false;
-  }
 
-  if (isAckPacket(packet)) {
-    Serial.print("Node ACK received: ");
+  while (millis() - startedAt < timeoutMs) {
+    const uint32_t remainingMs = timeoutMs - (millis() - startedAt);
+    if (!waitForNodePacket(packet, packetRssi, remainingMs)) {
+      break;
+    }
+
+    if (isAckPacket(packet)) {
+      Serial.print("Node ACK received: ");
+      Serial.println(packet);
+      return true;
+    }
+
+    Serial.print("Ignoring non-ACK node response: ");
     Serial.println(packet);
-    return true;
   }
 
-  Serial.print("Unexpected node response: ");
-  Serial.println(packet);
+  Serial.print("Node ACK timeout for: ");
+  Serial.println(message);
   return false;
 }
 

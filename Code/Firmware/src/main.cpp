@@ -42,7 +42,7 @@ struct AutoConfig
   float tdsMax = 800.0;
   float phMin = 5.8;
   float phMax = 6.5;
-  float airConditionerTemp = 24.0;
+  float airConditionerTemp = -1.0;
 };
 
 AutoConfig autoConfig;
@@ -59,6 +59,8 @@ bool updateAirConditionerTempConfig(const char *json);
 const char *findJsonValue(const char *json, const char *key);
 void serviceLoRaPriority();
 void servicePendingAirConditioner();
+bool modeEquals(const char *mode, const char *expectedMode);
+bool isAutoMode();
 void auto_control();
 
 void readSensors()
@@ -239,7 +241,33 @@ bool updateModeConfig(const char *json)
   const char *valueStart = findJsonValue(json, "mode");
   if (valueStart == nullptr || *valueStart != '"')
   {
-    return false;
+    valueStart = findJsonValue(json, "autoMode");
+    if (valueStart == nullptr)
+    {
+      return false;
+    }
+
+    if (commandStartsWith(valueStart, "true"))
+    {
+      strncpy(autoConfig.mode, "auto", sizeof(autoConfig.mode));
+    }
+    else if (commandStartsWith(valueStart, "false"))
+    {
+      strncpy(autoConfig.mode, "manual", sizeof(autoConfig.mode));
+    }
+    else
+    {
+      Serial.print(F("Invalid autoMode: "));
+      Serial.println(valueStart);
+      return false;
+    }
+
+    autoConfig.mode[sizeof(autoConfig.mode) - 1] = '\0';
+    Serial.print(F("Updated "));
+    Serial.print(F("autoMode"));
+    Serial.print(F(": "));
+    Serial.println(autoConfig.mode);
+    return true;
   }
 
   valueStart++;
@@ -253,6 +281,21 @@ bool updateModeConfig(const char *json)
   const size_t valueLength = min(static_cast<size_t>(valueEnd - valueStart), sizeof(modeBuffer) - 1);
   memcpy(modeBuffer, valueStart, valueLength);
   modeBuffer[valueLength] = '\0';
+
+  for (size_t i = 0; modeBuffer[i] != '\0'; i++)
+  {
+    if (modeBuffer[i] >= 'A' && modeBuffer[i] <= 'Z')
+    {
+      modeBuffer[i] += 'a' - 'A';
+    }
+  }
+
+  if (!modeEquals(modeBuffer, "auto") && !modeEquals(modeBuffer, "manual"))
+  {
+    Serial.print(F("Invalid mode: "));
+    Serial.println(modeBuffer);
+    return false;
+  }
 
   strncpy(autoConfig.mode, modeBuffer, sizeof(autoConfig.mode));
   autoConfig.mode[sizeof(autoConfig.mode) - 1] = '\0';
@@ -383,9 +426,41 @@ void sensor_actuator_send()
     sensor_actuator_send();
   }
 }
+
+bool modeEquals(const char *mode, const char *expectedMode)
+{
+  while (*mode != '\0' && *expectedMode != '\0')
+  {
+    char modeChar = *mode++;
+    char expectedChar = *expectedMode++;
+
+    if (modeChar >= 'A' && modeChar <= 'Z')
+    {
+      modeChar += 'a' - 'A';
+    }
+
+    if (expectedChar >= 'A' && expectedChar <= 'Z')
+    {
+      expectedChar += 'a' - 'A';
+    }
+
+    if (modeChar != expectedChar)
+    {
+      return false;
+    }
+  }
+
+  return *mode == '\0' && *expectedMode == '\0';
+}
+
+bool isAutoMode()
+{
+  return modeEquals(mod, "auto");
+}
+
 void auto_control()
 {
-  if (strcmp(mod, "auto") != 0)
+  if (!isAutoMode())
   {
     return;
   }

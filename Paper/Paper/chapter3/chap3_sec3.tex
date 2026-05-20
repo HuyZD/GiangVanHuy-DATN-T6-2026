@@ -1,7 +1,0 @@
-\section{Node cảm biến Arduino Pro Mini}
-Arduino Pro Mini là bo vi điều khiển nhỏ gọn, tiêu thụ năng lượng thấp và phù hợp với các ứng dụng cảm biến. Trong hệ thống này, Arduino Pro Mini đảm nhiệm việc đọc giá trị từ các cảm biến TDS, pH, nhiệt độ, độ ẩm, CO2 và ánh sáng, sau đó đóng gói dữ liệu để gửi qua module LoRa.
-
-Các cảm biến analog như TDS, pH và ánh sáng được đọc thông qua bộ chuyển đổi ADC của vi điều khiển. Các cảm biến digital như nhiệt độ, độ ẩm hoặc CO2 có thể giao tiếp qua GPIO, UART hoặc giao thức chuyên dụng tùy loại module sử dụng. Node cũng điều khiển relay và bộ phát hồng ngoại IR khi nhận lệnh từ gateway.
-
-\subsection{Yêu cầu đối với node}
-Node cần đáp ứng các yêu cầu: đọc dữ liệu ổn định, đóng gói dữ liệu ngắn gọn, truyền LoRa định kỳ, nhận lệnh điều khiển, phản hồi trạng thái và có khả năng hoạt động lâu dài trong môi trường căn hộ. Do Arduino Pro Mini có tài nguyên hạn chế, chương trình trên node cần đơn giản, tránh xử lý phức tạp và ưu tiên độ tin cậy.
